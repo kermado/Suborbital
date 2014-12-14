@@ -1,41 +1,41 @@
 %{
     #include <suborbital/Entity.hpp>
-    #include <suborbital/component/PythonComponent.hpp>
+    #include <suborbital/behaviour/PythonBehaviour.hpp>
 %}
 
-# Convert components to the type specified by the class name.
+# Convert behaviours to the type specified by the class name.
 # Thanks to Flexo:
 # http://stackoverflow.com/questions/27392602/swig-downcasting-from-base-to-derived/27417168#27417168
 # http://stackoverflow.com/questions/27454289/retrieving-a-python-type-back-from-c/27454946#27454946
-%typemap(out) suborbital::component::Component* suborbital::Entity::create_component
+%typemap(out) suborbital::behaviour::Behaviour* suborbital::Entity::create_behaviour
 {
-    const suborbital::component::PythonComponent* const python_component = dynamic_cast<suborbital::component::PythonComponent*>($1);
-    if (python_component)
+    const suborbital::behaviour::PythonBehaviour* const python_behaviour = dynamic_cast<suborbital::behaviour::PythonBehaviour*>($1);
+    if (python_behaviour)
     {
-        $result = python_component->derived;
+        $result = python_behaviour->derived;
     }
     else
     {
-        const std::string lookup_typename = "suborbital::component::" + *arg2 + "*";
+        const std::string lookup_typename = "suborbital::behaviour::" + *arg2 + "*";
         swig_type_info* const out_type = SWIG_TypeQuery(lookup_typename.c_str());
         $result = SWIG_NewPointerObj(SWIG_as_voidptr($1), out_type, $owner);
     }
 }
 
-# Convert components to the type specified by the class name.
+# Convert behaviours to the type specified by the class name.
 # Thanks to Flexo:
 # http://stackoverflow.com/questions/27392602/swig-downcasting-from-base-to-derived/27417168#27417168
 # http://stackoverflow.com/questions/27454289/retrieving-a-python-type-back-from-c/27454946#27454946
-%typemap(out) suborbital::component::Component* suborbital::Entity::component
+%typemap(out) suborbital::behaviour::Behaviour* suborbital::Entity::behaviour
 {
-    const suborbital::component::PythonComponent* const python_component = dynamic_cast<suborbital::component::PythonComponent*>($1);
-    if (python_component)
+    const suborbital::behaviour::PythonBehaviour* const python_behaviour = dynamic_cast<suborbital::behaviour::PythonBehaviour*>($1);
+    if (python_behaviour)
     {
-        $result = python_component->derived;
+        $result = python_behaviour->derived;
     }
     else
     {
-        const std::string lookup_typename = "suborbital::component::" + *arg2 + "*";
+        const std::string lookup_typename = "suborbital::behaviour::" + *arg2 + "*";
         swig_type_info* const out_type = SWIG_TypeQuery(lookup_typename.c_str());
         $result = SWIG_NewPointerObj(SWIG_as_voidptr($1), out_type, $owner);
     }

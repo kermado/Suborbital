@@ -2,7 +2,7 @@
 
 #include <suborbital/Suborbital.hpp>
 #include <suborbital/Entity.hpp>
-#include <suborbital/component/Component.hpp>
+#include <suborbital/behaviour/Behaviour.hpp>
 
 using namespace suborbital;
 
@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 
     {
         Entity entity("Player");
-        component::Component* timer = entity.create_component("Timer");
+        behaviour::Behaviour* timer = entity.create_behaviour("Timer");
         for (int i = 0; i < 10; ++i)
         {
             timer->update(0.1);

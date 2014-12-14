@@ -9,9 +9,9 @@
 
 namespace suborbital
 {
-    namespace component
+    namespace behaviour
     {
-        class Component;
+        class Behaviour;
     }
 
     class PythonInterpreter : public ScriptInterpreter
@@ -35,12 +35,12 @@ namespace suborbital
         void add_path(const std::string& path);
 
         /**
-        * Creates a new component from the script specified by the provided `class_name`.
+        * Creates a new behaviour from the script specified by the provided `class_name`.
         *
-        * @param class_name Name of the class from which to create the component.
-        * @return Unique pointer to the created component.
+        * @param class_name Name of the class from which to create the behaviour.
+        * @return Unique pointer to the created behaviour.
         */
-        std::unique_ptr<component::Component> create(const std::string& class_name) const;
+        std::unique_ptr<behaviour::Behaviour> create(const std::string& class_name) const;
 
     private:
         /**

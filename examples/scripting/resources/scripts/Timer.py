@@ -1,8 +1,8 @@
 from suborbital import *
 
-class Timer(PythonComponent):
+class Timer(PythonBehaviour):
     def __init__(self):
-        PythonComponent.__init__(self)
+        PythonBehaviour.__init__(self)
         self.time_elapsed = 0.0
         print("Timer::Timer()")
     def __del__(self):

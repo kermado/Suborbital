@@ -1,13 +1,13 @@
 #include <iostream>
 
 #include <suborbital/Entity.hpp>
-#include <suborbital/component/Component.hpp>
+#include <suborbital/behaviour/Behaviour.hpp>
 
 namespace suborbital
 {
     Entity::Entity(const std::string& name)
     : m_name(name)
-    , m_components()
+    , m_behaviours()
     {
         std::cout << "Entity::Entity(" << name << ")" << std::endl;
     }
@@ -22,37 +22,37 @@ namespace suborbital
         return m_name;
     }
 
-    bool Entity::has_component(const std::string& class_name) const
+    bool Entity::has_behaviour(const std::string& class_name) const
     {
-        auto iter = m_components.find(class_name);
-        if (iter != m_components.end()) {
+        auto iter = m_behaviours.find(class_name);
+        if (iter != m_behaviours.end()) {
             return !iter->second.empty();
         }
 
         return false;
     }
 
-    component::Component* Entity::create_component(const std::string& class_name)
+    behaviour::Behaviour* Entity::create_behaviour(const std::string& class_name)
     {
-        std::unique_ptr<component::Component> base_component = component::create(class_name);
-        component::Component* base_component_ptr = base_component.get();
-        m_components[class_name].push_back(std::move(base_component));
-        base_component_ptr->m_entity = this;
-        base_component_ptr->create();
-        return base_component_ptr;
+        std::unique_ptr<behaviour::Behaviour> base_behaviour = behaviour::create(class_name);
+        behaviour::Behaviour* base_behaviour_ptr = base_behaviour.get();
+        m_behaviours[class_name].push_back(std::move(base_behaviour));
+        base_behaviour_ptr->m_entity = this;
+        base_behaviour_ptr->create();
+        return base_behaviour_ptr;
     }
 
-    component::Component* Entity::component(const std::string& class_name) const
+    behaviour::Behaviour* Entity::behaviour(const std::string& class_name) const
     {
-        auto iter = m_components.find(class_name);
-        assert(iter != m_components.end());
+        auto iter = m_behaviours.find(class_name);
+        assert(iter != m_behaviours.end());
         assert(!iter->second.empty());
         return iter->second.front().get();
     }
 
     void Entity::update(double dt)
     {
-        for (auto iter = m_components.begin(); iter != m_components.end(); ++iter)
+        for (auto iter = m_behaviours.begin(); iter != m_behaviours.end(); ++iter)
         {
             for (auto& c : iter->second)
             {
