@@ -17,11 +17,6 @@ namespace suborbital
         std::cout << "Entity::~Entity(" << m_name << ")" << std::endl;
     }
 
-    std::shared_ptr<Entity> Entity::create(const std::string& name)
-    {
-        return std::shared_ptr<Entity>(new Entity(name));
-    }
-
     const std::string& Entity::name() const
     {
         return m_name;
@@ -42,7 +37,7 @@ namespace suborbital
         std::unique_ptr<component::Component> base_component = component::create(class_name);
         component::Component* base_component_ptr = base_component.get();
         m_components[class_name].push_back(std::move(base_component));
-        base_component_ptr->m_entity = shared_from_this();
+        base_component_ptr->m_entity = this;
         base_component_ptr->create();
         return base_component_ptr;
     }

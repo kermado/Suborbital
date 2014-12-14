@@ -73,9 +73,11 @@ namespace suborbital
             /**
              * Accessor for the parent entity that the component belongs to.
              *
-             * @return Weak pointer to the parent entity.
+             * @note The component lifetime is tied to its parent entity.
+             *
+             * @return Pointer to the parent entity.
              */
-            std::weak_ptr<Entity> entity() const;
+            Entity* entity() const;
 
         protected:
             /**
@@ -85,9 +87,10 @@ namespace suborbital
 
         private:
             /**
-             * Weak pointer to the parent entity.
+             * Pointer to the parent entity.
+             * Note that the component lifetime is tied to its parent entity.
              */
-            std::weak_ptr<Entity> m_entity;
+            Entity* m_entity;
         };
         /**
          * Internal details.

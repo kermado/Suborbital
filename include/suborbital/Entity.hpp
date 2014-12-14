@@ -16,32 +16,20 @@ namespace suborbital
     /**
      * Represents an object within a scene.
      */
-    class Entity : public std::enable_shared_from_this<Entity>, private NonCopyable
+    class Entity : private NonCopyable
     {
-    private:
+    public:
         /**
          * Constructor.
-         *
-         * Note that the constructor is made private to prevent stack allocation. Entity objects must be allocated on
-         * the heap in order to use shared_from_this(). Use the `create()` static method instead.
          *
          * @param name Name to assign to the entity.
          */
         Entity(const std::string& name);
 
-    public:
         /**
          * Destructor.
          */
         ~Entity();
-
-        /**
-         * Creates and returns a new entity.
-         *
-         * @param name Name to assign to the entity.
-         * @return Shared pointer to the created entity.
-         */
-        static std::shared_ptr<Entity> create(const std::string& name);
 
         /**
          * Accessor for the name assigned to the entity.
@@ -97,7 +85,7 @@ namespace suborbital
             ComponentType*specific_component_ptr = new ComponentType();
             const std::string component_name = component::name<ComponentType>();
             m_components[component_name].push_back(std::unique_ptr<ComponentType>(specific_component_ptr));
-            specific_component_ptr->m_entity = shared_from_this();
+            specific_component_ptr->m_entity = this;
             specific_component_ptr->create();
             return specific_component_ptr;
         }

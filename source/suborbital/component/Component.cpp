@@ -10,7 +10,7 @@ namespace suborbital
     namespace component
     {
         Component::Component()
-        : m_entity()
+        : m_entity(nullptr)
         {
             std::cout << "Component::Component()" << std::endl;
         }
@@ -25,7 +25,7 @@ namespace suborbital
             std::cout << message << std::endl;
         }
 
-        std::weak_ptr<Entity> Component::entity() const
+        Entity* Component::entity() const
         {
             return m_entity;
         }
