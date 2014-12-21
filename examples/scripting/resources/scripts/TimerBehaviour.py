@@ -1,6 +1,6 @@
 from suborbital import *
 
-class Timer(PythonBehaviour):
+class TimerBehaviour(PythonBehaviour):
     def __init__(self):
         PythonBehaviour.__init__(self)
         self.time_elapsed = 0.0

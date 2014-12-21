@@ -1,5 +1,5 @@
-#ifndef ENTITY_HPP
-#define ENTITY_HPP
+#ifndef SUBORBITAL_ENTITY_HPP
+#define SUBORBITAL_ENTITY_HPP
 
 #include <cassert>
 #include <string>
@@ -9,7 +9,8 @@
 #include <iostream>
 
 #include <suborbital/NonCopyable.hpp>
-#include <suborbital/behaviour/Behaviour.hpp>
+#include <suborbital/Behaviour.hpp>
+#include <suborbital/BehaviourRegistry.hpp>
 
 namespace suborbital
 {
@@ -46,14 +47,14 @@ namespace suborbital
         template<typename BehaviourType>
         bool has_behaviour() const
         {
-            const std::string behaviour_name = behaviour::name<BehaviourType>();
-            auto iter = m_behaviours.find(behaviour_name);
+            const std::string name = behaviour_registry().behaviour_name<BehaviourType>();
+            auto iter = m_behaviours.find(name);
             if (iter != m_behaviours.end())
             {
                 auto& behaviours = iter->second;
                 if (!behaviours.empty())
                 {
-                    BehaviourType*behaviour_ptr = dynamic_cast<BehaviourType*>( behaviours.front().get());
+                    BehaviourType* behaviour_ptr = dynamic_cast<BehaviourType*>(behaviours.front().get());
                     return behaviour_ptr != nullptr;
                 }
             }
@@ -82,9 +83,12 @@ namespace suborbital
         template<typename BehaviourType>
         BehaviourType* create_behaviour()
         {
-            BehaviourType*specific_behaviour_ptr = new BehaviourType();
-            const std::string behaviour_name = behaviour::name<BehaviourType>();
-            m_behaviours[behaviour_name].push_back(std::unique_ptr<BehaviourType>(specific_behaviour_ptr));
+            BehaviourType* specific_behaviour_ptr = new BehaviourType();
+            std::unique_ptr<BehaviourType> specific_behaviour(specific_behaviour_ptr);
+
+            const std::string name = behaviour_registry().behaviour_name<BehaviourType>();
+            m_behaviours[name].push_back(std::move(specific_behaviour));
+
             specific_behaviour_ptr->m_entity = this;
             specific_behaviour_ptr->create();
             return specific_behaviour_ptr;
@@ -102,7 +106,7 @@ namespace suborbital
          * @param class_name Class name for the behaviour to be created and attached.
          * @return Pointer to the behaviour that was created and attached.
          */
-        suborbital::behaviour::Behaviour* create_behaviour(const std::string& class_name);
+        suborbital::Behaviour* create_behaviour(const std::string& class_name);
 
         /**
          * Returns a pointer to the attached behaviour with the specified type. If multiple behaviours of the specified
@@ -115,12 +119,12 @@ namespace suborbital
         template<typename BehaviourType>
         BehaviourType* behaviour()
         {
-            const std::string behaviour_name = behaviour::name<BehaviourType>();
-            auto iter = m_behaviours.find(behaviour_name);
+            const std::string name = behaviour_registry().behaviour_name<BehaviourType>();
+            auto iter = m_behaviours.find(name);
             assert(iter != m_behaviours.end());
             assert(!iter->second.empty());
 
-            BehaviourType*behaviour_ptr = dynamic_cast<BehaviourType*>(iter->second.front().get());
+            BehaviourType* behaviour_ptr = dynamic_cast<BehaviourType*>(iter->second.front().get());
             assert(behaviour_ptr != nullptr);
             return behaviour_ptr;
         }
@@ -137,7 +141,7 @@ namespace suborbital
          * @param class_name Class name for the behaviour to be returned.
          * @return Pointer to the first attached behaviour with the specified class name.
          */
-        suborbital::behaviour::Behaviour* behaviour(const std::string& class_name) const;
+        suborbital::Behaviour* behaviour(const std::string& class_name) const;
 
     protected:
         /**
@@ -161,7 +165,7 @@ namespace suborbital
          * We store unique_ptr's here so that the behaviours attached to an entity are automatically deleted when the
          * entity is deleted.
          */
-        std::unordered_map<std::string, std::vector<std::unique_ptr<behaviour::Behaviour>>> m_behaviours;
+        std::unordered_map<std::string, std::vector<std::unique_ptr<Behaviour>>> m_behaviours;
     };
 }
 

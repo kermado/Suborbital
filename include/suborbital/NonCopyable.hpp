@@ -1,5 +1,5 @@
-#ifndef NONCOPYABLE_HPP
-#define	NONCOPYABLE_HPP
+#ifndef SUBORBITAL_NON_COPYABLE_HPP
+#define	SUBORBITAL_NON_COPYABLE_HPP
 
 namespace suborbital
 {

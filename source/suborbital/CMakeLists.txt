@@ -8,12 +8,14 @@ SET(SWIG_ROOT ${PROJECT_SOURCE_DIR}/swig/suborbital)
 
 # Source files.
 set(SOURCE_FILES
-	${SRC_ROOT}/Suborbital.cpp
 	${SRC_ROOT}/Entity.cpp
 	${SRC_ROOT}/ScriptInterpreter.cpp
 	${SRC_ROOT}/PythonInterpreter.cpp
-	${SRC_ROOT}/behaviour/Behaviour.cpp
-	${SRC_ROOT}/behaviour/PythonBehaviour.cpp
+	${SRC_ROOT}/Component.cpp
+	${SRC_ROOT}/Attribute.cpp
+	${SRC_ROOT}/Behaviour.cpp
+	${SRC_ROOT}/BehaviourRegistry.cpp
+	${SRC_ROOT}/PythonBehaviour.cpp
 )
 
 # Create a shared library.

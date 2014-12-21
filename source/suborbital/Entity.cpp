@@ -1,7 +1,4 @@
-#include <iostream>
-
 #include <suborbital/Entity.hpp>
-#include <suborbital/behaviour/Behaviour.hpp>
 
 namespace suborbital
 {
@@ -32,17 +29,20 @@ namespace suborbital
         return false;
     }
 
-    behaviour::Behaviour* Entity::create_behaviour(const std::string& class_name)
+    Behaviour* Entity::create_behaviour(const std::string& class_name)
     {
-        std::unique_ptr<behaviour::Behaviour> base_behaviour = behaviour::create(class_name);
-        behaviour::Behaviour* base_behaviour_ptr = base_behaviour.get();
+        std::unique_ptr<Behaviour> base_behaviour = behaviour_registry().create_behaviour(class_name);
+        assert(base_behaviour != nullptr);
+
+        Behaviour* base_behaviour_ptr = base_behaviour.get();
         m_behaviours[class_name].push_back(std::move(base_behaviour));
         base_behaviour_ptr->m_entity = this;
         base_behaviour_ptr->create();
+
         return base_behaviour_ptr;
     }
 
-    behaviour::Behaviour* Entity::behaviour(const std::string& class_name) const
+    Behaviour* Entity::behaviour(const std::string& class_name) const
     {
         auto iter = m_behaviours.find(class_name);
         assert(iter != m_behaviours.end());
