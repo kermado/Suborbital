@@ -1,6 +1,6 @@
 %{
     #include <suborbital/Entity.hpp>
-    #include <suborbital/PythonBehaviour.hpp>
+    #include <suborbital/component/PythonBehaviour.hpp>
 %}
 
 # Convert behaviours to the type specified by the class name.

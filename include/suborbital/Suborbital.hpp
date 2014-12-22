@@ -2,19 +2,18 @@
 #define SUBORBITAL_HPP
 
 #include <suborbital/Entity.hpp>
-#include <suborbital/BehaviourRegistry.hpp>
-#include <suborbital/BehaviourFactory.hpp>
+#include <suborbital/component/ComponentRegistry.hpp>
+#include <suborbital/component/PythonBehaviourFactory.hpp>
 
 /**
- * Macro for registering a behaviour type to a string name. This is necessary for creating behaviours inside of scripts.
+ * Macro for registering a behaviour type. This is necessary for creating behaviours inside of scripts.
  *
  * @param TYPE Behaviour type.
- * @param NAME Name to associate with the behaviour type.
  */
-#define REGISTER_BEHAVIOUR(TYPE, NAME)                                                                                 \
+#define REGISTER_BEHAVIOUR(TYPE)                                                                                       \
 	{                                                                                                                  \
         std::unique_ptr<BehaviourFactory<TYPE>> factory(new BehaviourFactory<TYPE>());                                 \
-        behaviour_registry().register_behaviour(NAME, std::move(factory));                                             \
+        component_registry().register_component(#TYPE, std::move(factory));                                            \
     }                                                                                                                  \
 
 /**
@@ -25,7 +24,7 @@
 #define REGISTER_PYTHON_BEHAVIOUR(NAME)                                                                                \
 	{                                                                                                                  \
         std::unique_ptr<BehaviourFactory<PythonBehaviour>> factory(new BehaviourFactory<PythonBehaviour>(NAME));       \
-        behaviour_registry().register_behaviour(NAME, std::move(factory));                                             \
+        component_registry().register_component(NAME, std::move(factory));                                             \
     }                                                                                                                  \
 
 

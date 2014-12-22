@@ -1,7 +1,7 @@
 #ifndef SUBORBITAL_ATTRIBUTE_HPP
 #define SUBORBITAL_ATTRIBUTE_HPP
 
-#include <suborbital/Component.hpp>
+#include <suborbital/component/Component.hpp>
 
 namespace suborbital
 {

@@ -3,7 +3,7 @@
 #include <Python.h>
 
 #include <suborbital/PythonInterpreter.hpp>
-#include <suborbital/PythonBehaviour.hpp>
+#include <suborbital/component/PythonBehaviour.hpp>
 
 namespace suborbital
 {

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cassert>
 
-#include <suborbital/Component.hpp>
+#include <suborbital/component/Component.hpp>
 
 namespace suborbital
 {

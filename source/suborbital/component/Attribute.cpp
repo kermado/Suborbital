@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <suborbital/Attribute.hpp>
+#include <suborbital/component/Attribute.hpp>
 
 namespace suborbital
 {

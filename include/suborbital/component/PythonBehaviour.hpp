@@ -1,7 +1,9 @@
 #ifndef SUBORBITAL_PYTHON_BEHAVIOUR_HPP
 #define SUBORBITAL_PYTHON_BEHAVIOUR_HPP
 
-#include <suborbital/Behaviour.hpp>
+#include <Python/Python.h>
+
+#include <suborbital/component/Behaviour.hpp>
 
 namespace suborbital
 {

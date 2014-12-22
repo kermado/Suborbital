@@ -1,7 +1,7 @@
 #include <iostream>
 #include <Python.h>
 
-#include <suborbital/PythonBehaviour.hpp>
+#include <suborbital/component/PythonBehaviour.hpp>
 
 namespace suborbital
 {

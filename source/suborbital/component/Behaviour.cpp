@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include <suborbital/Behaviour.hpp>
+#include <suborbital/component/Behaviour.hpp>
 
 namespace suborbital
 {

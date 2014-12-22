@@ -14,6 +14,6 @@
 
 // Include classes.
 %include <suborbital/Entity.i>
-%include <suborbital/Component.i>
-%include <suborbital/Behaviour.i>
-%include <suborbital/PythonBehaviour.i>
+%include <suborbital/component/Component.i>
+%include <suborbital/component/Behaviour.i>
+%include <suborbital/component/PythonBehaviour.i>

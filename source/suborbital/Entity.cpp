@@ -4,6 +4,7 @@ namespace suborbital
 {
     Entity::Entity(const std::string& name)
     : m_name(name)
+    , m_attributes()
     , m_behaviours()
     {
         std::cout << "Entity::Entity(" << name << ")" << std::endl;
@@ -19,35 +20,49 @@ namespace suborbital
         return m_name;
     }
 
-    bool Entity::has_behaviour(const std::string& class_name) const
+    bool Entity::has_attribute(const std::string& class_name) const
     {
-        auto iter = m_behaviours.find(class_name);
-        if (iter != m_behaviours.end()) {
+        auto iter = m_attributes.find(class_name);
+        if (iter != m_attributes.end())
+        {
             return !iter->second.empty();
         }
 
         return false;
     }
 
-    Behaviour* Entity::create_behaviour(const std::string& class_name)
+    suborbital::Attribute* Entity::create_attribute(const std::string& class_name)
     {
-        std::unique_ptr<Behaviour> base_behaviour = behaviour_registry().create_behaviour(class_name);
-        assert(base_behaviour != nullptr);
+        std::unique_ptr<Attribute> attribute = component_registry().create_attribute(class_name);
+        assert(attribute != nullptr);
 
-        Behaviour* base_behaviour_ptr = base_behaviour.get();
-        m_behaviours[class_name].push_back(std::move(base_behaviour));
-        base_behaviour_ptr->m_entity = this;
-        base_behaviour_ptr->create();
+        Attribute* attribute_ptr = attribute.get();
+        m_attributes[class_name].push_back(std::move(attribute));
+        attribute_ptr->m_entity = this;
+        attribute_ptr->create();
 
-        return base_behaviour_ptr;
+        return attribute_ptr;
     }
 
-    Behaviour* Entity::behaviour(const std::string& class_name) const
+    Attribute* Entity::attribute(const std::string& class_name) const
     {
-        auto iter = m_behaviours.find(class_name);
-        assert(iter != m_behaviours.end());
+        auto iter = m_attributes.find(class_name);
+        assert(iter != m_attributes.end());
         assert(!iter->second.empty());
         return iter->second.front().get();
+    }
+
+    Behaviour* Entity::create_behaviour(const std::string& class_name)
+    {
+        std::unique_ptr<Behaviour> behaviour = component_registry().create_behaviour(class_name);
+        assert(behaviour != nullptr);
+
+        Behaviour* behaviour_ptr = behaviour.get();
+        m_behaviours[class_name].push_back(std::move(behaviour));
+        behaviour_ptr->m_entity = this;
+        behaviour_ptr->create();
+
+        return behaviour_ptr;
     }
 
     void Entity::update(double dt)

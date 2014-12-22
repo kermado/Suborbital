@@ -11,11 +11,11 @@ set(SOURCE_FILES
 	${SRC_ROOT}/Entity.cpp
 	${SRC_ROOT}/ScriptInterpreter.cpp
 	${SRC_ROOT}/PythonInterpreter.cpp
-	${SRC_ROOT}/Component.cpp
-	${SRC_ROOT}/Attribute.cpp
-	${SRC_ROOT}/Behaviour.cpp
-	${SRC_ROOT}/BehaviourRegistry.cpp
-	${SRC_ROOT}/PythonBehaviour.cpp
+	${SRC_ROOT}/component/Component.cpp
+	${SRC_ROOT}/component/Attribute.cpp
+	${SRC_ROOT}/component/Behaviour.cpp
+	${SRC_ROOT}/component/ComponentRegistry.cpp
+	${SRC_ROOT}/component/PythonBehaviour.cpp
 )
 
 # Create a shared library.

@@ -1,56 +1,18 @@
-#ifndef SUBORBITAL_BEHAVIOUR_FACTORY_HPP
-#define SUBORBITAL_BEHAVIOUR_FACTORY_HPP
+#ifndef SUBORBITAL_PYTHON_BEHAVIOUR_FACTORY_HPP
+#define SUBORBITAL_PYTHON_BEHAVIOUR_FACTORY_HPP
 
-#include <string>
-#include <memory>
-#include <iostream>
-
-#include <Python/Python.h>
-
-#include <suborbital/Behaviour.hpp>
-#include <suborbital/PythonBehaviour.hpp>
-
-#include "SwigRuntime.h"
+#include <suborbital/PythonRuntime.hpp>
+#include <suborbital/component/BehaviourFactory.hpp>
+#include <suborbital/component/PythonBehaviour.hpp>
 
 namespace suborbital
 {
-    class IBehaviourFactory
-    {
-    public:
-        IBehaviourFactory()
-        {
-            // Nothing to do.
-        }
-
-        virtual ~IBehaviourFactory()
-        {
-            // Nothing to do.
-        }
-
-        virtual std::unique_ptr<Behaviour> create() const = 0;
-    };
-
-    template<typename BehaviourType>
-    class BehaviourFactory : public IBehaviourFactory
-    {
-    public:
-        BehaviourFactory();
-        ~BehaviourFactory();
-
-        std::unique_ptr<Behaviour> create() const
-        {
-            static_assert(std::is_base_of<Behaviour, BehaviourType>::value,
-                    "Template parameter BehaviourType in BehaviourFactory is not derived from Behaviour");
-            return std::unique_ptr<BehaviourType>(new BehaviourType());
-        }
-    };
-
     template<>
-    class BehaviourFactory<PythonBehaviour> : public IBehaviourFactory
+    class BehaviourFactory<PythonBehaviour> : public ComponentFactory
     {
     public:
         BehaviourFactory(const std::string& class_name)
-        : m_class_name(class_name)
+                : m_class_name(class_name)
         {
             // Nothing to do.
         }
@@ -60,7 +22,7 @@ namespace suborbital
             // Nothing to do.
         }
 
-        std::unique_ptr<Behaviour> create() const
+        std::unique_ptr<Component> create() const
         {
             assert(Py_IsInitialized());
 
@@ -110,7 +72,7 @@ namespace suborbital
             if (!SWIG_IsOK(status))
             {
                 std::cerr << "Failed to convert Python object to a PythonBehaviour for class " << m_class_name
-                          << std::endl;
+                        << std::endl;
                 return nullptr;
             }
 
@@ -129,8 +91,8 @@ namespace suborbital
             Py_XDECREF(python_instance);
             Py_XDECREF(python_class);
 
-            // Return a unique pointer to the scripted behaviour.
-            return std::unique_ptr<Behaviour>(scripted_behaviour_ptr);
+            // Return a unique pointer to the scripted Python behaviour.
+            return std::unique_ptr<PythonBehaviour>(scripted_behaviour_ptr);
         }
 
     private:
