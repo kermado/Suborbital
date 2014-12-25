@@ -1,8 +1,6 @@
-Suborbital component-oriented entity framework
-==============================================
+# Suborbital component-oriented entity framework
 
-Overview
---------
+## Overview
 
 **Please note that this project is currently under development and is not ready for production.**
 
@@ -12,14 +10,12 @@ Suborbital is a lightweight component-oriented entity framework for games, writt
 [2]: http://gamadu.com/artemis/index.html
 [3]: http://www.swig.org/
 
-Requirements
-------------
+## Requirements
 
  * [Python](https://www.python.org/)
  * [Swig](http://www.swig.org/) 
 
-Building
---------
+## Building
 
 Use CMake to generate makefiles or platform-specific IDE projects. Unix (Linux and Mac OS X) users can compile and install the library as follows:
 
@@ -32,13 +28,71 @@ make
 
 Windows users can use CMake to generate a Visual Studio project.
 
-Authors
--------
+## Getting started
+
+You will find some basic sample programs inside of the `examples` directory.
+
+### Defining attributes
+
+Attributes can be easily defined in Python scripts. Provided below is a minimal complete example:
+
+```
+from suborbital import *
+
+class ExampleAttribute(PythonAttribute):
+    def __init__(self):
+        PythonAttribute.__init__(self)
+    def create(self):
+        pass
+```
+
+Note that `self.entity()` is null inside of the constructor. The parent entity is injected into the attribute after construction but before `create`. You should place any initialization that requires accessing the parent entity inside of `create`. 
+
+### Defining behaviours
+
+Like attributes, behaviours can easily be defined in Python scripts. Provided below is a minimal complete example:
+
+```
+from suborbital import *
+
+class ExampleBehaviour(PythonBehaviour):
+    def __init__(self):
+        PythonBehaviour.__init__(self)
+    def create(self):
+        pass
+    def update(self, dt):
+        pass
+```
+
+Entity game logic should be executed from the `update` function. This function is called once per state update. Behaviours can write and read to and from attributes. For example:
+
+```
+class MoveBehaviour(PythonBehaviour):
+    [...]
+    def create(self):
+        self.transform = self.entity().attribute("TransformAttribute")
+    def update(self, dt):
+        self.transform.translate(0, 0, 1)
+    [...]
+```
+
+### Adding components to entities
+
+You can add both Python and c++ defined components to entities:
+
+```
+Entity player("Player");
+player.create_attribute("ExampleAttribute"); // Add a Python defined attribute
+player.create_attribute<ExampleAttribute>(); // Add a c++ defined attribute
+player.create_behaviour("MoveBehaviour"); // Add a Python defined behaviour
+player.create_behaviour<MoveBehaviour>(); // Add a c++ defined behaviour
+```
+
+## Authors
 
  * Omar Kermad
 
-License (MIT)
--------------
+## License (MIT)
 
 Copyright (C) 2014
 Omar Kermad
