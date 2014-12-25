@@ -3,7 +3,19 @@
 
 #include <suborbital/Entity.hpp>
 #include <suborbital/component/ComponentRegistry.hpp>
+#include <suborbital/component/PythonAttributeFactory.hpp>
 #include <suborbital/component/PythonBehaviourFactory.hpp>
+
+/**
+* Macro for registering an attribute type. This is necessary for creating attributes inside of scripts.
+*
+* @param TYPE Behaviour type.
+*/
+#define REGISTER_ATTRIBUTE(TYPE)                                                                                       \
+	{                                                                                                                  \
+        std::unique_ptr<AttributeFactory<TYPE>> factory(new AttributeFactory<TYPE>());                                 \
+        component_registry().register_component<TYPE>(#TYPE, std::move(factory));                                      \
+    }
 
 /**
  * Macro for registering a behaviour type. This is necessary for creating behaviours inside of scripts.
@@ -13,7 +25,7 @@
 #define REGISTER_BEHAVIOUR(TYPE)                                                                                       \
 	{                                                                                                                  \
         std::unique_ptr<BehaviourFactory<TYPE>> factory(new BehaviourFactory<TYPE>());                                 \
-        component_registry().register_component(#TYPE, std::move(factory));                                            \
+        component_registry().register_component<TYPE>(#TYPE, std::move(factory));                                      \
     }                                                                                                                  \
 
 /**

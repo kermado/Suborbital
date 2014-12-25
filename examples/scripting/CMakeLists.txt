@@ -3,6 +3,7 @@ project(ScriptingExample)
 
 # Include headers.
 include_directories(${INC_ROOT})
+include_directories(${PROJECT_SOURCE_DIR})
 
 # Source files.
 set(SOURCE_FILES

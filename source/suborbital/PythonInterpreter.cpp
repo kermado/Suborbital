@@ -1,6 +1,6 @@
 #include <cassert>
 #include <iostream>
-#include <Python.h>
+#include <Python/Python.h>
 
 #include <suborbital/PythonInterpreter.hpp>
 #include <suborbital/component/PythonBehaviour.hpp>

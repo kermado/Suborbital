@@ -3,6 +3,9 @@
 
 namespace suborbital
 {
+    /**
+     * The base class for all classes that should not be copy constructable.
+     */
     class NonCopyable
     {
     protected:
@@ -18,7 +21,7 @@ namespace suborbital
         NonCopyable(const NonCopyable&);
 
         /**
-         * Private (disabled) assignment operator.
+         * Private (disabled) copy assignment operator.
          */
         NonCopyable& operator=(const NonCopyable&);
     };

@@ -2,6 +2,14 @@
 
 namespace suborbital
 {
+    Entity::Entity()
+    : m_name()
+    , m_attributes()
+    , m_behaviours()
+    {
+        std::cout << "Entity::Entity()" << std::endl;
+    }
+
     Entity::Entity(const std::string& name)
     : m_name(name)
     , m_attributes()
@@ -31,7 +39,7 @@ namespace suborbital
         return false;
     }
 
-    suborbital::Attribute* Entity::create_attribute(const std::string& class_name)
+    watch_ptr<Attribute> Entity::create_attribute(const std::string& class_name)
     {
         std::unique_ptr<Attribute> attribute = component_registry().create_attribute(class_name);
         assert(attribute != nullptr);
@@ -41,18 +49,21 @@ namespace suborbital
         attribute_ptr->m_entity = this;
         attribute_ptr->create();
 
-        return attribute_ptr;
+        return watch_ptr<Attribute>(attribute_ptr);
     }
 
-    Attribute* Entity::attribute(const std::string& class_name) const
+    watch_ptr<Attribute> Entity::attribute(const std::string& class_name) const
     {
         auto iter = m_attributes.find(class_name);
         assert(iter != m_attributes.end());
-        assert(!iter->second.empty());
-        return iter->second.front().get();
+        assert(iter->second.empty() == false);
+
+        Attribute* attribute = iter->second.front().get();
+        watch_ptr<Attribute> watch_attribute(attribute);
+        return watch_attribute;
     }
 
-    Behaviour* Entity::create_behaviour(const std::string& class_name)
+    void Entity::create_behaviour(const std::string& class_name)
     {
         std::unique_ptr<Behaviour> behaviour = component_registry().create_behaviour(class_name);
         assert(behaviour != nullptr);
@@ -61,8 +72,6 @@ namespace suborbital
         m_behaviours[class_name].push_back(std::move(behaviour));
         behaviour_ptr->m_entity = this;
         behaviour_ptr->create();
-
-        return behaviour_ptr;
     }
 
     void Entity::update(double dt)

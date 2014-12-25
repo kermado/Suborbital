@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <cassert>
 #include <unordered_map>
 #include <typeindex>
 
@@ -10,9 +11,11 @@
 
 namespace suborbital
 {
+    // Forward declarations.
+    class Component;
+    class ComponentFactory;
     class Attribute;
     class Behaviour;
-    class ComponentFactory;
 
     /**
      * Behaviour registry.
@@ -22,7 +25,14 @@ namespace suborbital
     class ComponentRegistry : public NonCopyable
     {
     private:
+        /**
+         * Component names registry type definition.
+         */
         typedef std::unordered_map<std::type_index, std::string> NameRegistry;
+
+        /**
+         * Component factories registry type definition.
+         */
         typedef std::unordered_map<std::string, std::unique_ptr<ComponentFactory>> FactoryRegistry;
 
     public:
@@ -47,6 +57,9 @@ namespace suborbital
         template<typename ComponentType>
         std::string component_name() const
         {
+            static_assert(std::is_base_of<Component, ComponentType>::value, "Template parameter ComponentType in"
+                    " ComponentRegistry::component_name is not derived from Component");
+
             auto iter = m_name_registry.find(std::type_index(typeid(ComponentType)));
             assert(iter != m_name_registry.end());
 
@@ -62,8 +75,11 @@ namespace suborbital
         template<typename ComponentType>
         void register_component(const std::string& name, std::unique_ptr<ComponentFactory> factory)
         {
+            static_assert(std::is_base_of<Component, ComponentType>::value, "Template parameter ComponentType in"
+                    " ComponentRegistry::register_component is not derived from Component");
+
             m_name_registry.insert(NameRegistry::value_type(typeid(ComponentType), name));
-            m_factory_registry.insert(FactoryRegistry::value_type(name, factory));
+            m_factory_registry.insert(FactoryRegistry::value_type(name, std::move(factory)));
         }
 
         /**
@@ -93,6 +109,9 @@ namespace suborbital
         template<typename AttributeType>
         std::unique_ptr<AttributeType> create_attribute() const
         {
+            static_assert(std::is_base_of<Attribute, AttributeType>::value, "Template parameter AttributeType in"
+                    " ComponentRegistry::create_attribute is not derived from Attribute");
+
             return std::dynamic_pointer_cast<std::unique_ptr<AttributeType>>(create_attribute(component_name<AttributeType>()));
         }
 
@@ -112,19 +131,24 @@ namespace suborbital
         template<typename BehaviourType>
         std::unique_ptr<BehaviourType> create_behaviour() const
         {
+            static_assert(std::is_base_of<Attribute, BehaviourType>::value, "Template parameter BehaviourType in"
+                    " ComponentRegistry::create_behaviour is not derived from Behaviour");
+
             return std::dynamic_pointer_cast<std::unique_ptr<BehaviourType>>(create_behaviour(component_name<BehaviourType>()));
         }
 
     private:
         /**
          * Component name registry.
+         *
          * Maps component types to their registered names.
          */
         NameRegistry m_name_registry;
 
         /**
          * Component factory registry.
-         * Maps components by name to their creation factories.
+         *
+         * Maps components by name to their factory instances.
          */
         FactoryRegistry m_factory_registry;
     };

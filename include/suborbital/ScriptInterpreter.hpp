@@ -7,8 +7,13 @@
 
 namespace suborbital
 {
+    // Forward declarations.
     class Behaviour;
 
+    /**
+     * The base class for script interpreter managers that manage the startup and shutdown of scripting language
+     * interpreters.
+     */
     class ScriptInterpreter : private NonCopyable
     {
     public:
@@ -25,7 +30,7 @@ namespace suborbital
         /**
          * Adds the specified path to the list of script search paths.
          *
-         * @param path Path to add
+         * @param path Path to add.
          */
         virtual void add_path(const std::string& path) = 0;
     };

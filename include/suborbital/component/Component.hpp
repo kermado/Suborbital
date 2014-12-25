@@ -1,6 +1,7 @@
 #ifndef SUBORBITAL_COMPONENT_HPP
 #define SUBORBITAL_COMPONENT_HPP
 
+#include <suborbital/Watchable.hpp>
 #include <suborbital/NonCopyable.hpp>
 
 namespace suborbital
@@ -11,7 +12,7 @@ namespace suborbital
     /**
      * The base class for components attachable to entities.
      */
-    class Component : private NonCopyable
+    class Component : public Watchable, private NonCopyable
     {
     friend Entity;
     public:

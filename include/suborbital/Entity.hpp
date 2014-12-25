@@ -8,7 +8,9 @@
 #include <vector>
 #include <iostream>
 
+#include <suborbital/watch_ptr.hpp>
 #include <suborbital/NonCopyable.hpp>
+#include <suborbital/Watchable.hpp>
 #include <suborbital/component/Attribute.hpp>
 #include <suborbital/component/Behaviour.hpp>
 #include <suborbital/component/ComponentRegistry.hpp>
@@ -18,9 +20,16 @@ namespace suborbital
     /**
      * Represents an object within a scene.
      */
-    class Entity : private NonCopyable
+    class Entity : public Watchable, private NonCopyable
     {
     public:
+        /**
+         * Constructor.
+         *
+         * Sets the entity's name to the empty string.
+         */
+        Entity();
+
         /**
          * Constructor.
          *
@@ -75,14 +84,13 @@ namespace suborbital
         bool has_attribute(const std::string& class_name) const;
 
         /**
-         * Attaches an attribute of the specified type to the entity and returns a pointer to the created attribute.
-         *
-         * @note The caller is NOT responsible for managing the lifetime of the returned attribute.
+         * Creates and attaches an attribute of the specified type to the entity and returns a pointer to the created
+         * attribute.
          *
          * @return Pointer to the attribute that was created and attached.
          */
         template<typename AttributeType>
-        AttributeType* create_attribute()
+        watch_ptr<AttributeType> create_attribute()
         {
             AttributeType* attribute_ptr = new AttributeType();
             const std::string attribute_name = component_registry().component_name<AttributeType>();
@@ -90,22 +98,20 @@ namespace suborbital
 
             attribute_ptr->m_entity = this;
             attribute_ptr->create();
-            return attribute_ptr;
+            return watch_ptr<AttributeType>(attribute_ptr);
         }
 
         /**
-         * Attaches an attribute of type specified by `class_name` to the entity and returns a pointer to the created
-         * attribute.
+         * Creates and attaches an attribute of the type specified by `class_name` to the entity and returns a pointer
+         * to the created attribute.
          *
          * This function is intended to be called from within scripts. Users of the c++ API should use the templated
          * function provided.
          *
-         * @note The caller is NOT responsible for managing the lifetime of the returned attribute.
-         *
          * @param class_name Class name for the attribute to be created and attached.
          * @return Pointer to the attribute that was created and attached.
          */
-        suborbital::Attribute* create_attribute(const std::string& class_name);
+        suborbital::watch_ptr<suborbital::Attribute> create_attribute(const std::string& class_name);
 
         /**
          * Returns a pointer to the attached attribute with the specified type. If multiple attributes of the specified
@@ -116,7 +122,7 @@ namespace suborbital
          * @return Pointer to the first attached attribute with the specified type.
          */
         template<typename AttributeType>
-        AttributeType* attribute()
+        watch_ptr<AttributeType> attribute()
         {
             const std::string attribute_name = component_registry().component_name<AttributeType>();
             auto iter = m_behaviours.find(attribute_name);
@@ -125,32 +131,28 @@ namespace suborbital
 
             AttributeType* attribute_ptr = dynamic_cast<AttributeType*>(iter->second.front().get());
             assert(attribute_ptr != nullptr);
-            return attribute_ptr;
+            return watch_ptr<AttributeType>(attribute_ptr);
         }
 
         /**
-         * Returns a pointer to the attached attribute with the specified class name. If multiple attributes of type
+         * Returns a pointer the attached attribute with the specified class name. If multiple attributes of type
          * specified by `class_name` are attached then the first such attribute is returned.
          *
          * This function is intended to be called from within scripts. Users of the c++ API should use the templated
          * function provided, which attempts to safely cast the requested attribute to the specified type.
          *
-         * @note The caller is NOT responsible for managing the lifetime of the returned attribute.
-         *
          * @param class_name Class name for the attribute to be returned.
          * @return Pointer to the first attached attribute with the specified class name.
          */
-        suborbital::Attribute* attribute(const std::string& class_name) const;
+        watch_ptr<Attribute> attribute(const std::string& class_name) const;
 
         /**
-         * Attaches a behaviour of the specified type to the entity and returns a pointer to the created behaviour.
+         * Attaches a behaviour of the specified type to the entity.
          *
          * @note The caller is NOT responsible for managing the lifetime of the returned behaviour.
-         *
-         * @return Pointer to the behaviour that was created and attached.
          */
         template<typename BehaviourType>
-        BehaviourType* create_behaviour()
+        void create_behaviour()
         {
             BehaviourType* specific_behaviour_ptr = new BehaviourType();
             std::unique_ptr<BehaviourType> specific_behaviour(specific_behaviour_ptr);
@@ -160,12 +162,10 @@ namespace suborbital
 
             specific_behaviour_ptr->m_entity = this;
             specific_behaviour_ptr->create();
-            return specific_behaviour_ptr;
         }
 
         /**
-         * Attaches a behaviour of type specified by `class_name` to the entity and returns a pointer to the created
-         * behaviour.
+         * Attaches a behaviour of type specified by `class_name` to the entity.
          *
          * This function is intended to be called from within scripts. Users of the c++ API should use the templated
          * function provided.
@@ -173,11 +173,10 @@ namespace suborbital
          * @note The caller is NOT responsible for managing the lifetime of the returned behaviour.
          *
          * @param class_name Class name for the behaviour to be created and attached.
-         * @return Pointer to the behaviour that was created and attached.
          */
-        suborbital::Behaviour* create_behaviour(const std::string& class_name);
+        void create_behaviour(const std::string& class_name);
 
-    protected:
+    public: // TODO: Make this private and friend the Scene class.
         /**
          * Updates all the behaviours belonging to the entity.
          *

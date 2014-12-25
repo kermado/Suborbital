@@ -7,6 +7,12 @@
 
 namespace suborbital
 {
+    /**
+     * The base class for Python defined behaviours that can be attached to entities.
+     *
+     * Python defined behaviour classes must derive from this class in order for their members to be accessible from
+     * python scripts.
+     */
     class PythonBehaviour : public Behaviour
     {
     public:
@@ -16,8 +22,9 @@ namespace suborbital
         virtual ~PythonBehaviour();
 
         /**
-         * The Python object that was created when constructing Python behaviour classes that derive from this
-         * class.
+         * The Python object that was created when constructing Python behaviour classes that derive from this class.
+         *
+         * You really don't want to touch this!
          */
         PyObject* derived;
 

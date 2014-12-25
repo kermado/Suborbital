@@ -8,8 +8,12 @@
 
 namespace suborbital
 {
+    // Forward declarations.
     class Behaviour;
 
+    /**
+     * Python script interpreter.
+     */
     class PythonInterpreter : public ScriptInterpreter
     {
     public:
