@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cassert>
 
 #include <suborbital/component/Component.hpp>
 
@@ -16,9 +15,8 @@ namespace suborbital
         std::cout << "Component::~Component()" << std::endl;
     }
 
-    Entity* Component::entity() const
+    watch_ptr<Entity> Component::entity() const
     {
-        assert(m_entity != nullptr);
         return m_entity;
     }
 }

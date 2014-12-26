@@ -1,6 +1,7 @@
 #ifndef SUBORBITAL_COMPONENT_HPP
 #define SUBORBITAL_COMPONENT_HPP
 
+#include <suborbital/watch_ptr.hpp>
 #include <suborbital/Watchable.hpp>
 #include <suborbital/NonCopyable.hpp>
 
@@ -29,11 +30,9 @@ namespace suborbital
         /**
          * Accessor for the parent entity that the component belongs to.
          *
-         * @note The component lifetime is tied to its parent entity.
-         *
          * @return Pointer to the parent entity.
          */
-        Entity* entity() const;
+        watch_ptr<Entity> entity() const;
 
     protected:
         /**
@@ -44,9 +43,8 @@ namespace suborbital
     private:
         /**
          * Pointer to the parent entity.
-         * Note that the component's lifetime is tied to its parent entity.
          */
-        Entity* m_entity;
+        watch_ptr<Entity> m_entity;
     };
 }
 

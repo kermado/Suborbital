@@ -1,5 +1,3 @@
-%feature("director") suborbital::Entity;
-
 %{
     #include <suborbital/watch_ptr.hpp>
     #include <suborbital/Entity.hpp>
@@ -13,7 +11,7 @@
 # Thanks to Flexo:
 # http://stackoverflow.com/questions/27392602/swig-downcasting-from-base-to-derived/27417168#27417168
 # http://stackoverflow.com/questions/27454289/retrieving-a-python-type-back-from-c/27454946#27454946
-%typemap(out) watch_ptr<Attribute> Entity::create_attribute
+%typemap(out) suborbital::watch_ptr<suborbital::Attribute> suborbital::Entity::create_attribute
 {
     watch_ptr<PythonAttribute> python_attribute = dynamic_pointer_cast<PythonAttribute>($1);
     if (python_attribute)
