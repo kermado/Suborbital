@@ -1,13 +1,12 @@
 #include <iostream>
-#include <Python.h>
 
 #include <suborbital/component/PythonAttribute.hpp>
 
 namespace suborbital
 {
     PythonAttribute::PythonAttribute()
-    : Attribute()
-    , derived(nullptr)
+    : PythonObject()
+    , Attribute()
     {
         std::cout << "PythonAttribute::PythonAttribute()" << std::endl;
     }
@@ -15,10 +14,5 @@ namespace suborbital
     PythonAttribute::~PythonAttribute()
     {
         std::cout << "PythonAttribute::PythonAttribute()" << std::endl;
-
-        if (derived != nullptr)
-        {
-            Py_DECREF(derived);
-        }
     }
 }

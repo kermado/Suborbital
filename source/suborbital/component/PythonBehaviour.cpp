@@ -1,13 +1,12 @@
 #include <iostream>
-#include <Python.h>
 
 #include <suborbital/component/PythonBehaviour.hpp>
 
 namespace suborbital
 {
     PythonBehaviour::PythonBehaviour()
-    : Behaviour()
-    , derived(nullptr)
+    : PythonObject()
+    , Behaviour()
     {
         std::cout << "PythonBehaviour::PythonBehaviour()" << std::endl;
     }
@@ -15,10 +14,5 @@ namespace suborbital
     PythonBehaviour::~PythonBehaviour()
     {
         std::cout << "PythonBehaviour::PythonBehaviour()" << std::endl;
-
-        if (derived != nullptr)
-        {
-            Py_DECREF(derived);
-        }
     }
 }

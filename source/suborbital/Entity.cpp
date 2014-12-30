@@ -1,9 +1,12 @@
 #include <suborbital/Entity.hpp>
+#include <suborbital/event/EventCallbackBase.hpp>
+#include <suborbital/event/EventSubscription.hpp>
 
 namespace suborbital
 {
     Entity::Entity()
     : m_name()
+    , m_event_dispatcher()
     , m_attributes()
     , m_behaviours()
     {
@@ -12,6 +15,7 @@ namespace suborbital
 
     Entity::Entity(const std::string& name)
     : m_name(name)
+    , m_event_dispatcher()
     , m_attributes()
     , m_behaviours()
     {
@@ -72,6 +76,17 @@ namespace suborbital
         m_behaviours[class_name].push_back(std::move(behaviour));
         behaviour_ptr->m_entity = this;
         behaviour_ptr->create();
+    }
+
+    void Entity::publish(const std::string& event_name, std::shared_ptr<Event> event)
+    {
+        m_event_dispatcher.publish(event_name, event);
+    }
+
+    std::unique_ptr<EventSubscription> Entity::subscribe(const std::string& event_name,
+            std::unique_ptr<EventCallbackBase> callback)
+    {
+        return m_event_dispatcher.subscribe(event_name, std::move(callback));
     }
 
     void Entity::update(double dt)

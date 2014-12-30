@@ -10,9 +10,14 @@ SET(SWIG_ROOT ${PROJECT_SOURCE_DIR}/swig/suborbital)
 set(SOURCE_FILES
 	${SRC_ROOT}/watch_ptr.cpp
 	${SRC_ROOT}/Watchable.cpp
+
+	${SRC_ROOT}/PythonObject.cpp
+
 	${SRC_ROOT}/Entity.cpp
+
 	${SRC_ROOT}/ScriptInterpreter.cpp
 	${SRC_ROOT}/PythonInterpreter.cpp
+
 	${SRC_ROOT}/component/Component.cpp
 	${SRC_ROOT}/component/PythonAttribute.cpp
 	${SRC_ROOT}/component/Attribute.cpp
@@ -20,6 +25,14 @@ set(SOURCE_FILES
 	${SRC_ROOT}/component/PythonBehaviour.cpp
 	${SRC_ROOT}/component/ComponentRegistry.cpp
 	${SRC_ROOT}/component/ExampleAttribute.cpp
+
+	${SRC_ROOT}/event/EventDispatcher.cpp
+	${SRC_ROOT}/event/EventSubscription.cpp
+	${SRC_ROOT}/event/Event.cpp
+	${SRC_ROOT}/event/PythonEvent.cpp
+	${SRC_ROOT}/event/EventCallbackBase.cpp
+	${SRC_ROOT}/event/EventCallback.cpp
+	${SRC_ROOT}/event/PythonEventCallback.cpp
 )
 
 # Create a shared library.

@@ -8,9 +8,10 @@
 #include <vector>
 #include <iostream>
 
-#include <suborbital/watch_ptr.hpp>
 #include <suborbital/NonCopyable.hpp>
+#include <suborbital/watch_ptr.hpp>
 #include <suborbital/Watchable.hpp>
+#include <suborbital/event/EventDispatcher.hpp>
 #include <suborbital/component/Attribute.hpp>
 #include <suborbital/component/Behaviour.hpp>
 #include <suborbital/component/ComponentRegistry.hpp>
@@ -144,7 +145,7 @@ namespace suborbital
          * @param class_name Class name for the attribute to be returned.
          * @return Pointer to the first attached attribute with the specified class name.
          */
-        watch_ptr<Attribute> attribute(const std::string& class_name) const;
+        suborbital::watch_ptr<suborbital::Attribute> attribute(const std::string& class_name) const;
 
         /**
          * Attaches a behaviour of the specified type to the entity.
@@ -176,6 +177,32 @@ namespace suborbital
          */
         void create_behaviour(const std::string& class_name);
 
+        /**
+         * Publishes an event to be dispatched to all subscribers of the specified `event_name`.
+         *
+         * The event must be passed as a shared pointer to the event. This is because we make no assumption about how
+         * subscribers may choose to use the event. For instance, we cannot guarantee that subscribers will not make
+         * use of the event beyond the lifetime of their callback function.
+         *
+         * @param event_name Name of the event to publish.
+         * @param Shared pointer to the event to be published.
+         */
+        void publish(const std::string& event_name, std::shared_ptr<suborbital::Event> event);
+
+        /**
+         * Subscribes to receive events of the specified `event_name`.
+         *
+         * The `EventSubscription` object returned manages the lifetime of the subscription. The subscription is
+         * cancelled automatically once the object goes out of scope. Alternatively, it is possible to manually cancel
+         * the subscription using the function provided by the `EventSubscription` class.
+         *
+         * @param event_name Name of the event to subscribe for.
+         * @param callback Callback function that should receive the events.
+         * @return Subscription object that controls the lifetime of the subscription.
+         */
+        std::unique_ptr<suborbital::EventSubscription> subscribe(const std::string& event_name,
+                std::unique_ptr<suborbital::EventCallbackBase> callback);
+
     public: // TODO: Make this private and friend the Scene class.
         /**
          * Updates all the behaviours belonging to the entity.
@@ -191,6 +218,11 @@ namespace suborbital
          * Name assigned to the entity.
          */
         const std::string m_name;
+
+        /**
+         * Event dispatcher for the entity.
+         */
+        EventDispatcher m_event_dispatcher;
 
         /**
          * Attributes attached to the entity, indexed by class name.
