@@ -20,7 +20,7 @@ class HealthAttribute(PythonAttribute):
         self.health -= amount
         if self.health <= 0:
             self.health = 0
-            self.entity().publish("EntityDiedEvent", EntityDiedEvent())
+            self.entity.publish("EntityDiedEvent", EntityDiedEvent())
 
     def increase(self, amount):
         self.health += amount

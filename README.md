@@ -46,7 +46,7 @@ class SomeAttribute(PythonAttribute):
         pass
 ```
 
-Note that `self.entity()` is null inside of the constructor. The parent entity is injected into the attribute after construction but before `create`. You should place any initialization that requires accessing the parent entity inside of `create`. 
+Note that `self.entity` is null inside of the constructor. The parent entity is injected into the attribute after construction but before `create`. You should place any initialization that requires accessing the parent entity inside of `create`. 
 
 ### Defining behaviours
 
@@ -70,7 +70,7 @@ Entity game logic should be executed from the `update` function. This function i
 class MoveBehaviour(PythonBehaviour):
     [...]
     def create(self):
-        self.transform = self.entity().attribute("TransformAttribute")
+        self.transform = self.entity.attribute("TransformAttribute")
     def update(self, dt):
         self.transform.translate(0, 0, 1)
     [...]
@@ -99,15 +99,15 @@ class HealthAttribute(PythonAttribute):
     def decrement(self, amount):
         self.health -= amount
         if self.health <= 0:
-            self.entity().publish("EntityDiedEvent", EntityDiedEvent())
+            self.entity.publish("EntityDiedEvent", EntityDiedEvent())
     [...]
 
 class RespawnBehaviour(PythonBehaviour):
     [...]
     def create(self):
-        self.transform = self.entity().attribute("TransformAttribute")
-        self.health = self.entity().attribute("HealthAttribute")
-        self.entity().subscribe("EntityDiedEvent", self.on_entity_died)
+        self.transform = self.entity.attribute("TransformAttribute")
+        self.health = self.entity.attribute("HealthAttribute")
+        self.entity.subscribe("EntityDiedEvent", self.on_entity_died)
     def on_entity_died(self, event):
         self.transform.position(0, 0, 0)
         self.health.reset()
