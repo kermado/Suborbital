@@ -2,9 +2,9 @@
 #define SUBORBITAL_EVENT_SUBSCRIPTION_HPP
 
 #include <string>
+#include <memory>
 
 #include <suborbital/NonCopyable.hpp>
-#include <suborbital/watch_ptr.hpp>
 
 namespace suborbital
 {
@@ -38,7 +38,7 @@ namespace suborbital
         /**
          * Constructor.
          */
-        EventSubscription(watch_ptr<EventDispatcher> dispatcher, const std::string& event_name, std::size_t callback_index);
+        EventSubscription(std::weak_ptr<EventDispatcher> dispatcher, const std::string& event_name);
 
     private:
         /**
@@ -47,19 +47,14 @@ namespace suborbital
         bool m_cancelled;
 
         /**
-         * The dispatcher for the subscription.
+         * Weak pointer to the dispatcher for the subscription.
          */
-        watch_ptr<EventDispatcher> m_dispatcher;
+        std::weak_ptr<EventDispatcher> m_dispatcher;
 
         /**
          * The name of the event that the subscription is for.
          */
         std::string m_event_name;
-
-        /**
-         * The index into the list of event callbacks for the subscription's callback function.
-         */
-        std::size_t m_callback_index;
     };
 }
 

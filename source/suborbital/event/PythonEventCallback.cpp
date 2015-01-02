@@ -2,6 +2,7 @@
 
 #include <suborbital/PythonRuntime.hpp>
 #include <suborbital/event/PythonEventCallback.hpp>
+#include <suborbital/event/PythonEvent.hpp>
 
 namespace suborbital
 {
@@ -46,9 +47,18 @@ namespace suborbital
 
     void PythonEventCallback::operator()(std::shared_ptr<Event> event)
     {
-        swig_type_info* event_type_info = SWIG_TypeQuery("std::shared_ptr<suborbital::Event>*");
-        assert(event_type_info != NULL);
-        PyObject* python_event_object = SWIG_NewPointerObj((void*) &event, event_type_info, 0);
-        PyObject_CallFunctionObjArgs(m_callback_function, python_event_object, NULL);
+        std::shared_ptr<PythonEvent> python_event = std::dynamic_pointer_cast<PythonEvent>(event);
+        if (python_event)
+        {
+            assert(python_event->m_derived != nullptr);
+            PyObject_CallFunctionObjArgs(m_callback_function, python_event->m_derived, NULL);
+        }
+        else
+        {
+            swig_type_info* event_type_info = SWIG_TypeQuery("std::shared_ptr<suborbital::Event>*");
+            assert(event_type_info != NULL);
+            PyObject* python_event_object = SWIG_NewPointerObj((void*) &event, event_type_info, 0);
+            PyObject_CallFunctionObjArgs(m_callback_function, python_event_object, NULL);
+        }
     }
 }

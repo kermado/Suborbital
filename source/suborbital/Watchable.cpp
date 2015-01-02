@@ -1,4 +1,5 @@
 #include <suborbital/Watchable.hpp>
+#include <iostream>
 
 namespace suborbital
 {
@@ -10,6 +11,7 @@ namespace suborbital
 
     Watchable::~Watchable()
     {
+        std::cout << "Watchable::~Watchable()" << std::endl;
         for (watch_ptr_base* watcher = m_watchers.next; watcher != nullptr; watcher = watcher->next)
         {
             watcher->ptr = nullptr;

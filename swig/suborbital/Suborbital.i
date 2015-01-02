@@ -4,6 +4,17 @@
     #include <memory>
 %}
 
+// Exception handling.
+%feature("director:except") {
+    if ($error != NULL) {
+        PyObject *ptype, *pvalue, *ptraceback;
+        PyErr_Fetch(&ptype, &pvalue, &ptraceback);
+        PyErr_Restore(ptype, pvalue, ptraceback);
+        PyErr_Print();
+        Py_Exit(1);
+    }
+}
+
 // Include parts of the c++ standard library.
 %include <std_string.i>
 %include <std_shared_ptr.i>
@@ -17,7 +28,6 @@
 %shared_ptr(suborbital::PythonEvent);
 
 // Include classes.
-%include <suborbital/PythonObject.i>
 %include <suborbital/Watchable.i>
 %include <suborbital/Entity.i>
 %include <suborbital/component/Component.i>

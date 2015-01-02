@@ -5,8 +5,8 @@
 namespace suborbital
 {
     PythonEvent::PythonEvent()
-    : PythonObject()
-    , Event()
+    : Event()
+    , m_derived(nullptr)
     {
         std::cout << "PythonEvent::PythonEvent()" << std::endl;
     }

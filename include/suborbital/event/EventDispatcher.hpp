@@ -3,11 +3,10 @@
 
 #include <memory>
 #include <functional>
-#include <vector>
+#include <map>
 #include <unordered_map>
 
 #include <suborbital/NonCopyable.hpp>
-#include <suborbital/Watchable.hpp>
 
 namespace suborbital
 {
@@ -19,7 +18,7 @@ namespace suborbital
     /**
      * Event dispatcher.
      */
-    class EventDispatcher : public Watchable, private NonCopyable
+    class EventDispatcher : public std::enable_shared_from_this<EventDispatcher>, private NonCopyable
     {
     friend EventSubscription;
     public:
@@ -56,8 +55,10 @@ namespace suborbital
          *
          * This method cannot be called directly. See the `EventSubscription` class for details on how to unsubscribe
          * for events.
+         *
+         * @param subscription Pointer to the subscription that is being cancelled.
          */
-        void unsubscribe(EventSubscription& subscription);
+        void unsubscribe(EventSubscription* subscription);
 
     private:
         /**
@@ -65,7 +66,7 @@ namespace suborbital
          *
          * Maps event names to a vector of callback functions.
          */
-        std::unordered_map<std::string, std::vector<std::unique_ptr<EventCallbackBase>>> m_subscriptions;
+        std::unordered_map<std::string, std::map<EventSubscription* const, std::unique_ptr<EventCallbackBase>>> m_subscriptions;
     };
 }
 

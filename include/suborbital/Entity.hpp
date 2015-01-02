@@ -222,7 +222,7 @@ namespace suborbital
         /**
          * Event dispatcher for the entity.
          */
-        EventDispatcher m_event_dispatcher;
+        std::shared_ptr<EventDispatcher> m_event_dispatcher;
 
         /**
          * Attributes attached to the entity, indexed by class name.

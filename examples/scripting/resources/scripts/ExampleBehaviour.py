@@ -13,7 +13,8 @@ class ExampleBehaviour(PythonBehaviour):
         example = self.entity().attribute("ExampleAttribute")
         example.value("awesome!")
         example.log()
-        self.entityDiedSubscription = self.entity().subscribe("EntityDiedEvent", self.onEntityDied)
+
+        self.entityDiedSubscription1 = self.entity().subscribe("EntityDiedEvent", self.on_entity_died)
 
     def update(self, dt):
         e = self.entity()
@@ -21,5 +22,6 @@ class ExampleBehaviour(PythonBehaviour):
         health.decrease(10)
         print("Health = " + str(health.value()))
 
-    def onEntityDied(self, event):
+    def on_entity_died(self, event):
+        print(event)
         print(self.entity().name().upper() + " has gone to a better place".upper())

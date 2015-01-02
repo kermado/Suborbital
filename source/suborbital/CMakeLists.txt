@@ -11,8 +11,6 @@ set(SOURCE_FILES
 	${SRC_ROOT}/watch_ptr.cpp
 	${SRC_ROOT}/Watchable.cpp
 
-	${SRC_ROOT}/PythonObject.cpp
-
 	${SRC_ROOT}/Entity.cpp
 
 	${SRC_ROOT}/ScriptInterpreter.cpp

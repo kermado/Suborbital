@@ -6,7 +6,7 @@ namespace suborbital
 {
     Entity::Entity()
     : m_name()
-    , m_event_dispatcher()
+    , m_event_dispatcher(new EventDispatcher())
     , m_attributes()
     , m_behaviours()
     {
@@ -15,7 +15,7 @@ namespace suborbital
 
     Entity::Entity(const std::string& name)
     : m_name(name)
-    , m_event_dispatcher()
+    , m_event_dispatcher(new EventDispatcher())
     , m_attributes()
     , m_behaviours()
     {
@@ -80,13 +80,13 @@ namespace suborbital
 
     void Entity::publish(const std::string& event_name, std::shared_ptr<Event> event)
     {
-        m_event_dispatcher.publish(event_name, event);
+        m_event_dispatcher->publish(event_name, event);
     }
 
     std::unique_ptr<EventSubscription> Entity::subscribe(const std::string& event_name,
             std::unique_ptr<EventCallbackBase> callback)
     {
-        return m_event_dispatcher.subscribe(event_name, std::move(callback));
+        return m_event_dispatcher->subscribe(event_name, std::move(callback));
     }
 
     void Entity::update(double dt)
