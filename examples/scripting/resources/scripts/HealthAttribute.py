@@ -1,5 +1,5 @@
-from suborbital import *
-from EntityDiedEvent import *
+from suborbital import PythonAttribute
+from EntityDiedEvent import EntityDiedEvent
 
 class HealthAttribute(PythonAttribute):
 

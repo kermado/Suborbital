@@ -1,4 +1,4 @@
-from suborbital import *
+from suborbital import PythonBehaviour
 
 class ExampleBehaviour(PythonBehaviour):
 

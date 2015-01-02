@@ -1,4 +1,4 @@
-from suborbital import *
+from suborbital import PythonBehaviour
 
 class TimerBehaviour(PythonBehaviour):
     def __init__(self):

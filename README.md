@@ -36,10 +36,10 @@ You will find some basic sample programs inside of the `examples` directory.
 
 Attributes can be easily defined in Python scripts. Provided below is a minimal complete example:
 
-```
-from suborbital import *
+```python
+from suborbital import PythonAttribute
 
-class ExampleAttribute(PythonAttribute):
+class SomeAttribute(PythonAttribute):
     def __init__(self):
         PythonAttribute.__init__(self)
     def create(self):
@@ -52,10 +52,10 @@ Note that `self.entity()` is null inside of the constructor. The parent entity i
 
 Like attributes, behaviours can easily be defined in Python scripts. Provided below is a minimal complete example:
 
-```
-from suborbital import *
+```python
+from suborbital import PythonBehaviour
 
-class ExampleBehaviour(PythonBehaviour):
+class SomeBehaviour(PythonBehaviour):
     def __init__(self):
         PythonBehaviour.__init__(self)
     def create(self):
@@ -66,7 +66,7 @@ class ExampleBehaviour(PythonBehaviour):
 
 Entity game logic should be executed from the `update` function. This function is called once per state update. Behaviours can write and read to and from attributes. For example:
 
-```
+```python
 class MoveBehaviour(PythonBehaviour):
     [...]
     def create(self):
@@ -76,14 +76,52 @@ class MoveBehaviour(PythonBehaviour):
     [...]
 ```
 
+### Defining events
+
+Events are the last of the basic building blocks that can be defined in Python scripts. Provided below is a minimal complete example:
+
+```python
+from suborbital import PythonEvent
+
+class ExampleEvent(PythonEvent):
+    def __init__(self):
+        PythonEvent.__init__(self)
+
+```
+
+Attributes and behaviours can both publish and subscribe for events. For example:
+
+```python
+class HealthAttribute(PythonAttribute):
+    [...]
+    def reset(self):
+        self.health = 100
+    def decrement(self, amount):
+        self.health -= amount
+        if self.health <= 0:
+            self.entity().publish("EntityDiedEvent", EntityDiedEvent())
+    [...]
+
+class RespawnBehaviour(PythonBehaviour):
+    [...]
+    def create(self):
+        self.transform = self.entity().attribute("TransformAttribute")
+        self.health = self.entity().attribute("HealthAttribute")
+        self.entity().subscribe("EntityDiedEvent", self.on_entity_died)
+    def on_entity_died(self, event):
+        self.transform.position(0, 0, 0)
+        self.health.reset()
+    [...]
+```
+
 ### Adding components to entities
 
 You can add both Python and c++ defined components to entities:
 
-```
+```cpp
 Entity player("Player");
-player.create_attribute("ExampleAttribute"); // Add a Python defined attribute
-player.create_attribute<ExampleAttribute>(); // Add a c++ defined attribute
+player.create_attribute("SomeAttribute"); // Add a Python defined attribute
+player.create_attribute<SomeAttribute>(); // Add a c++ defined attribute
 player.create_behaviour("MoveBehaviour"); // Add a Python defined behaviour
 player.create_behaviour<MoveBehaviour>(); // Add a c++ defined behaviour
 ```
