@@ -108,8 +108,7 @@ namespace suborbital
             //
             // Thanks to Flexo:
             // http://stackoverflow.com/questions/27454289/retrieving-a-python-type-back-from-c/27454946#27454946
-            scripted_behaviour_ptr->derived = python_instance;
-            Py_INCREF(python_instance);
+            scripted_behaviour_ptr->instance(python_instance);
 
             // Decrease reference counts for created python objects.
             Py_XDECREF(python_disown_function);

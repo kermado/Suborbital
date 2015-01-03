@@ -6,7 +6,7 @@ namespace suborbital
 {
     PythonEvent::PythonEvent()
     : Event()
-    , m_derived(nullptr)
+    , m_instance(nullptr)
     {
         std::cout << "PythonEvent::PythonEvent()" << std::endl;
     }
@@ -14,5 +14,15 @@ namespace suborbital
     PythonEvent::~PythonEvent()
     {
         std::cout << "PythonEvent::~PythonEvent()" << std::endl;
+    }
+
+    void PythonEvent::instance(PyObject* derived_instance)
+    {
+        m_instance = derived_instance;
+    }
+
+    PyObject* PythonEvent::instance() const
+    {
+        return m_instance;
     }
 }

@@ -18,22 +18,38 @@ namespace suborbital
     public:
         /**
          * Destructor.
+         *
+         * Decrements the reference count of the derived Python instance being wrapped.
          */
         virtual ~PythonBehaviour();
 
-    public:
         /**
-         * The Python object that was created when constructing classes that derive from this class.
+         * Sets the derived Python instance that is being wrapped.
          *
-         * You really don't want to touch this!
+         * This function increments the reference count of the passed `derived_instance`.
+         *
+         * @param derived_instance Pointer to the derived Python instance.
          */
-        PyObject* derived;
+        void instance(PyObject* derived_instance);
+
+        /**
+         * Accessor for the derived Python instance that has been wrapped.
+         *
+         * @return Derived Python instance.
+         */
+        PyObject* instance() const;
 
     protected:
         /**
          * Constructor.
          */
         PythonBehaviour();
+
+    private:
+        /**
+         * The Python object that was created when constructing classes that derive from this class.
+         */
+        PyObject* m_instance;
     };
 }
 

@@ -50,8 +50,9 @@ namespace suborbital
         std::shared_ptr<PythonEvent> python_event = std::dynamic_pointer_cast<PythonEvent>(event);
         if (python_event)
         {
-            assert(python_event->m_derived != nullptr);
-            PyObject_CallFunctionObjArgs(m_callback_function, python_event->m_derived, NULL);
+            PyObject* derived_instance = python_event->instance();
+            assert(derived_instance != nullptr);
+            PyObject_CallFunctionObjArgs(m_callback_function, derived_instance, NULL);
         }
         else
         {

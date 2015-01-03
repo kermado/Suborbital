@@ -18,7 +18,7 @@
     suborbital::watch_ptr<suborbital::PythonAttribute> python_attribute = suborbital::dynamic_pointer_cast<suborbital::PythonAttribute>($1);
     if (python_attribute)
     {
-        $result = python_attribute->derived;
+        $result = python_attribute->instance();
         Py_INCREF($result);
     }
     else
@@ -40,7 +40,7 @@
     suborbital::watch_ptr<suborbital::PythonAttribute> python_attribute = suborbital::dynamic_pointer_cast<suborbital::PythonAttribute>($1);
     if (python_attribute)
     {
-        $result = python_attribute->derived;
+        $result = python_attribute->instance();
         Py_INCREF($result);
     }
     else
@@ -110,7 +110,7 @@ class WeaklyBoundMethod:
         assert(SWIG_IsOK(status));
 
         std::shared_ptr<suborbital::PythonEvent> event = *(reinterpret_cast<std::shared_ptr<suborbital::PythonEvent>*>(result));
-        event->m_derived = python_type;
+        event->instance(python_type);
         $self->publish(event_name, event);
     }
 }
