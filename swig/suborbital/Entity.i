@@ -95,8 +95,11 @@ class WeaklyBoundMethod:
     }
 }
 
-// Ignore the Entity::publish function. An alternative implementation is provided below.
+// Ignore the Entity::publish, Entity::broadcast_descendents and Entity::broadcast functions. Alternative
+// implementations of these functions are provided below.
 %ignore suborbital::Entity::publish(const std::string&, std::shared_ptr<suborbital::Event>);
+%ignore suborbital::Entity::broadcast_descendents(const std::string&, std::shared_ptr<suborbital::Event>);
+%ignore suborbital::Entity::broadcast(const std::string&, std::shared_ptr<suborbital::Event>);
 
 // Our alternative implementation of the Entity::publish function stores the PyObject* for the derived event inside of
 // the PythonEvent instance. This allows us to pass the PyObject* to the Python callback function, thus preserving type
@@ -112,6 +115,28 @@ class WeaklyBoundMethod:
         std::shared_ptr<suborbital::PythonEvent> event = *(reinterpret_cast<std::shared_ptr<suborbital::PythonEvent>*>(result));
         event->instance(python_type);
         $self->publish(event_name, event);
+    }
+
+    void suborbital::Entity::broadcast_descendents(const std::string& event_name, PyObject* python_type)
+    {
+        void* result = NULL;
+        const int status = SWIG_ConvertPtr(python_type, &result, SWIGTYPE_p_std__shared_ptrT_suborbital__PythonEvent_t, 0);
+        assert(SWIG_IsOK(status));
+
+        std::shared_ptr<suborbital::PythonEvent> event = *(reinterpret_cast<std::shared_ptr<suborbital::PythonEvent>*>(result));
+        event->instance(python_type);
+        $self->broadcast_descendents(event_name, event);
+    }
+
+    void suborbital::Entity::broadcast(const std::string& event_name, PyObject* python_type)
+    {
+        void* result = NULL;
+        const int status = SWIG_ConvertPtr(python_type, &result, SWIGTYPE_p_std__shared_ptrT_suborbital__PythonEvent_t, 0);
+        assert(SWIG_IsOK(status));
+
+        std::shared_ptr<suborbital::PythonEvent> event = *(reinterpret_cast<std::shared_ptr<suborbital::PythonEvent>*>(result));
+        event->instance(python_type);
+        $self->broadcast(event_name, event);
     }
 }
 

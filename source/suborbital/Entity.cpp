@@ -9,6 +9,8 @@ namespace suborbital
     , m_event_dispatcher(new EventDispatcher())
     , m_attributes()
     , m_behaviours()
+    , m_parent(nullptr)
+    , m_children()
     {
         std::cout << "Entity::Entity()" << std::endl;
     }
@@ -83,10 +85,54 @@ namespace suborbital
         m_event_dispatcher->publish(event_name, event);
     }
 
+    void Entity::broadcast_descendents(const std::string& event_name, std::shared_ptr<suborbital::Event> event)
+    {
+        for (auto& child : m_children)
+        {
+            child->broadcast(event_name, event);
+        }
+    }
+
+    void Entity::broadcast(const std::string& event_name, std::shared_ptr<suborbital::Event> event)
+    {
+        publish(event_name, event);
+
+        for (auto& child : m_children)
+        {
+            child->broadcast(event_name, event);
+        }
+    }
+
     std::unique_ptr<EventSubscription> Entity::subscribe(const std::string& event_name,
             std::unique_ptr<EventCallbackBase> callback)
     {
         return m_event_dispatcher->subscribe(event_name, std::move(callback));
+    }
+
+    bool Entity::has_children() const
+    {
+        return m_children.empty() == false;
+    }
+
+    bool Entity::has_parent() const
+    {
+        return static_cast<bool>(m_parent);
+    }
+
+    watch_ptr<Entity> Entity::create_child()
+    {
+        Entity* child = new Entity();
+        child->m_parent = watch_ptr<Entity>(this);
+        m_children.push_back(std::unique_ptr<Entity>(child));
+        return watch_ptr<Entity>(child);
+    }
+
+    watch_ptr<Entity> Entity::create_child(const std::string& name)
+    {
+        Entity* child = new Entity(name);
+        child->m_parent = watch_ptr<Entity>(this);
+        m_children.push_back(std::unique_ptr<Entity>(child));
+        return watch_ptr<Entity>(child);
     }
 
     void Entity::update(double dt)

@@ -178,7 +178,7 @@ namespace suborbital
         void create_behaviour(const std::string& class_name);
 
         /**
-         * Publishes an event to be dispatched to all subscribers of the specified `event_name`.
+         * Publishes an event to be dispatched to all subscribers of the specified `event_name` on this entity.
          *
          * The event must be passed as a shared pointer to the event. This is because we make no assumption about how
          * subscribers may choose to use the event. For instance, we cannot guarantee that subscribers will not make
@@ -188,6 +188,30 @@ namespace suborbital
          * @param Shared pointer to the event to be published.
          */
         void publish(const std::string& event_name, std::shared_ptr<suborbital::Event> event);
+
+        /**
+         * Broadcasts an event to all descendant entities (not including this entity).
+         *
+         * The event must be passed as a shared pointer to the event. This is because we make no assumption about how
+         * subscribers may choose to use the event. For instance, we cannot guarantee that subscribers will not make
+         * use of the event beyond the lifetime of their callback function.
+         *
+         * @param event_name Name of the event to broadcast.
+         * @param Shared pointer to the event to be broadcast.
+         */
+        void broadcast_descendents(const std::string& event_name, std::shared_ptr<suborbital::Event> event);
+
+        /**
+         * Broadcasts an event to this entity and all descendant entities.
+         *
+         * The event must be passed as a shared pointer to the event. This is because we make no assumption about how
+         * subscribers may choose to use the event. For instance, we cannot guarantee that subscribers will not make
+         * use of the event beyond the lifetime of their callback function.
+         *
+         * @param event_name Name of the event to broadcast.
+         * @param Shared pointer to the event to be broadcast.
+         */
+        void broadcast(const std::string& event_name, std::shared_ptr<suborbital::Event> event);
 
         /**
          * Subscribes to receive events of the specified `event_name`.
@@ -202,6 +226,37 @@ namespace suborbital
          */
         std::unique_ptr<suborbital::EventSubscription> subscribe(const std::string& event_name,
                 std::unique_ptr<suborbital::EventCallbackBase> callback);
+
+        /**
+         * Checks whether the entity has any children.
+         *
+         * @return True if the entity has one or more children, false otherwise.
+         */
+        bool has_children() const;
+
+        /**
+         * Checks whether the entity is the child of another entity.
+         *
+         * @return True if the entity is the child of another entity, false otherwise.
+         */
+        bool has_parent() const;
+
+        /**
+         * Creates and attaches an entity as the child of this entity.
+         *
+         * Sets the child entity's name to the empty string.
+         *
+         * @return Pointer to the entity that was created and attached as a child.
+         */
+        watch_ptr<Entity> create_child();
+
+        /**
+         * Creates and attaches an entity as the child of this entity.
+         *
+         * @param name Name to assign to the child entity.
+         * @return Pointer to the entity that was created and attached as a child.
+         */
+        watch_ptr<Entity> create_child(const std::string& name);
 
     public: // TODO: Make this private and friend the Scene class.
         /**
@@ -239,6 +294,16 @@ namespace suborbital
          * entity is deleted.
          */
         std::unordered_map<std::string, std::vector<std::unique_ptr<Behaviour>>> m_behaviours;
+
+        /**
+         * Parent entity (will be a nullptr if the entity has no parent).
+         */
+        watch_ptr<Entity> m_parent;
+
+        /**
+         * Child entities.
+         */
+        std::vector<std::unique_ptr<Entity>> m_children;
     };
 }
 
