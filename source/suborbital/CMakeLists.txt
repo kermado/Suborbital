@@ -8,10 +8,11 @@ SET(SWIG_ROOT ${PROJECT_SOURCE_DIR}/swig/suborbital)
 
 # Source files.
 set(SOURCE_FILES
-	${SRC_ROOT}/watch_ptr.cpp
+	${SRC_ROOT}/WatchPtr.cpp
 	${SRC_ROOT}/Watchable.cpp
 
 	${SRC_ROOT}/Entity.cpp
+	${SRC_ROOT}/Scene.cpp
 
 	${SRC_ROOT}/ScriptInterpreter.cpp
 	${SRC_ROOT}/PythonInterpreter.cpp

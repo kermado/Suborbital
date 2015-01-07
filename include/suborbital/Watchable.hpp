@@ -1,7 +1,7 @@
 #ifndef SUBORBITAL_WATCHABLE_HPP
 #define SUBORBITAL_WATCHABLE_HPP
 
-#include <suborbital/watch_ptr.hpp>
+#include <suborbital/WatchPtr.hpp>
 
 namespace suborbital
 {
@@ -26,7 +26,7 @@ namespace suborbital
         /**
          * Linked list of watch_ptr's that are pointing to the watchable object.
          */
-        mutable watch_ptr_base m_watchers;
+        mutable WatchPtrBase m_watchers;
     };
 }
 

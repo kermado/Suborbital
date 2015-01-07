@@ -19,8 +19,8 @@
 %include <std_string.i>
 %include <std_shared_ptr.i>
 
-// Include watch_ptr smart pointer class.
-%include <suborbital/watch_ptr.i>
+// Include WatchPtr smart pointer class.
+%include <suborbital/WatchPtr.i>
 
 // Specify which classes should be wrapped using std::shared_ptr.
 // Note that this must be done before before any usage or declaration of the classes.
@@ -42,10 +42,10 @@
 %include <suborbital/event/EventCallbackBase.i>
 %include <suborbital/event/PythonEventCallback.i>
 
-// Specify which classes can be wrapped using watch_ptr.
-%template(EntityWatchPtr) suborbital::watch_ptr<suborbital::Entity>;
-%template(ComponentWatchPtr) suborbital::watch_ptr<suborbital::Component>;
-%template(AttributeWatchPtr) suborbital::watch_ptr<suborbital::Attribute>;
-%template(PythonAttributeWatchPtr) suborbital::watch_ptr<suborbital::PythonAttribute>;
-%template(BehaviourWatchPtr) suborbital::watch_ptr<suborbital::Behaviour>;
-%template(ExampleAttributeWatchPtr) suborbital::watch_ptr<suborbital::ExampleAttribute>;
+// Specify which classes can be wrapped using WatchPtr.
+%template(EntityWatchPtr) suborbital::WatchPtr<suborbital::Entity>;
+%template(ComponentWatchPtr) suborbital::WatchPtr<suborbital::Component>;
+%template(AttributeWatchPtr) suborbital::WatchPtr<suborbital::Attribute>;
+%template(PythonAttributeWatchPtr) suborbital::WatchPtr<suborbital::PythonAttribute>;
+%template(BehaviourWatchPtr) suborbital::WatchPtr<suborbital::Behaviour>;
+%template(ExampleAttributeWatchPtr) suborbital::WatchPtr<suborbital::ExampleAttribute>;

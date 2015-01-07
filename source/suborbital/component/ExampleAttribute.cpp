@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <suborbital/component/ExampleAttribute.hpp>
 
 namespace suborbital

@@ -1,9 +1,8 @@
-#ifndef SUBORBITAL_WATCH_PTR_HPP
-#define SUBORBITAL_WATCH_PTR_HPP
+#ifndef SUBORBITAL_WatchPtr_HPP
+#define SUBORBITAL_WatchPtr_HPP
 
 #include <cstddef>
 #include <cassert>
-#include <iostream>
 
 namespace suborbital
 {
@@ -11,37 +10,37 @@ namespace suborbital
     class Watchable;
 
     /**
-     * Base class for the template `watch_ptr` class.
+     * Base class for the template `WatchPtr` class.
      */
-    class watch_ptr_base
+    class WatchPtrBase
     {
     friend Watchable;
     protected:
         /**
-         * Pointer to the object that the watch_ptr is watching.
+         * Pointer to the object that the WatchPtr is watching.
          *
          * This pointer will be null when the object being watched is deleted.
          */
         const Watchable* ptr = nullptr; // Payload.
 
         /**
-         * Pointer to the previous watch_ptr node in the linked list.
+         * Pointer to the previous WatchPtr node in the linked list.
          */
-        watch_ptr_base* previous = nullptr; // Pointer to the previous node.
+        WatchPtrBase* previous = nullptr; // Pointer to the previous node.
 
         /**
-         * Pointer to the next watch_ptr node in the linked list.
+         * Pointer to the next WatchPtr node in the linked list.
          */
-        watch_ptr_base* next = nullptr; // Pointer to the next node.
+        WatchPtrBase* next = nullptr; // Pointer to the next node.
 
     protected:
         /**
-         * Links the watch_ptr to the supplied watchable object.
+         * Links the WatchPtr to the supplied watchable object.
          */
         void link(const Watchable* watchable_object);
 
         /**
-         * Unlinks the watch_ptr from the object that it is currently watching.
+         * Unlinks the WatchPtr from the object that it is currently watching.
          */
         void unlink();
     };
@@ -60,23 +59,23 @@ namespace suborbital
      * http://www.anisopteragames.com/how-to-prevent-dangling-pointers-to-deleted-game-objects-in-c/
      */
     template<typename T>
-    class watch_ptr : public watch_ptr_base
+    class WatchPtr : public WatchPtrBase
     {
     public:
         /**
          * Constructor.
          */
-        watch_ptr() = default;
+        WatchPtr() = default;
 
         /**
          * Constructor.
          */
-        watch_ptr(std::nullptr_t) {};
+        WatchPtr(std::nullptr_t) {};
 
         /**
          * Constructor.
          */
-        explicit watch_ptr(T* t)
+        explicit WatchPtr(T* t)
         {
             link(t);
         }
@@ -84,7 +83,7 @@ namespace suborbital
         /**
          * Copy constructor.
          */
-        watch_ptr(const watch_ptr& t)
+        WatchPtr(const WatchPtr& t)
         {
             link(t.ptr);
         }
@@ -93,7 +92,7 @@ namespace suborbital
          * Copy constructor.
          */
         template<typename U>
-        watch_ptr(const watch_ptr<U>& t)
+        WatchPtr(const WatchPtr<U>& t)
         {
             link(t.ptr);
         }
@@ -101,7 +100,7 @@ namespace suborbital
         /**
          * Destructor.
          */
-        ~watch_ptr()
+        ~WatchPtr()
         {
             unlink();
         }
@@ -110,9 +109,9 @@ namespace suborbital
          * Copy assignment operator.
          *
          * @param t Pointer to the object to watch.
-         * @return Reference to this watch_ptr.
+         * @return Reference to this WatchPtr.
          */
-        watch_ptr& operator=(T* t)
+        WatchPtr& operator=(T* t)
         {
             unlink();
             link(t);
@@ -122,10 +121,10 @@ namespace suborbital
         /**
          * Copy assignment operator.
          *
-         * @param other Other watch_ptr to copy from.
-         * @return Reference to this watch_ptr.
+         * @param other Other WatchPtr to copy from.
+         * @return Reference to this WatchPtr.
          */
-        watch_ptr& operator=(const watch_ptr& other)
+        WatchPtr& operator=(const WatchPtr& other)
         {
             unlink();
             link(other.ptr);
@@ -155,10 +154,10 @@ namespace suborbital
         /**
          * Equality operator.
          *
-         * @param other The other watch_ptr to compare with.
-         * @return True if the two watch_ptr's are watching the same object, false otherwise.
+         * @param other The other WatchPtr to compare with.
+         * @return True if the two WatchPtr's are watching the same object, false otherwise.
          */
-        bool operator==(const watch_ptr &other) const
+        bool operator==(const WatchPtr &other) const
         {
             return ptr == other.ptr;
         }
@@ -166,11 +165,11 @@ namespace suborbital
         /**
          * Less-than comparison operator.
          *
-         * @param other The other watch_ptr to compare with.
+         * @param other The other WatchPtr to compare with.
          * @return True if the pointer being watched is addressed in memory before the pointer being watched by `other`,
          * false otherwise.
          */
-        bool operator<(const watch_ptr &other) const
+        bool operator<(const WatchPtr &other) const
         {
             return ptr < other.ptr;
         }
@@ -178,7 +177,7 @@ namespace suborbital
         /**
          * Boolean conversion operator.
          *
-         * @return True if the watch_ptr is watching a valid object, false otherwise.
+         * @return True if the WatchPtr is watching a valid object, false otherwise.
          */
         explicit operator bool() const
         {
@@ -199,27 +198,27 @@ namespace suborbital
     /**
      * Returns a copy of `t` with its stored pointer cast dynamically from `U` to `T`.
      *
-     * If the dynamic cast fails then an empty `watch_ptr` is returned.
+     * If the dynamic cast fails then an empty `WatchPtr` is returned.
      *
-     * @param t The watch_ptr to be dynamically cast.
-     * @return A `watch_ptr` that watches the same pointer as `t` with potentially different type.
+     * @param t The WatchPtr to be dynamically cast.
+     * @return A `WatchPtr` that watches the same pointer as `t` with potentially different type.
      */
     template<typename T, typename U>
-    watch_ptr<T> dynamic_pointer_cast(const watch_ptr<U>& t)
+    WatchPtr<T> dynamic_pointer_cast(const WatchPtr<U>& t)
     {
-        return watch_ptr<T>(dynamic_cast<T*>(t.get()));
+        return WatchPtr<T>(dynamic_cast<T*>(t.get()));
     }
 
     /**
      * Returns a copy of `t` with its stored pointer cast statically from `U` to `T`.
      *
-     * @param t The watch_ptr to be dynamically cast.
-     * @return A `watch_ptr` that watches the same pointer as `t` with potentially different type.
+     * @param t The WatchPtr to be dynamically cast.
+     * @return A `WatchPtr` that watches the same pointer as `t` with potentially different type.
      */
     template<typename T, typename U>
-    watch_ptr<T> static_pointer_cast(const watch_ptr<U>& t)
+    WatchPtr<T> static_pointer_cast(const WatchPtr<U>& t)
     {
-        return watch_ptr<T>(static_cast<T*>(t.get()));
+        return WatchPtr<T>(static_cast<T*>(t.get()));
     }
 }
 

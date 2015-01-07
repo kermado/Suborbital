@@ -1,11 +1,11 @@
 #include <cassert>
 
-#include <suborbital/watch_ptr.hpp>
+#include <suborbital/WatchPtr.hpp>
 #include <suborbital/Watchable.hpp>
 
 namespace suborbital
 {
-    void watch_ptr_base::link(const Watchable* watchable_object)
+    void WatchPtrBase::link(const Watchable* watchable_object)
     {
         assert(previous == nullptr);
         assert(next == nullptr);
@@ -26,7 +26,7 @@ namespace suborbital
         }
     }
 
-    void watch_ptr_base::unlink()
+    void WatchPtrBase::unlink()
     {
         if (next != nullptr)
         {

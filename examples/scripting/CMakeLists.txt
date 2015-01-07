@@ -8,6 +8,7 @@ include_directories(${PROJECT_SOURCE_DIR})
 # Source files.
 set(SOURCE_FILES
     main.cpp
+    ExampleScene.cpp
 )
 
 # Create executable.

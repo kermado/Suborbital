@@ -4,19 +4,25 @@
 
 namespace suborbital
 {
-    Entity::Entity()
-    : m_name()
+    Entity::Entity(WatchPtr<Scene> scene)
+    : Watchable()
+    , m_scene(scene)
+    , m_name()
+    , m_parent(nullptr)
+    , m_children()
     , m_event_dispatcher(new EventDispatcher())
     , m_attributes()
     , m_behaviours()
-    , m_parent(nullptr)
-    , m_children()
     {
         std::cout << "Entity::Entity()" << std::endl;
     }
 
-    Entity::Entity(const std::string& name)
-    : m_name(name)
+    Entity::Entity(WatchPtr<Scene> scene, const std::string& name)
+    : Watchable()
+    , m_scene(scene)
+    , m_name(name)
+    , m_parent(nullptr)
+    , m_children()
     , m_event_dispatcher(new EventDispatcher())
     , m_attributes()
     , m_behaviours()
@@ -27,6 +33,11 @@ namespace suborbital
     Entity::~Entity()
     {
         std::cout << "Entity::~Entity(" << m_name << ")" << std::endl;
+    }
+
+    WatchPtr<Scene> Entity::scene() const
+    {
+        return m_scene;
     }
 
     const std::string& Entity::name() const
@@ -45,7 +56,7 @@ namespace suborbital
         return false;
     }
 
-    watch_ptr<Attribute> Entity::create_attribute(const std::string& class_name)
+    WatchPtr<Attribute> Entity::create_attribute(const std::string& class_name)
     {
         std::unique_ptr<Attribute> attribute = component_registry().create_attribute(class_name);
         assert(attribute != nullptr);
@@ -55,17 +66,17 @@ namespace suborbital
         attribute_ptr->m_entity = this;
         attribute_ptr->create();
 
-        return watch_ptr<Attribute>(attribute_ptr);
+        return WatchPtr<Attribute>(attribute_ptr);
     }
 
-    watch_ptr<Attribute> Entity::attribute(const std::string& class_name) const
+    WatchPtr<Attribute> Entity::attribute(const std::string& class_name) const
     {
         auto iter = m_attributes.find(class_name);
         assert(iter != m_attributes.end());
         assert(iter->second.empty() == false);
 
         Attribute* attribute = iter->second.front().get();
-        watch_ptr<Attribute> watch_attribute(attribute);
+        WatchPtr<Attribute> watch_attribute(attribute);
         return watch_attribute;
     }
 
@@ -119,20 +130,20 @@ namespace suborbital
         return static_cast<bool>(m_parent);
     }
 
-    watch_ptr<Entity> Entity::create_child()
+    WatchPtr<Entity> Entity::create_child()
     {
-        Entity* child = new Entity();
-        child->m_parent = watch_ptr<Entity>(this);
+        Entity* child = new Entity(m_scene);
+        child->m_parent = WatchPtr<Entity>(this);
         m_children.push_back(std::unique_ptr<Entity>(child));
-        return watch_ptr<Entity>(child);
+        return WatchPtr<Entity>(child);
     }
 
-    watch_ptr<Entity> Entity::create_child(const std::string& name)
+    WatchPtr<Entity> Entity::create_child(const std::string& name)
     {
-        Entity* child = new Entity(name);
-        child->m_parent = watch_ptr<Entity>(this);
+        Entity* child = new Entity(m_scene, name);
+        child->m_parent = WatchPtr<Entity>(this);
         m_children.push_back(std::unique_ptr<Entity>(child));
-        return watch_ptr<Entity>(child);
+        return WatchPtr<Entity>(child);
     }
 
     void Entity::update(double dt)

@@ -11,6 +11,12 @@ namespace suborbital
     // Forward declarations.
     class EventDispatcher;
 
+    /**
+     * Manages the lifetime of an event subscription.
+     *
+     * The handled event subscription is cancelled automatically upon destruction. Alternatively, the subscription can
+     * be manually cancelled by calling `unsubscribe`.
+     */
     class EventSubscription : private NonCopyable
     {
     friend EventDispatcher;

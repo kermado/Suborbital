@@ -1,5 +1,5 @@
 %{
-    #include <suborbital/watch_ptr.hpp>
+    #include <suborbital/WatchPtr.hpp>
     #include <suborbital/Entity.hpp>
     #include <suborbital/component/PythonAttribute.hpp>
     #include <suborbital/event/PythonEvent.hpp>
@@ -13,9 +13,9 @@
 // Thanks to Flexo:
 // http://stackoverflow.com/questions/27392602/swig-downcasting-from-base-to-derived/27417168#27417168
 // http://stackoverflow.com/questions/27454289/retrieving-a-python-type-back-from-c/27454946#27454946
-%typemap(out) suborbital::watch_ptr<suborbital::Attribute> suborbital::Entity::create_attribute
+%typemap(out) suborbital::WatchPtr<suborbital::Attribute> suborbital::Entity::create_attribute
 {
-    suborbital::watch_ptr<suborbital::PythonAttribute> python_attribute = suborbital::dynamic_pointer_cast<suborbital::PythonAttribute>($1);
+    suborbital::WatchPtr<suborbital::PythonAttribute> python_attribute = suborbital::dynamic_pointer_cast<suborbital::PythonAttribute>($1);
     if (python_attribute)
     {
         $result = python_attribute->instance();
@@ -23,7 +23,7 @@
     }
     else
     {
-        const std::string lookup_typename = "suborbital::watch_ptr<suborbital::" + *arg2 + ">*";
+        const std::string lookup_typename = "suborbital::WatchPtr<suborbital::" + *arg2 + ">*";
         swig_type_info* const out_type = SWIG_TypeQuery(lookup_typename.c_str());
         assert(out_type != NULL);
         $result = SWIG_NewPointerObj(SWIG_as_voidptr($1.get()), out_type, $owner);
@@ -35,9 +35,9 @@
 // Thanks to Flexo:
 // http://stackoverflow.com/questions/27392602/swig-downcasting-from-base-to-derived/27417168#27417168
 // http://stackoverflow.com/questions/27454289/retrieving-a-python-type-back-from-c/27454946#27454946
-%typemap(out) suborbital::watch_ptr<suborbital::Attribute> suborbital::Entity::attribute
+%typemap(out) suborbital::WatchPtr<suborbital::Attribute> suborbital::Entity::attribute
 {
-    suborbital::watch_ptr<suborbital::PythonAttribute> python_attribute = suborbital::dynamic_pointer_cast<suborbital::PythonAttribute>($1);
+    suborbital::WatchPtr<suborbital::PythonAttribute> python_attribute = suborbital::dynamic_pointer_cast<suborbital::PythonAttribute>($1);
     if (python_attribute)
     {
         $result = python_attribute->instance();
@@ -45,7 +45,7 @@
     }
     else
     {
-        const std::string lookup_typename = "suborbital::watch_ptr<suborbital::" + *arg2 + ">*";
+        const std::string lookup_typename = "suborbital::WatchPtr<suborbital::" + *arg2 + ">*";
         swig_type_info* const out_type = SWIG_TypeQuery(lookup_typename.c_str());
         assert(out_type != NULL);
         $result = SWIG_NewPointerObj(SWIG_as_voidptr($1.get()), out_type, $owner);

@@ -15,7 +15,7 @@ namespace suborbital
         std::cout << "Component::~Component()" << std::endl;
     }
 
-    watch_ptr<Entity> Component::entity() const
+    WatchPtr<Entity> Component::entity() const
     {
         return m_entity;
     }

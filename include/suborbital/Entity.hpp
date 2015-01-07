@@ -9,8 +9,8 @@
 #include <iostream>
 
 #include <suborbital/NonCopyable.hpp>
-#include <suborbital/watch_ptr.hpp>
 #include <suborbital/Watchable.hpp>
+#include <suborbital/WatchPtr.hpp>
 #include <suborbital/event/EventDispatcher.hpp>
 #include <suborbital/component/Attribute.hpp>
 #include <suborbital/component/Behaviour.hpp>
@@ -18,25 +18,32 @@
 
 namespace suborbital
 {
+    // Forward declarations.
+    class Scene;
+
     /**
      * Represents an object within a scene.
      */
     class Entity : public Watchable, private NonCopyable
     {
+    friend Scene;
     public:
         /**
          * Constructor.
          *
          * Sets the entity's name to the empty string.
+         *
+         * @param Scene that the entity is in.
          */
-        Entity();
+        Entity(WatchPtr<Scene> scene);
 
         /**
          * Constructor.
          *
+         * @param Scene that the entity is in.
          * @param name Name to assign to the entity.
          */
-        Entity(const std::string& name);
+        Entity(WatchPtr<Scene> scene, const std::string& name);
 
         /**
          * Destructor.
@@ -44,11 +51,49 @@ namespace suborbital
         ~Entity();
 
         /**
+         * Accessor for the scene that the entity is in.
+         *
+         * @return Pointer to the scene that the entity is in.
+         */
+        WatchPtr<Scene> scene() const;
+
+        /**
          * Accessor for the name assigned to the entity.
          *
          * @return Name assigned to the entity.
          */
         const std::string& name() const;
+
+        /**
+         * Checks whether the entity has any children.
+         *
+         * @return True if the entity has one or more children, false otherwise.
+         */
+        bool has_children() const;
+
+        /**
+         * Checks whether the entity is the child of another entity.
+         *
+         * @return True if the entity is the child of another entity, false otherwise.
+         */
+        bool has_parent() const;
+
+        /**
+         * Creates and attaches an entity as the child of this entity.
+         *
+         * Sets the child entity's name to the empty string.
+         *
+         * @return Pointer to the entity that was created and attached as a child.
+         */
+        WatchPtr<Entity> create_child();
+
+        /**
+         * Creates and attaches an entity as the child of this entity.
+         *
+         * @param name Name to assign to the child entity.
+         * @return Pointer to the entity that was created and attached as a child.
+         */
+        WatchPtr<Entity> create_child(const std::string& name);
 
         /**
          * Checks whether the entity has an attribute with the type attached.
@@ -91,7 +136,7 @@ namespace suborbital
          * @return Pointer to the attribute that was created and attached.
          */
         template<typename AttributeType>
-        watch_ptr<AttributeType> create_attribute()
+        WatchPtr<AttributeType> create_attribute()
         {
             AttributeType* attribute_ptr = new AttributeType();
             const std::string attribute_name = component_registry().component_name<AttributeType>();
@@ -99,7 +144,7 @@ namespace suborbital
 
             attribute_ptr->m_entity = this;
             attribute_ptr->create();
-            return watch_ptr<AttributeType>(attribute_ptr);
+            return WatchPtr<AttributeType>(attribute_ptr);
         }
 
         /**
@@ -112,7 +157,7 @@ namespace suborbital
          * @param class_name Class name for the attribute to be created and attached.
          * @return Pointer to the attribute that was created and attached.
          */
-        suborbital::watch_ptr<suborbital::Attribute> create_attribute(const std::string& class_name);
+        suborbital::WatchPtr<suborbital::Attribute> create_attribute(const std::string& class_name);
 
         /**
          * Returns a pointer to the attached attribute with the specified type. If multiple attributes of the specified
@@ -123,7 +168,7 @@ namespace suborbital
          * @return Pointer to the first attached attribute with the specified type.
          */
         template<typename AttributeType>
-        watch_ptr<AttributeType> attribute()
+        WatchPtr<AttributeType> attribute()
         {
             const std::string attribute_name = component_registry().component_name<AttributeType>();
             auto iter = m_behaviours.find(attribute_name);
@@ -132,7 +177,7 @@ namespace suborbital
 
             AttributeType* attribute_ptr = dynamic_cast<AttributeType*>(iter->second.front().get());
             assert(attribute_ptr != nullptr);
-            return watch_ptr<AttributeType>(attribute_ptr);
+            return WatchPtr<AttributeType>(attribute_ptr);
         }
 
         /**
@@ -145,7 +190,7 @@ namespace suborbital
          * @param class_name Class name for the attribute to be returned.
          * @return Pointer to the first attached attribute with the specified class name.
          */
-        suborbital::watch_ptr<suborbital::Attribute> attribute(const std::string& class_name) const;
+        suborbital::WatchPtr<suborbital::Attribute> attribute(const std::string& class_name) const;
 
         /**
          * Attaches a behaviour of the specified type to the entity.
@@ -227,38 +272,7 @@ namespace suborbital
         std::unique_ptr<suborbital::EventSubscription> subscribe(const std::string& event_name,
                 std::unique_ptr<suborbital::EventCallbackBase> callback);
 
-        /**
-         * Checks whether the entity has any children.
-         *
-         * @return True if the entity has one or more children, false otherwise.
-         */
-        bool has_children() const;
-
-        /**
-         * Checks whether the entity is the child of another entity.
-         *
-         * @return True if the entity is the child of another entity, false otherwise.
-         */
-        bool has_parent() const;
-
-        /**
-         * Creates and attaches an entity as the child of this entity.
-         *
-         * Sets the child entity's name to the empty string.
-         *
-         * @return Pointer to the entity that was created and attached as a child.
-         */
-        watch_ptr<Entity> create_child();
-
-        /**
-         * Creates and attaches an entity as the child of this entity.
-         *
-         * @param name Name to assign to the child entity.
-         * @return Pointer to the entity that was created and attached as a child.
-         */
-        watch_ptr<Entity> create_child(const std::string& name);
-
-    public: // TODO: Make this private and friend the Scene class.
+    private:
         /**
          * Updates all the behaviours belonging to the entity.
          *
@@ -270,9 +284,24 @@ namespace suborbital
 
     private:
         /**
+         * Scene that the entity is in.
+         */
+        WatchPtr<Scene> m_scene;
+
+        /**
          * Name assigned to the entity.
          */
         const std::string m_name;
+
+        /**
+         * Parent entity (will be a nullptr if the entity has no parent).
+         */
+        WatchPtr<Entity> m_parent;
+
+        /**
+         * Child entities.
+         */
+        std::vector<std::unique_ptr<Entity>> m_children;
 
         /**
          * Event dispatcher for the entity.
@@ -294,16 +323,6 @@ namespace suborbital
          * entity is deleted.
          */
         std::unordered_map<std::string, std::vector<std::unique_ptr<Behaviour>>> m_behaviours;
-
-        /**
-         * Parent entity (will be a nullptr if the entity has no parent).
-         */
-        watch_ptr<Entity> m_parent;
-
-        /**
-         * Child entities.
-         */
-        std::vector<std::unique_ptr<Entity>> m_children;
     };
 }
 

@@ -1,9 +1,9 @@
 #ifndef SUBORBITAL_COMPONENT_HPP
 #define SUBORBITAL_COMPONENT_HPP
 
-#include <suborbital/watch_ptr.hpp>
 #include <suborbital/Watchable.hpp>
 #include <suborbital/NonCopyable.hpp>
+#include <suborbital/WatchPtr.hpp>
 
 namespace suborbital
 {
@@ -32,7 +32,7 @@ namespace suborbital
          *
          * @return Pointer to the parent entity.
          */
-        watch_ptr<Entity> entity() const;
+        WatchPtr<Entity> entity() const;
 
     protected:
         /**
@@ -44,7 +44,7 @@ namespace suborbital
         /**
          * Pointer to the parent entity.
          */
-        watch_ptr<Entity> m_entity;
+        WatchPtr<Entity> m_entity;
     };
 }
 
