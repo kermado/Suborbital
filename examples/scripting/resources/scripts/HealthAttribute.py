@@ -13,6 +13,9 @@ class HealthAttribute(PythonAttribute):
     def create(self):
         self.health = 100
 
+    def reset(self):
+        self.health = 100
+
     def value(self):
         return self.health
 

@@ -1,6 +1,9 @@
 #ifndef SUBORBITAL_PYTHON_ATTRIBUTE_FACTORY_HPP
 #define SUBORBITAL_PYTHON_ATTRIBUTE_FACTORY_HPP
 
+#include <ostream>
+#include <string>
+
 #include <suborbital/PythonRuntime.hpp>
 
 #include <suborbital/component/AttributeFactory.hpp>
@@ -37,8 +40,6 @@ namespace suborbital
          * Instantiates the Python defined attribute and returns a unique_ptr to the created attribute.
          *
          * This function will return a nullptr in the event that the Python attribute could not be instantiated.
-         *
-         * @note The caller is responsible for managing the lifetime of the returned Python attribute.
          *
          * @return Unique pointer to the created Python attribute.
          */

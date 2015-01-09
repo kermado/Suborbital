@@ -30,12 +30,17 @@
 // Include classes.
 %include <suborbital/Watchable.i>
 %include <suborbital/Entity.i>
+
+%include <suborbital/scene/Scene.i>
+%include <suborbital/scene/PythonScene.i>
+
 %include <suborbital/component/Component.i>
 %include <suborbital/component/Attribute.i>
 %include <suborbital/component/Behaviour.i>
 %include <suborbital/component/PythonAttribute.i>
 %include <suborbital/component/PythonBehaviour.i>
 %include <suborbital/component/ExampleAttribute.i>
+
 %include <suborbital/event/Event.i>
 %include <suborbital/event/PythonEvent.i>
 %include <suborbital/event/EventSubscription.i>
@@ -44,6 +49,8 @@
 
 // Specify which classes can be wrapped using WatchPtr.
 %template(EntityWatchPtr) suborbital::WatchPtr<suborbital::Entity>;
+%template(SceneWatchPtr) suborbital::WatchPtr<suborbital::Scene>;
+%template(PythonSceneWatchPtr) suborbital::WatchPtr<suborbital::PythonScene>;
 %template(ComponentWatchPtr) suborbital::WatchPtr<suborbital::Component>;
 %template(AttributeWatchPtr) suborbital::WatchPtr<suborbital::Attribute>;
 %template(PythonAttributeWatchPtr) suborbital::WatchPtr<suborbital::PythonAttribute>;

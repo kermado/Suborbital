@@ -1,19 +1,21 @@
-#ifndef SUBORBITAL_PYTHON_ATTRIBUTE_HPP
-#define SUBORBITAL_PYTHON_ATTRIBUTE_HPP
+#ifndef SUBORBITAL_PYTHON_SCENE_HPP
+#define SUBORBITAL_PYTHON_SCENE_HPP
+
+#include <iostream>
 
 #include <Python/Python.h>
 
-#include <suborbital/component/Attribute.hpp>
+#include <suborbital/scene/Scene.hpp>
 
 namespace suborbital
 {
     /**
-     * The base class for Python defined attributes that can be attached to entities.
+     * The base class for Python defined scenes.
      *
-     * Python defined attribute classes must derive from this class in order for their members to be accessible from
-     * Python scripts.
+     * Python defined scene classes must derive from this class in order for their members to be accessible from Python
+     * scripts.
      */
-    class PythonAttribute : public Attribute
+    class PythonScene : public Scene
     {
     public:
         /**
@@ -21,7 +23,7 @@ namespace suborbital
          *
          * Decrements the reference count of the derived Python instance being wrapped.
          */
-        virtual ~PythonAttribute();
+        virtual ~PythonScene();
 
         /**
          * Sets the derived Python instance that is being wrapped.
@@ -43,7 +45,7 @@ namespace suborbital
         /**
          * Constructor.
          */
-        PythonAttribute();
+        PythonScene();
 
     private:
         /**

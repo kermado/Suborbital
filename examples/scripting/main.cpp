@@ -2,6 +2,8 @@
 
 #include <suborbital/Suborbital.hpp>
 #include <suborbital/PythonInterpreter.hpp>
+
+#include <suborbital/scene/SceneStack.hpp>
 #include <suborbital/component/ExampleAttribute.hpp>
 
 #include "ExampleScene.hpp"
@@ -17,15 +19,13 @@ int main(int argc, char* argv[])
     REGISTER_ATTRIBUTE(ExampleAttribute);
 
     {
-        ExampleScene scene;
-        WatchPtr<Entity> entity = scene.create_entity("Player");
-        entity->create_attribute<ExampleAttribute>();
-        entity->create_attribute("HealthAttribute");
-        entity->create_behaviour("ExampleBehaviour");
+        SceneStack scene_stack;
+        scene_stack.register_scene("ExampleScene");
+        scene_stack.push("ExampleScene");
 
         for (int i = 0; i < 10; ++i)
         {
-            scene.process(0.1);
+            scene_stack.process(0.1);
         }
 
         std::cout << "End of scope." << std::endl;

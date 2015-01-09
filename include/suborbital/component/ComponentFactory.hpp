@@ -27,8 +27,6 @@ namespace suborbital
         /**
          * Instantiates a component and returns a unique_ptr to the created component.
          *
-         * @note The caller is responsible for managing the lifetime of the returned component.
-         *
          * @return Unique pointer to the created component.
          */
         virtual std::unique_ptr<Component> create() const = 0;

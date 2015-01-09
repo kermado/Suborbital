@@ -4,6 +4,7 @@
 
 %feature("director") suborbital::PythonBehaviour;
 
-%ignore suborbital::PythonBehaviour::derived;
+%ignore suborbital::PythonBehaviour::instance();
+%ignore suborbital::PythonBehaviour::instance(PyObject*);
 
 %include <suborbital/component/PythonBehaviour.hpp>

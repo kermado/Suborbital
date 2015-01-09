@@ -28,7 +28,7 @@ namespace suborbital
         ~BehaviourFactory() = default;
 
         /**
-         * Instantiates a behaviour of the provided type and returns a unique_ptr to the created behaviour.
+         * Instantiates a behaviour of the templated type and returns a unique_ptr to the created behaviour.
          *
          * @note The caller is responsible for managing the lifetime of the returned behaviour.
          *

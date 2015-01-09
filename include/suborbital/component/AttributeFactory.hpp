@@ -28,7 +28,7 @@ namespace suborbital
         ~AttributeFactory() = default;
 
         /**
-         * Instantiates an attribute of the provided type and returns a unique_ptr to the created attribute.
+         * Instantiates an attribute of the templated type and returns a unique_ptr to the created attribute.
          *
          * @note The caller is responsible for managing the lifetime of the returned attribute.
          *

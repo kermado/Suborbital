@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <suborbital/Scene.hpp>
 #include <suborbital/Entity.hpp>
+#include <suborbital/scene/Scene.hpp>
 
 namespace suborbital
 {

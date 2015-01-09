@@ -11,7 +11,7 @@ namespace suborbital
      * The base class for Python defined behaviours that can be attached to entities.
      *
      * Python defined behaviour classes must derive from this class in order for their members to be accessible from
-     * python scripts.
+     * Python scripts.
      */
     class PythonBehaviour : public Behaviour
     {

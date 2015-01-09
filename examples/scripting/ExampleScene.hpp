@@ -1,7 +1,7 @@
 #ifndef EXAMPLES_SCRIPTING_EXAMPLE_SCENE_HPP
 #define EXAMPLES_SCRIPTING_EXAMPLE_SCENE_HPP
 
-#include <suborbital/Scene.hpp>
+#include <suborbital/scene/Scene.hpp>
 
 class ExampleScene : public suborbital::Scene
 {

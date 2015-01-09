@@ -12,10 +12,13 @@ set(SOURCE_FILES
 	${SRC_ROOT}/Watchable.cpp
 
 	${SRC_ROOT}/Entity.cpp
-	${SRC_ROOT}/Scene.cpp
 
 	${SRC_ROOT}/ScriptInterpreter.cpp
 	${SRC_ROOT}/PythonInterpreter.cpp
+
+	${SRC_ROOT}/scene/SceneStack.cpp
+	${SRC_ROOT}/scene/Scene.cpp
+	${SRC_ROOT}/scene/PythonScene.cpp
 
 	${SRC_ROOT}/component/Component.cpp
 	${SRC_ROOT}/component/PythonAttribute.cpp
