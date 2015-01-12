@@ -107,7 +107,7 @@ class RespawnBehaviour(PythonBehaviour):
     def create(self):
         self.transform = self.entity.attribute("TransformAttribute")
         self.health = self.entity.attribute("HealthAttribute")
-        self.entity.subscribe("EntityDiedEvent", self.on_entity_died)
+        self.subscription = self.entity.subscribe("EntityDiedEvent", self.on_entity_died)
     def on_entity_died(self, event):
         self.transform.position(0, 0, 0)
         self.health.reset()
