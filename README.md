@@ -126,6 +126,30 @@ player.create_behaviour("MoveBehaviour"); // Add a Python defined behaviour
 player.create_behaviour<MoveBehaviour>(); // Add a c++ defined behaviour
 ```
 
+### Scenes: Tying it all together
+
+Scenes are the basic container inside of which entities live. All entities must be created within either a scene or another entity. It is possible to define scenes in Python scripts:
+
+```python
+class ExampleScene(PythonScene):
+    def __init__(self):
+        PythonScene.__init__(self)
+        entity = self.create_entity("Player")
+        entity.create_attribute("HealthAttribute")
+        entity.create_behaviour("RespawnBehaviour")
+        
+    def update(self, dt):
+        pass
+        
+    def suspend(self):
+        pass
+        
+    def resume(self):
+        pass
+```
+
+The `update` function is called before updating all of the entities in the scene. The `suspend` and `resume` functions are called when a scene becomes inactive and active respectively. This occurs when scenes are pushed onto the scene stack or popped off of the scene stack.
+
 ## Authors
 
  * Omar Kermad
