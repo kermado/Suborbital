@@ -49,8 +49,6 @@
 
 // Specify which classes can be wrapped using WatchPtr.
 %template(EntityWatchPtr) suborbital::WatchPtr<suborbital::Entity>;
-%template(SceneWatchPtr) suborbital::WatchPtr<suborbital::Scene>;
-%template(PythonSceneWatchPtr) suborbital::WatchPtr<suborbital::PythonScene>;
 %template(ComponentWatchPtr) suborbital::WatchPtr<suborbital::Component>;
 %template(AttributeWatchPtr) suborbital::WatchPtr<suborbital::Attribute>;
 %template(PythonAttributeWatchPtr) suborbital::WatchPtr<suborbital::PythonAttribute>;

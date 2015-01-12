@@ -35,14 +35,14 @@ namespace suborbital
 
     WatchPtr<Entity> Scene::create_entity()
     {
-        Entity* entity = new Entity(WatchPtr<Scene>(this));
+        Entity* entity = new Entity(*this);
         m_entities.push_back(std::unique_ptr<Entity>(entity));
         return WatchPtr<Entity>(entity);
     }
 
     WatchPtr<Entity> Scene::create_entity(const std::string& name)
     {
-        Entity* entity = new Entity(WatchPtr<Scene>(this), name);
+        Entity* entity = new Entity(*this, name);
         m_entities.push_back(std::unique_ptr<Entity>(entity));
         return WatchPtr<Entity>(entity);
     }

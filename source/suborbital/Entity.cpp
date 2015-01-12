@@ -4,7 +4,7 @@
 
 namespace suborbital
 {
-    Entity::Entity(WatchPtr<Scene> scene)
+    Entity::Entity(Scene& scene)
     : Watchable()
     , m_scene(scene)
     , m_name()
@@ -17,7 +17,7 @@ namespace suborbital
         std::cout << "Entity::Entity()" << std::endl;
     }
 
-    Entity::Entity(WatchPtr<Scene> scene, const std::string& name)
+    Entity::Entity(Scene& scene, const std::string& name)
     : Watchable()
     , m_scene(scene)
     , m_name(name)
@@ -35,7 +35,7 @@ namespace suborbital
         std::cout << "Entity::~Entity(" << m_name << ")" << std::endl;
     }
 
-    WatchPtr<Scene> Entity::scene() const
+    Scene& Entity::scene() const
     {
         return m_scene;
     }

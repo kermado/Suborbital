@@ -9,9 +9,9 @@
 %}
 
 // Use the stored PyObject* for Python defined scenes.
-%typemap(out) suborbital::WatchPtr<suborbital::Scene> suborbital::Entity::scene
+%typemap(out) suborbital::Scene& suborbital::Entity::scene
 {
-    suborbital::WatchPtr<suborbital::PythonScene> python_scene = suborbital::dynamic_pointer_cast<suborbital::PythonScene>($1);
+    suborbital::PythonScene* python_scene = dynamic_cast<suborbital::PythonScene*>($1);
     if (python_scene)
     {
         $result = python_scene->instance();
@@ -19,7 +19,7 @@
     }
     else
     {
-        $result = SWIG_NewPointerObj(SWIG_as_voidptr($1.get()), SWIGTYPE_p_suborbital__WatchPtrT_suborbital__Scene_t, $owner);
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr($1), SWIGTYPE_p_suborbital__Scene, $owner);
     }
 }
 

@@ -33,17 +33,17 @@ namespace suborbital
          *
          * Sets the entity's name to the empty string.
          *
-         * @param Scene that the entity is in.
+         * @param scene Scene that the entity is in.
          */
-        Entity(WatchPtr<Scene> scene);
+        Entity(Scene& scene);
 
         /**
          * Constructor.
          *
-         * @param Scene that the entity is in.
+         * @param scene Scene that the entity is in.
          * @param name Name to assign to the entity.
          */
-        Entity(WatchPtr<Scene> scene, const std::string& name);
+        Entity(Scene& scene, const std::string& name);
 
         /**
          * Destructor.
@@ -53,9 +53,9 @@ namespace suborbital
         /**
          * Accessor for the scene that the entity is in.
          *
-         * @return Pointer to the scene that the entity is in.
+         * @return Reference to the scene that the entity is in.
          */
-        WatchPtr<Scene> scene() const;
+        Scene& scene() const;
 
         /**
          * Accessor for the name assigned to the entity.
@@ -286,7 +286,7 @@ namespace suborbital
         /**
          * Scene that the entity is in.
          */
-        WatchPtr<Scene> m_scene;
+        Scene& m_scene;
 
         /**
          * Name assigned to the entity.
