@@ -6,15 +6,20 @@
 ExampleScene::ExampleScene()
 : Scene()
 {
-    suborbital::WatchPtr<suborbital::Entity> entity = create_entity("Player");
-    entity->create_attribute<suborbital::ExampleAttribute>();
-    entity->create_attribute("HealthAttribute");
-    entity->create_behaviour("ExampleBehaviour");
+    // Nothing to do.
 }
 
 ExampleScene::~ExampleScene()
 {
     // Nothing to do.
+}
+
+void ExampleScene::create()
+{
+    suborbital::WatchPtr<suborbital::Entity> entity = create_entity("Player");
+    entity->create_attribute<suborbital::ExampleAttribute>();
+    entity->create_attribute("HealthAttribute");
+    entity->create_behaviour("ExampleBehaviour");
 }
 
 void ExampleScene::update(double dt)

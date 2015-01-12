@@ -6,13 +6,14 @@ class ExampleScene(PythonScene):
         PythonScene.__init__(self)
         print("ExampleScene::ExampleScene()")
 
+    def __del__(self):
+        print("ExampleScene::~ExampleScene()")
+
+    def create(self):
         entity = self.create_entity("Player")
         entity.create_attribute("ExampleAttribute")
         entity.create_attribute("HealthAttribute")
         entity.create_behaviour("ExampleBehaviour")
-
-    def __del__(self):
-        print("ExampleScene::~ExampleScene()")
 
     def update(self, dt):
         pass

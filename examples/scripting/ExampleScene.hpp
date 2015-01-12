@@ -17,6 +17,11 @@ public:
     ~ExampleScene();
 
     /**
+     * Called after the scene has been created and pushed onto the scene stack.
+     */
+    void create();
+
+    /**
      * Called each frame before the entities in the scene are updated.
      *
      * @param dt Time elapsed (in seconds) since the previous call to update.

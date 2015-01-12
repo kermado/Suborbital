@@ -8,6 +8,21 @@
     #include <suborbital/event/PythonEventCallback.hpp>
 %}
 
+// Use the stored PyObject* for Python defined scenes.
+%typemap(out) suborbital::WatchPtr<suborbital::Scene> suborbital::Entity::scene
+{
+    suborbital::WatchPtr<suborbital::PythonScene> python_scene = suborbital::dynamic_pointer_cast<suborbital::PythonScene>($1);
+    if (python_scene)
+    {
+        $result = python_scene->instance();
+        Py_INCREF($result);
+    }
+    else
+    {
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr($1.get()), SWIGTYPE_p_suborbital__WatchPtrT_suborbital__Scene_t, $owner);
+    }
+}
+
 // Convert attributes to the type specified by the class name.
 //
 // Thanks to Flexo:

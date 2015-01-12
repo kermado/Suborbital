@@ -22,7 +22,6 @@ namespace suborbital
     void PythonScene::instance(PyObject* derived_instance)
     {
         assert(derived_instance != nullptr);
-
         m_instance = derived_instance;
         Py_XINCREF(derived_instance);
     }

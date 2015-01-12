@@ -11,11 +11,13 @@
 namespace suborbital
 {
     // Forward declarations.
+    class SceneStack;
     class Entity;
     class Event;
 
     class Scene : public Watchable, private NonCopyable
     {
+    friend SceneStack;
     public:
         /**
          * Destructor.
@@ -91,6 +93,11 @@ namespace suborbital
         Scene();
 
         /**
+         * Called after the scene has been created and pushed onto the scene stack.
+         */
+        virtual void create() = 0;
+
+        /**
          * Called each frame before the entities in the scene are updated.
          *
          * @param dt Time elapsed (in seconds) since the previous call to update.
@@ -107,7 +114,7 @@ namespace suborbital
          */
         virtual void resume() = 0;
 
-    public: // TODO: make private and friend SceneStack
+    private:
         /**
          * Called each frame.
          *

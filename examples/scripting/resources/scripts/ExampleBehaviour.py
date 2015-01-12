@@ -19,7 +19,7 @@ class ExampleBehaviour(PythonBehaviour):
 
     def update(self, dt):
         self.health.decrease(10)
-        #print("Health = " + str(self.health.value()))
+        print("Health = " + str(self.health.value()))
 
     def on_entity_died(self, event):
         print(self.entity.name().upper() + " has gone to a better place".upper())
