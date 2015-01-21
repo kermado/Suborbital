@@ -12,6 +12,8 @@ set(SOURCE_FILES
 	${SRC_ROOT}/Watchable.cpp
 
 	${SRC_ROOT}/Entity.cpp
+	${SRC_ROOT}/EntitySet.cpp
+	${SRC_ROOT}/EntityManager.cpp
 
 	${SRC_ROOT}/ScriptInterpreter.cpp
 	${SRC_ROOT}/PythonInterpreter.cpp
@@ -19,6 +21,8 @@ set(SOURCE_FILES
 	${SRC_ROOT}/scene/SceneStack.cpp
 	${SRC_ROOT}/scene/Scene.cpp
 	${SRC_ROOT}/scene/PythonScene.cpp
+
+	${SRC_ROOT}/system/System.cpp
 
 	${SRC_ROOT}/component/Component.cpp
 	${SRC_ROOT}/component/PythonAttribute.cpp

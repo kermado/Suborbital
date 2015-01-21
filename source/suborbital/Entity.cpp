@@ -1,6 +1,11 @@
 #include <suborbital/Entity.hpp>
+
+#include <suborbital/scene/Scene.hpp>
+
 #include <suborbital/event/EventCallbackBase.hpp>
 #include <suborbital/event/EventSubscription.hpp>
+
+#include <suborbital/system/System.hpp>
 
 namespace suborbital
 {
@@ -8,6 +13,7 @@ namespace suborbital
     : Watchable()
     , m_scene(scene)
     , m_name()
+    , m_dead(false)
     , m_parent(nullptr)
     , m_children()
     , m_event_dispatcher(new EventDispatcher())
@@ -43,6 +49,58 @@ namespace suborbital
     const std::string& Entity::name() const
     {
         return m_name;
+    }
+
+    bool Entity::dead() const
+    {
+        return m_dead;
+    }
+
+    bool Entity::alive() const
+    {
+        return !m_dead;
+    }
+
+    void Entity::destroy()
+    {
+        assert(m_dead == false);
+        m_dead = true;
+    }
+
+    void Entity::add_to_group(const std::string& group_name)
+    {
+        m_scene.entities().add_to_group(group_name, WatchPtr<Entity>(this));
+    }
+
+    void Entity::remove_from_group(const std::string& group_name)
+    {
+        m_scene.entities().remove_from_group(group_name, WatchPtr<Entity>(this));
+    }
+
+    bool Entity::has_children() const
+    {
+        return m_children.empty() == false;
+    }
+
+    bool Entity::has_parent() const
+    {
+        return static_cast<bool>(m_parent);
+    }
+
+    WatchPtr<Entity> Entity::create_child()
+    {
+        Entity* child = new Entity(m_scene);
+        child->m_parent = WatchPtr<Entity>(this);
+        m_children.push_back(std::unique_ptr<Entity>(child));
+        return WatchPtr<Entity>(child);
+    }
+
+    WatchPtr<Entity> Entity::create_child(const std::string& name)
+    {
+        Entity* child = new Entity(m_scene, name);
+        child->m_parent = WatchPtr<Entity>(this);
+        m_children.push_back(std::unique_ptr<Entity>(child));
+        return WatchPtr<Entity>(child);
     }
 
     bool Entity::has_attribute(const std::string& class_name) const
@@ -118,32 +176,6 @@ namespace suborbital
             std::unique_ptr<EventCallbackBase> callback)
     {
         return m_event_dispatcher->subscribe(event_name, std::move(callback));
-    }
-
-    bool Entity::has_children() const
-    {
-        return m_children.empty() == false;
-    }
-
-    bool Entity::has_parent() const
-    {
-        return static_cast<bool>(m_parent);
-    }
-
-    WatchPtr<Entity> Entity::create_child()
-    {
-        Entity* child = new Entity(m_scene);
-        child->m_parent = WatchPtr<Entity>(this);
-        m_children.push_back(std::unique_ptr<Entity>(child));
-        return WatchPtr<Entity>(child);
-    }
-
-    WatchPtr<Entity> Entity::create_child(const std::string& name)
-    {
-        Entity* child = new Entity(m_scene, name);
-        child->m_parent = WatchPtr<Entity>(this);
-        m_children.push_back(std::unique_ptr<Entity>(child));
-        return WatchPtr<Entity>(child);
     }
 
     void Entity::update(double dt)

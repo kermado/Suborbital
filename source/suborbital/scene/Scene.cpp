@@ -1,14 +1,16 @@
 #include <iostream>
 
 #include <suborbital/Entity.hpp>
+
 #include <suborbital/scene/Scene.hpp>
 
 namespace suborbital
 {
     Scene::Scene()
     : Watchable()
-    , m_entities()
+    , m_entities(*this)
     , m_camera(nullptr)
+    , m_systems()
     {
         std::cout << "Scene::Scene()" << std::endl;
     }
@@ -16,6 +18,11 @@ namespace suborbital
     Scene::~Scene()
     {
         std::cout << "Scene::~Scene()" << std::endl;
+    }
+
+    EntityManager& Scene::entities()
+    {
+        return m_entities;
     }
 
     bool Scene::has_camera() const
@@ -35,46 +42,59 @@ namespace suborbital
 
     WatchPtr<Entity> Scene::create_entity()
     {
-        Entity* entity = new Entity(*this);
-        m_entities.push_back(std::unique_ptr<Entity>(entity));
-        return WatchPtr<Entity>(entity);
+        return m_entities.create();
     }
 
-    WatchPtr<Entity> Scene::create_entity(const std::string& name)
+    WatchPtr<Entity> Scene::create_entity(const std::string& entity_name)
     {
-        Entity* entity = new Entity(*this, name);
-        m_entities.push_back(std::unique_ptr<Entity>(entity));
-        return WatchPtr<Entity>(entity);
+        return m_entities.create(entity_name);
     }
 
-    WatchPtr<Entity> Scene::find(const std::string& name) const
+    void Scene::broadcast(const std::string& event_name, std::shared_ptr<suborbital::Event> event)
     {
-        for (const std::unique_ptr<Entity>& entity : m_entities)
+        const EntitySet& entities = m_entities.all();
+        for (auto iter = entities.cbegin(); iter != entities.cend(); ++iter)
         {
-            if (entity->name() == name)
-            {
-                return WatchPtr<Entity>(entity.get());
-            }
+            const WatchPtr<Entity>& entity = *iter;
+            entity->broadcast(event_name, event);
+        }
+    }
+
+    WatchPtr<System> Scene::system(const std::string& name)
+    {
+        auto iter = m_systems.find(name);
+        if (iter != m_systems.end())
+        {
+            std::unique_ptr<System>& system = iter->second;
+            return WatchPtr<System>(system.get());
         }
 
         return nullptr;
     }
 
-    void Scene::broadcast(const std::string& event_name, std::shared_ptr<suborbital::Event> event)
-    {
-        for (std::unique_ptr<Entity>& entity : m_entities)
-        {
-            entity->broadcast(event_name, event);
-        }
-    }
-
     void Scene::process(double dt)
     {
+        // 1. Call the scene's update function.
         update(dt);
 
-        for (std::unique_ptr<Entity>& entity : m_entities)
+        // 2. Process all of the systems.
+        for (const auto& kv : m_systems)
         {
-            entity->update(dt);
+            kv.second->process(dt);
         }
+
+        // 3. Update all of the alive entities in the scene.
+        const EntitySet& entities = m_entities.all();
+        for (auto iter = entities.cbegin(); iter != entities.cend(); ++iter)
+        {
+            const WatchPtr<Entity>& entity = *iter;
+            if (entity->alive())
+            {
+                entity->update(dt);
+            }
+        }
+
+        // 4. Delete all the entities marked for destruction.
+        m_entities.purge();
     }
 }

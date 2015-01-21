@@ -1,12 +1,20 @@
 #ifndef SUBORBITAL_SCENE_HPP
 #define SUBORBITAL_SCENE_HPP
 
+#include <cassert>
 #include <memory>
+#include <string>
 #include <vector>
+#include <map>
+#include <unordered_map>
+#include <set>
 
 #include <suborbital/Watchable.hpp>
 #include <suborbital/WatchPtr.hpp>
 #include <suborbital/NonCopyable.hpp>
+#include <suborbital/EntityManager.hpp>
+
+#include <suborbital/system/System.hpp>
 
 namespace suborbital
 {
@@ -23,6 +31,13 @@ namespace suborbital
          * Destructor.
          */
         virtual ~Scene();
+
+        /**
+         * Accessor for the scene's entity manager.
+         *
+         * @return Entity manager for the scene.
+         */
+        EntityManager& entities();
 
         /**
          * Checks whether the scene has a camera entity.
@@ -57,22 +72,10 @@ namespace suborbital
         /**
          * Creates a new entity in the scene.
          *
-         * Sets the child entity's name to the empty string.
-         *
+         * @param entity_name Unique name for the entity.
          * @return Pointer to the created entity.
          */
-        WatchPtr<Entity> create_entity(const std::string& name);
-
-        /**
-         * Searches for an entity with the specified `name` and returns it.
-         *
-         * A nullptr is returned if no entity having the specified `name` was found. Note that this function has time
-         * complexity O(n). Avoid calling this function every frame and cache the result where possible.
-         *
-         * @param name Name of the entity to search for.
-         * @return Pointer to the first entity found having the specified `name`.
-         */
-        WatchPtr<Entity> find(const std::string& name) const;
+        WatchPtr<Entity> create_entity(const std::string& entity_name);
 
         /**
          * Broadcasts an event to every entity in the scene.
@@ -85,6 +88,54 @@ namespace suborbital
          * @param Shared pointer to the event to be broadcast.
          */
         void broadcast(const std::string& event_name, std::shared_ptr<suborbital::Event> event);
+
+        /**
+         * Creates a new system to process entities in the scene.
+         *
+         * @param name Name to be used for accessing the system.
+         * @return Pointer to the created system.
+         */
+        template<typename SystemType>
+        WatchPtr<SystemType> create_system(const std::string& name)
+        {
+            assert(m_systems.find(name) == m_systems.end());
+
+            SystemType* system = new SystemType();
+            m_systems.insert(std::make_pair(name, std::unique_ptr<SystemType>(system)));
+            return WatchPtr<SystemType>(system);
+        }
+
+        /**
+         * Accessor for the system with the specified name.
+         *
+         * @param name Name of the system to return.
+         * @return Pointer to the system with the specified name.
+         */
+        template<typename SystemType>
+        WatchPtr<SystemType> system(const std::string& name)
+        {
+            auto iter = m_systems.find(name);
+            if (iter != m_systems.end())
+            {
+                std::unique_ptr<System>& system = iter->second;
+                SystemType* specific_system = dynamic_cast<SystemType*>(system.get());
+
+                if (specific_system)
+                {
+                    return WatchPtr<SystemType>(specific_system);
+                }
+            }
+
+            return nullptr;
+        }
+
+        /**
+         * Accessor for the system with the specified name.
+         *
+         * @param name Name of the system to return.
+         * @return Pointer to the system with the specified name.
+         */
+        WatchPtr<System> system(const std::string& name);
 
     protected:
         /**
@@ -118,20 +169,34 @@ namespace suborbital
         /**
          * Called each frame.
          *
-         * Calls the scene's `update` function and then recursively updates all entities in the scene.
+         * The scene is processed in the following order:
+         *
+         * 1. The scene's `update` function is called.
+         * 2. The scene's systems are processed.
+         * 3. All the entities in the scene are recursively updated.
+         * 4. Entities marked for destruction are deleted.
+         *
+         * @param dt Time elapsed (in seconds) since the previous call to process.
          */
         void process(double dt);
 
     private:
         /**
-         * All the entities in the scene.
+         * Entities that form the contents of the scene.
          */
-        std::vector<std::unique_ptr<Entity>> m_entities;
+        EntityManager m_entities;
 
         /**
          * The entity serving as the scene's camera.
          */
         WatchPtr<Entity> m_camera;
+
+        /**
+         * The systems that process the entities in the scene.
+         *
+         * Map from system names to systems.
+         */
+        std::map<std::string, std::unique_ptr<System>> m_systems;
     };
 }
 

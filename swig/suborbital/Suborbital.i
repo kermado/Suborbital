@@ -30,6 +30,8 @@
 // Include classes.
 %include <suborbital/Watchable.i>
 %include <suborbital/Entity.i>
+%include <suborbital/EntitySet.i>
+%include <suborbital/EntityManager.i>
 
 %include <suborbital/scene/Scene.i>
 %include <suborbital/scene/PythonScene.i>

@@ -6,12 +6,15 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <set>
 #include <iostream>
 
 #include <suborbital/NonCopyable.hpp>
 #include <suborbital/Watchable.hpp>
 #include <suborbital/WatchPtr.hpp>
+
 #include <suborbital/event/EventDispatcher.hpp>
+
 #include <suborbital/component/Attribute.hpp>
 #include <suborbital/component/Behaviour.hpp>
 #include <suborbital/component/ComponentRegistry.hpp>
@@ -20,6 +23,7 @@ namespace suborbital
 {
     // Forward declarations.
     class Scene;
+    class System;
 
     /**
      * Represents an object within a scene.
@@ -63,6 +67,41 @@ namespace suborbital
          * @return Name assigned to the entity.
          */
         const std::string& name() const;
+
+        /**
+         * Checks whether the entity has been marked for destruction.
+         *
+         * @return True if the entity has been marked for destruction, false otherwise.
+         */
+        bool dead() const;
+
+        /**
+         * Checks whether the entity has NOT been marked for destruction.
+         *
+         * @return True if the entity has NOT been marked for destruction, false otherwise.
+         */
+        bool alive() const;
+
+        /**
+         * Marks the entity for destruction.
+         *
+         * @note Destruction is delayed until after all of the entities in the scene have been updated.
+         */
+        void destroy();
+
+        /**
+         * Adds the entity to the group specified by the provided `group_name`.
+         *
+         * @param group_name Name of the group that the entity should be added to.
+         */
+        void add_to_group(const std::string& group_name);
+
+        /**
+         * Removes the entity from the group specified by the provided `group_name`.
+         *
+         * @param group_name Name of the group that the entity should be removed from.
+         */
+        void remove_from_group(const std::string& group_name);
 
         /**
          * Checks whether the entity has any children.
@@ -292,6 +331,11 @@ namespace suborbital
          * Name assigned to the entity.
          */
         const std::string m_name;
+
+        /**
+         * Whether the entity has been marked for destruction.
+         */
+        bool m_dead;
 
         /**
          * Parent entity (will be a nullptr if the entity has no parent).
