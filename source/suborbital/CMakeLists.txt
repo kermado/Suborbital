@@ -23,11 +23,13 @@ set(SOURCE_FILES
 	${SRC_ROOT}/scene/PythonScene.cpp
 
 	${SRC_ROOT}/system/System.cpp
+	${SRC_ROOT}/system/PythonSystem.cpp
+	${SRC_ROOT}/system/SystemRegistry.cpp
 
 	${SRC_ROOT}/component/Component.cpp
-	${SRC_ROOT}/component/PythonAttribute.cpp
 	${SRC_ROOT}/component/Attribute.cpp
 	${SRC_ROOT}/component/Behaviour.cpp
+	${SRC_ROOT}/component/PythonAttribute.cpp
 	${SRC_ROOT}/component/PythonBehaviour.cpp
 	${SRC_ROOT}/component/ComponentRegistry.cpp
 	${SRC_ROOT}/component/ExampleAttribute.cpp

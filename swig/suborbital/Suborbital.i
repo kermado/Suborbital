@@ -36,6 +36,9 @@
 %include <suborbital/scene/Scene.i>
 %include <suborbital/scene/PythonScene.i>
 
+%include <suborbital/system/System.i>
+%include <suborbital/system/PythonSystem.i>
+
 %include <suborbital/component/Component.i>
 %include <suborbital/component/Attribute.i>
 %include <suborbital/component/Behaviour.i>
@@ -50,9 +53,13 @@
 %include <suborbital/event/PythonEventCallback.i>
 
 // Specify which classes can be wrapped using WatchPtr.
+%template(SceneWatchPtr) suborbital::WatchPtr<suborbital::Scene>;
+%template(PythonSceneWatchPtr) suborbital::WatchPtr<suborbital::PythonScene>;
 %template(EntityWatchPtr) suborbital::WatchPtr<suborbital::Entity>;
 %template(ComponentWatchPtr) suborbital::WatchPtr<suborbital::Component>;
 %template(AttributeWatchPtr) suborbital::WatchPtr<suborbital::Attribute>;
 %template(PythonAttributeWatchPtr) suborbital::WatchPtr<suborbital::PythonAttribute>;
 %template(BehaviourWatchPtr) suborbital::WatchPtr<suborbital::Behaviour>;
 %template(ExampleAttributeWatchPtr) suborbital::WatchPtr<suborbital::ExampleAttribute>;
+%template(SystemWatchPtr) suborbital::WatchPtr<suborbital::System>;
+%template(PythonSystemWatchPtr) suborbital::WatchPtr<suborbital::PythonSystem>;

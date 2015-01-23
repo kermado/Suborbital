@@ -1,25 +1,26 @@
-#ifndef SUBORBITAL_PYTHON_SCENE_FACTORY_HPP
-#define SUBORBITAL_PYTHON_SCENE_FACTORY_HPP
+#ifndef SUBORBITAL_PYTHON_SYSTEM_FACTORY_HPP
+#define SUBORBITAL_PYTHON_SYSTEM_FACTORY_HPP
 
 #include <string>
+#include <iostream>
 
 #include <suborbital/PythonRuntime.hpp>
 
-#include <suborbital/scene/SceneFactory.hpp>
-#include <suborbital/scene/PythonScene.hpp>
+#include <suborbital/system/SpecificSystemFactory.hpp>
+#include <suborbital/system/PythonSystem.hpp>
 
 namespace suborbital
 {
     template<>
-    class SpecificSceneFactory<PythonScene> : public SceneFactory
+    class SpecificSystemFactory<PythonSystem> : public SystemFactory
     {
     public:
         /**
          * Constructor.
          *
-         * @param class_name Class/file name for the scene to be instantiated by the `create` function.
+         * @param class_name Class/file name for the system to be instantiated by the `create` function.
          */
-        SpecificSceneFactory(const std::string& class_name)
+        SpecificSystemFactory(const std::string& class_name)
         : m_class_name(class_name)
         {
             // Nothing to do.
@@ -28,16 +29,16 @@ namespace suborbital
         /**
          * Destructor.
          */
-        ~SpecificSceneFactory() = default;
+        ~SpecificSystemFactory() = default;
 
         /**
-         * Instantiates the Python defined scene and returns a unique_ptr to the created scene.
+         * Instantiates the Python defined system and returns a unique_ptr to the created system.
          *
-         * This function will return a nullptr in the event that the Python scene could not be instantiated.
+         * This function will return a nullptr in the event that the Python system could not be instantiated.
          *
-         * @return Unique pointer to the created Python scene.
+         * @return Unique pointer to the created Python system.
          */
-        std::unique_ptr<Scene> create() const
+        std::unique_ptr<System> create() const
         {
             // Import the script file.
             PyObject* module = PyImport_ImportModule(m_class_name.c_str());
@@ -85,25 +86,25 @@ namespace suborbital
                 return nullptr;
             }
 
-            // Now we must convert the PyObject pointer into our PythonScene pointer.
+            // Now we must convert the PyObject pointer into our PythonSystem pointer.
             void* converted_ptr = NULL;
-            swig_type_info* scene_type_info = SWIG_TypeQuery("suborbital::PythonScene*");
-            const int status = SWIG_ConvertPtr(python_instance, &converted_ptr, scene_type_info, 0);
+            swig_type_info* system_type_info = SWIG_TypeQuery("suborbital::PythonSystem*");
+            const int status = SWIG_ConvertPtr(python_instance, &converted_ptr, system_type_info, 0);
             if (!SWIG_IsOK(status))
             {
-                std::cerr << "Failed to convert Python object to a PythonScene for class " << m_class_name
+                std::cerr << "Failed to convert Python object to a PythonSystem for class " << m_class_name
                           << std::endl;
                 return nullptr;
             }
 
-            PythonScene* scripted_scene_ptr = reinterpret_cast<PythonScene*>(converted_ptr);
+            PythonSystem* scripted_system_ptr = reinterpret_cast<PythonSystem*>(converted_ptr);
 
-            // Store the PyObject* that was created when constructing our PythonScene derived types so that we can
-            // easily return it when scripts request to access scripted scene types.
+            // Store the PyObject* that was created when constructing our PythonSystem derived types so that we can
+            // easily return it when scripts request to access scripted system types.
             //
             // Thanks to Flexo:
             // http://stackoverflow.com/questions/27454289/retrieving-a-python-type-back-from-c/27454946#27454946
-            scripted_scene_ptr->instance(python_instance);
+            scripted_system_ptr->instance(python_instance);
 
             // Decrease reference counts for created python objects.
             Py_XDECREF(python_disown_function);
@@ -111,13 +112,13 @@ namespace suborbital
             Py_XDECREF(python_instance);
             Py_XDECREF(python_class);
 
-            // Return a unique pointer to the scripted Python scene.
-            return std::unique_ptr<PythonScene>(scripted_scene_ptr);
+            // Return a unique pointer to the scripted Python system.
+            return std::unique_ptr<PythonSystem>(scripted_system_ptr);
         }
 
     private:
         /**
-         * Class/file name for the Python defined scene.
+         * Class/file name for the Python defined system.
          */
         std::string m_class_name;
     };

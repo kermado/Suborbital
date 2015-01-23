@@ -5,8 +5,8 @@
 
 namespace suborbital
 {
-    System::System(Scene& scene)
-    : m_scene(scene)
+    System::System()
+    : m_scene(nullptr)
     {
         std::cout << "System::System()" << std::endl;
     }
@@ -14,5 +14,10 @@ namespace suborbital
     System::~System()
     {
         std::cout << "System::~System()" << std::endl;
+    }
+
+    WatchPtr<Scene> System::scene() const
+    {
+        return m_scene;
     }
 }

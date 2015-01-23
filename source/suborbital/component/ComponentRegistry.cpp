@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include <suborbital/component/ComponentRegistry.hpp>
 #include <suborbital/component/AttributeFactory.hpp>
 #include <suborbital/component/PythonBehaviourFactory.hpp>

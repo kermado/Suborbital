@@ -23,7 +23,7 @@ namespace suborbital
         virtual ~Component();
 
         /**
-         * Called after the component has been created and assigned to the entity.
+         * Called after the component has been created and attached to the entity.
          */
         virtual void create() = 0;
 

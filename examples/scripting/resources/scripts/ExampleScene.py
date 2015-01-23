@@ -10,7 +10,9 @@ class ExampleScene(PythonScene):
         print("ExampleScene::~ExampleScene()")
 
     def create(self):
-        entity = self.create_entity("Player")
+        example_system = self.create_system("ExampleSystem")
+
+        entity = self.create_entity("Player 1")
         entity.create_attribute("ExampleAttribute")
         entity.create_attribute("HealthAttribute")
         entity.create_behaviour("ExampleBehaviour")

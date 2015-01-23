@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include <suborbital/NonCopyable.hpp>
+
 namespace suborbital
 {
     // Forward declarations.
@@ -11,7 +13,7 @@ namespace suborbital
     /**
      * The base class for factories that instantiate scenes.
      */
-    class SceneFactory
+    class SceneFactory : private NonCopyable
     {
     public:
         /**

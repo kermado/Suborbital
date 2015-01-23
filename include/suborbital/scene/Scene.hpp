@@ -15,6 +15,7 @@
 #include <suborbital/EntityManager.hpp>
 
 #include <suborbital/system/System.hpp>
+#include <suborbital/system/SystemRegistry.hpp>
 
 namespace suborbital
 {
@@ -92,18 +93,30 @@ namespace suborbital
         /**
          * Creates a new system to process entities in the scene.
          *
-         * @param name Name to be used for accessing the system.
          * @return Pointer to the created system.
          */
         template<typename SystemType>
-        WatchPtr<SystemType> create_system(const std::string& name)
+        WatchPtr<SystemType> create_system()
         {
-            assert(m_systems.find(name) == m_systems.end());
+            SystemType* system_ptr = new SystemType();
+            const std::string system_name = system_registry().system_name<SystemType>();
 
-            SystemType* system = new SystemType();
-            m_systems.insert(std::make_pair(name, std::unique_ptr<SystemType>(system)));
-            return WatchPtr<SystemType>(system);
+            assert(m_systems.find(system_name) == m_systems.end());
+            m_systems[system_name] = std::unique_ptr<SystemType>(system_ptr);
+
+            system_ptr->m_scene = this;
+            system_ptr->create();
+            return WatchPtr<SystemType>(system_ptr);
         }
+
+        /**
+         * Creates and attaches a system of the type specified by `class_name` to the scene and returns a pointer
+         * to the created system.
+         *
+         * @param class_name Class name for the attribute to be created and attached.
+         * @return Pointer to the attribute that was created and attached.
+         */
+        WatchPtr<System> create_system(const std::string& class_name);
 
         /**
          * Accessor for the system with the specified name.

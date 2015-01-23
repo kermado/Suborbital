@@ -5,6 +5,7 @@
 
 #include <suborbital/NonCopyable.hpp>
 #include <suborbital/Watchable.hpp>
+#include <suborbital/WatchPtr.hpp>
 
 namespace suborbital
 {
@@ -21,13 +22,23 @@ namespace suborbital
          */
         virtual ~System();
 
+        /**
+         * Accessor for the scene that owns the system.
+         *
+         * @return Pointer to the parent scene.
+         */
+        WatchPtr<Scene> scene() const;
+
     protected:
         /**
          * Constructor.
-         *
-         * @param scene Reference to the parent scene.
          */
-        System(Scene& scene);
+        System();
+
+        /**
+         * Called after the system has been created and attached to the scene.
+         */
+        virtual void create() = 0;
 
         /**
          * Called each frame.
@@ -38,9 +49,9 @@ namespace suborbital
 
     protected:
         /**
-         * Scene that the system is processing.
+         * Pointer to the scene that the system is processing.
          */
-        Scene& m_scene;
+        WatchPtr<Scene> m_scene;
     };
 }
 

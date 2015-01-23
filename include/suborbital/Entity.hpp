@@ -190,9 +190,6 @@ namespace suborbital
          * Creates and attaches an attribute of the type specified by `class_name` to the entity and returns a pointer
          * to the created attribute.
          *
-         * This function is intended to be called from within scripts. Users of the c++ API should use the templated
-         * function provided.
-         *
          * @param class_name Class name for the attribute to be created and attached.
          * @return Pointer to the attribute that was created and attached.
          */
@@ -223,9 +220,6 @@ namespace suborbital
          * Returns a pointer the attached attribute with the specified class name. If multiple attributes of type
          * specified by `class_name` are attached then the first such attribute is returned.
          *
-         * This function is intended to be called from within scripts. Users of the c++ API should use the templated
-         * function provided, which attempts to safely cast the requested attribute to the specified type.
-         *
          * @param class_name Class name for the attribute to be returned.
          * @return Pointer to the first attached attribute with the specified class name.
          */
@@ -251,9 +245,6 @@ namespace suborbital
 
         /**
          * Attaches a behaviour of type specified by `class_name` to the entity.
-         *
-         * This function is intended to be called from within scripts. Users of the c++ API should use the templated
-         * function provided.
          *
          * @note The caller is NOT responsible for managing the lifetime of the returned behaviour.
          *

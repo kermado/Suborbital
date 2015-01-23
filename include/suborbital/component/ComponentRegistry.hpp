@@ -18,9 +18,7 @@ namespace suborbital
     class Behaviour;
 
     /**
-     * Behaviour registry.
-     *
-     * Represents the behaviour registry where behaviours are registered.
+     * Component registry.
      */
     class ComponentRegistry : public NonCopyable
     {
@@ -88,8 +86,8 @@ namespace suborbital
          * @note This method does not register the specified component name to a specific c++ type. This function is
          * used for registering scripted components.
          *
-         * @param name Name to associate with the provided behaviour factory function.
-         * @param factory Factory to use for instantiating behaviours of the specified name.
+         * @param name Name to associate with the provided component factory function.
+         * @param factory Factory to use for instantiating components of the specified name.
          */
         void register_component(const std::string& name, std::unique_ptr<ComponentFactory> factory);
 

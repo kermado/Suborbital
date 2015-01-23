@@ -60,6 +60,19 @@ namespace suborbital
         }
     }
 
+    WatchPtr<System> Scene::create_system(const std::string& class_name)
+    {
+        std::unique_ptr<System> system = system_registry().create_system(class_name);
+        assert(system != nullptr);
+
+        System* system_ptr = system.get();
+        m_systems[class_name] = std::move(system);
+        system_ptr->m_scene = this;
+        system_ptr->create();
+
+        return WatchPtr<System>(system_ptr);
+    }
+
     WatchPtr<System> Scene::system(const std::string& name)
     {
         auto iter = m_systems.find(name);
