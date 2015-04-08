@@ -8,6 +8,7 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Header search path.
 include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/swig)
 include_directories(${PROJECT_SOURCE_DIR}/build)
 
 # Compile flags.

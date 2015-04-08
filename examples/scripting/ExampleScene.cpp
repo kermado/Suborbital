@@ -1,7 +1,7 @@
-#include "ExampleScene.hpp"
-
 #include <suborbital/Entity.hpp>
-#include <suborbital/component/ExampleAttribute.hpp>
+
+#include "ExampleScene.hpp"
+#include "ExampleAttribute.hpp"
 
 ExampleScene::ExampleScene()
 : Scene()
@@ -17,7 +17,7 @@ ExampleScene::~ExampleScene()
 void ExampleScene::create()
 {
     suborbital::WatchPtr<suborbital::Entity> entity = create_entity("Player");
-    entity->create_attribute<suborbital::ExampleAttribute>();
+    entity->create_attribute<ExampleAttribute>();
     entity->create_attribute("HealthAttribute");
     entity->create_behaviour("ExampleBehaviour");
 }

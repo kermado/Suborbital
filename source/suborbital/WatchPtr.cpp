@@ -5,40 +5,33 @@
 
 namespace suborbital
 {
-    void WatchPtrBase::link(const Watchable* watchable_object)
+    WatchPtrBase::WatchPtrBase()
+    : ptr(nullptr)
     {
-        assert(previous == nullptr);
-        assert(next == nullptr);
+        // Nothing to do.
+    }
 
-        ptr = watchable_object;
+    void WatchPtrBase::watch(const Watchable* watchable_object)
+    {
+        // Stop watching existing object.
+        unwatch();
 
+        // Start watching the provided object.
         if (watchable_object != nullptr)
         {
-            previous = &(watchable_object->m_watchers);
-            next = watchable_object->m_watchers.next;
-
-            if (watchable_object->m_watchers.next != nullptr)
-            {
-                watchable_object->m_watchers.next->previous = this;
-            }
-
-            watchable_object->m_watchers.next = this;
+            watchable_object->m_watchers.insert(this);
+            ptr = watchable_object;
         }
     }
 
-    void WatchPtrBase::unlink()
+    void WatchPtrBase::unwatch()
     {
-        if (next != nullptr)
+        if (ptr != nullptr)
         {
-            next->previous = previous;
-        }
+            std::size_t removed = ptr->m_watchers.erase(this);
+            assert(removed == 1);
 
-        if (previous != nullptr)
-        {
-            previous->next = next;
+            ptr = nullptr;
         }
-
-        next = nullptr;
-        previous = nullptr;
     }
 }

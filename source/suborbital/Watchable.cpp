@@ -13,16 +13,9 @@ namespace suborbital
     {
         std::cout << "Watchable::~Watchable()" << std::endl;
 
-        for (WatchPtrBase* watcher = m_watchers.next; watcher != nullptr; watcher = watcher->next)
+        for (WatchPtrBase* watcher : m_watchers)
         {
             watcher->ptr = nullptr;
-
-            if (watcher->previous)
-            {
-                watcher->previous->next = nullptr;
-            }
-
-            watcher->previous = nullptr;
         }
     }
 }

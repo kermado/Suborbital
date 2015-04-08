@@ -4,9 +4,9 @@
 #include <suborbital/PythonInterpreter.hpp>
 
 #include <suborbital/scene/SceneStack.hpp>
-#include <suborbital/component/ExampleAttribute.hpp>
 
 #include "ExampleScene.hpp"
+#include "ExampleAttribute.hpp"
 
 using namespace suborbital;
 

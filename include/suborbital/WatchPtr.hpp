@@ -1,5 +1,5 @@
-#ifndef SUBORBITAL_WatchPtr_HPP
-#define SUBORBITAL_WatchPtr_HPP
+#ifndef SUBORBITAL_WATCHPTR_HPP
+#define SUBORBITAL_WATCHPTR_HPP
 
 #include <cstddef>
 #include <cassert>
@@ -17,32 +17,31 @@ namespace suborbital
     friend Watchable;
     protected:
         /**
+         * Constructor.
+         */
+        WatchPtrBase();
+
+        /**
+         * Destructor.
+         */
+        ~WatchPtrBase() = default;
+
+        /**
+         * Starts watching the supplied watchable object.
+         */
+        void watch(const Watchable* watchable_object);
+
+        /**
+         * Stops watching any object.
+         */
+        void unwatch();
+
+        /**
          * Pointer to the object that the WatchPtr is watching.
          *
          * This pointer will be null when the object being watched is deleted.
          */
-        const Watchable* ptr = nullptr; // Payload.
-
-        /**
-         * Pointer to the previous WatchPtr node in the linked list.
-         */
-        WatchPtrBase* previous = nullptr; // Pointer to the previous node.
-
-        /**
-         * Pointer to the next WatchPtr node in the linked list.
-         */
-        WatchPtrBase* next = nullptr; // Pointer to the next node.
-
-    protected:
-        /**
-         * Links the WatchPtr to the supplied watchable object.
-         */
-        void link(const Watchable* watchable_object);
-
-        /**
-         * Unlinks the WatchPtr from the object that it is currently watching.
-         */
-        void unlink();
+        const Watchable* ptr;
     };
 
     /**
@@ -77,7 +76,7 @@ namespace suborbital
          */
         explicit WatchPtr(T* t)
         {
-            link(t);
+            watch(t);
         }
 
         /**
@@ -85,7 +84,7 @@ namespace suborbital
          */
         WatchPtr(const WatchPtr& t)
         {
-            link(t.ptr);
+            watch(t.ptr);
         }
 
         /**
@@ -94,7 +93,7 @@ namespace suborbital
         template<typename U>
         WatchPtr(const WatchPtr<U>& t)
         {
-            link(t.ptr);
+            watch(t.ptr);
         }
 
         /**
@@ -102,7 +101,7 @@ namespace suborbital
          */
         ~WatchPtr()
         {
-            unlink();
+            unwatch();
         }
 
         /**
@@ -113,8 +112,7 @@ namespace suborbital
          */
         WatchPtr& operator=(T* t)
         {
-            unlink();
-            link(t);
+            watch(t);
             return *this;
         }
 
@@ -126,8 +124,7 @@ namespace suborbital
          */
         WatchPtr& operator=(const WatchPtr& other)
         {
-            unlink();
-            link(other.ptr);
+            watch(other.ptr);
             return *this;
         }
 

@@ -32,7 +32,6 @@ set(SOURCE_FILES
 	${SRC_ROOT}/component/PythonAttribute.cpp
 	${SRC_ROOT}/component/PythonBehaviour.cpp
 	${SRC_ROOT}/component/ComponentRegistry.cpp
-	${SRC_ROOT}/component/ExampleAttribute.cpp
 
 	${SRC_ROOT}/event/EventDispatcher.cpp
 	${SRC_ROOT}/event/EventSubscription.cpp
@@ -70,6 +69,10 @@ swig_link_libraries(${SWIG_LIBRARY_NAME} ${PYTHON_LIBRARIES})
 # Install.
 INSTALL(TARGETS ${LIBRARY_NAME} DESTINATION lib)
 INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/include
+		DESTINATION .
+		PATTERN ".svn" EXCLUDE
+		PATTERN ".DS_Store" EXCLUDE)
+INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/swig
 		DESTINATION .
 		PATTERN ".svn" EXCLUDE
 		PATTERN ".DS_Store" EXCLUDE)

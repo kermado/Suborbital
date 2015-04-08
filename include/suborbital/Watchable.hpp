@@ -1,6 +1,8 @@
 #ifndef SUBORBITAL_WATCHABLE_HPP
 #define SUBORBITAL_WATCHABLE_HPP
 
+#include <unordered_set>
+
 #include <suborbital/WatchPtr.hpp>
 
 namespace suborbital
@@ -10,6 +12,7 @@ namespace suborbital
      */
     class Watchable
     {
+    friend WatchPtrBase;
     public:
         /**
          * Constructor.
@@ -23,10 +26,11 @@ namespace suborbital
          */
         virtual ~Watchable();
 
+    private:
         /**
-         * Linked list of watch_ptr's that are pointing to the watchable object.
+         * List of watch_ptr's that are pointing to the watchable object.
          */
-        mutable WatchPtrBase m_watchers;
+        mutable std::unordered_set<WatchPtrBase*> m_watchers;
     };
 }
 

@@ -4,9 +4,9 @@
 
 **Please note that this project is currently under development and is not ready for production.**
 
-Suborbital is a lightweight component-oriented entity framework for games, written in c++11. It is heavily inspired by both the Unity game engine and a presentation given by [Marcin Chady][1] at GDC Canada in 2009. The concept differs slightly from Entity Component Systems (ECS), such as that used by [Artemis][2]. The framework includes bindings for Python scripting, which are generated using [SWIG][3]. Components can be defined in either c++ source files or python scripts.
+Suborbital is a lightweight component-oriented entity framework for games, written in c++11. It is heavily inspired by both the Unity game engine and a presentation given by [Marcin Chady][1] at GDC Canada in 2009. The concept differs slightly from Entity Component Systems (ECS), such as that used by [Artemis][2]. The framework includes bindings for Python scripting, which are generated using [SWIG][3]. Components can be defined in both c++ source files or python scripts. It is possible to expose components implemented in c++ to Python but the converse is not currently possible.
 
-[1]: www.gdcvault.com/play/1911/
+[1]: http://www.gdcvault.com/play/1911/
 [2]: http://gamadu.com/artemis/index.html
 [3]: http://www.swig.org/
 
@@ -26,8 +26,6 @@ cmake ..
 make
 ```
 
-Windows users can use CMake to generate a Visual Studio project.
-
 ## Getting started
 
 You will find some basic sample programs inside of the `examples` directory.
@@ -46,11 +44,11 @@ class SomeAttribute(PythonAttribute):
         pass
 ```
 
-Note that `self.entity` is null inside of the constructor. The parent entity is injected into the attribute after construction but before `create`. You should place any initialization that requires accessing the parent entity inside of `create`. 
+Note that `self.entity` is null inside of the constructor. The parent entity is injected into the attribute after construction but before `create`. You should place any initialization code that requires accessing the entity that the component is attached to inside of `create`. 
 
 ### Defining behaviours
 
-Like attributes, behaviours can easily be defined in Python scripts. Provided below is a minimal complete example:
+Behaviours can easily be similarly defined in Python scripts. Provided below is a minimal complete example:
 
 ```python
 from suborbital import PythonBehaviour
@@ -119,12 +117,24 @@ class RespawnBehaviour(PythonBehaviour):
 You can add both Python and c++ defined components to entities:
 
 ```cpp
-Entity player("Player");
-player.create_attribute("SomeAttribute"); // Add a Python defined attribute
-player.create_attribute<SomeAttribute>(); // Add a c++ defined attribute
-player.create_behaviour("MoveBehaviour"); // Add a Python defined behaviour
-player.create_behaviour<MoveBehaviour>(); // Add a c++ defined behaviour
+some_entity->create_attribute("SomeAttribute"); // Add a Python defined attribute
+some_entity->create_attribute<SomeAttribute>(); // Add a c++ defined attribute
+some_entity->create_behaviour("SomeBehaviour"); // Add a Python defined behaviour
+some_entity->create_behaviour<SomeBehaviour>(); // Add a c++ defined behaviour
 ```
+
+Or, for example, from inside of a Python script:
+
+```python
+
+some_entity.create_attribute(SomePythonDefinedAttribute) # Add a Python defined attribute
+some_entity.create_attribute(SomeCppDefinedAttribute)    # Add a c++ defined attribute that has been exposed to Python
+some_entity.create_behaviour(SomePythonDefinedBehaviour) # Add a Python defined behaviour
+some_entity.create_behaviour(SomeCppDefinedBehaviour)    # Add a c++ defined behaviour that has been exposed to Python
+
+```
+
+Note the any c++ defined components must be exposed to Python before it is possible to add them to entities.
 
 ### Scenes: Tying it all together
 
@@ -150,6 +160,10 @@ class ExampleScene(PythonScene):
 
 The `update` function is called before updating all of the entities in the scene. The `suspend` and `resume` functions are called when a scene becomes inactive and active respectively. This occurs when scenes are pushed onto the scene stack or popped off of the scene stack.
 
+### Exposing C++ defined types to Python
+
+See `examples/scripting`.
+
 ## Authors
 
  * Omar Kermad
@@ -164,6 +178,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kermado/suborbital/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-

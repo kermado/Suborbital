@@ -1,4 +1,5 @@
-from suborbital import PythonBehaviour
+from suborbital import *
+from scripting import *
 
 class ExampleBehaviour(PythonBehaviour):
 
@@ -11,7 +12,7 @@ class ExampleBehaviour(PythonBehaviour):
 
     def create(self):
         self.example = self.entity.attribute("ExampleAttribute")
-        self.example.value("awesome!")
+        self.example.value("You can even write your components in c++ and interface with them from Python!")
         self.example.log()
 
         self.health = self.entity.attribute("HealthAttribute")

@@ -19,9 +19,6 @@
 %include <std_string.i>
 %include <std_shared_ptr.i>
 
-// Include WatchPtr smart pointer class.
-%include <suborbital/WatchPtr.i>
-
 // Specify which classes should be wrapped using std::shared_ptr.
 // Note that this must be done before before any usage or declaration of the classes.
 %shared_ptr(suborbital::Event);
@@ -29,6 +26,7 @@
 
 // Include classes.
 %include <suborbital/Watchable.i>
+%include <suborbital/WatchPtr.i>
 %include <suborbital/Entity.i>
 %include <suborbital/EntitySet.i>
 %include <suborbital/EntityManager.i>
@@ -44,7 +42,6 @@
 %include <suborbital/component/Behaviour.i>
 %include <suborbital/component/PythonAttribute.i>
 %include <suborbital/component/PythonBehaviour.i>
-%include <suborbital/component/ExampleAttribute.i>
 
 %include <suborbital/event/Event.i>
 %include <suborbital/event/PythonEvent.i>
@@ -60,6 +57,5 @@
 %template(AttributeWatchPtr) suborbital::WatchPtr<suborbital::Attribute>;
 %template(PythonAttributeWatchPtr) suborbital::WatchPtr<suborbital::PythonAttribute>;
 %template(BehaviourWatchPtr) suborbital::WatchPtr<suborbital::Behaviour>;
-%template(ExampleAttributeWatchPtr) suborbital::WatchPtr<suborbital::ExampleAttribute>;
 %template(SystemWatchPtr) suborbital::WatchPtr<suborbital::System>;
 %template(PythonSystemWatchPtr) suborbital::WatchPtr<suborbital::PythonSystem>;
