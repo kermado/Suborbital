@@ -68,7 +68,7 @@ Entity game logic should be executed from the `update` function. This function i
 class MoveBehaviour(PythonBehaviour):
     [...]
     def create(self):
-        self.transform = self.entity.attribute("TransformAttribute")
+        self.transform = self.entity.attribute(TransformAttribute)
     def update(self, dt):
         self.transform.translate(0, 0, 1)
     [...]
@@ -103,8 +103,8 @@ class HealthAttribute(PythonAttribute):
 class RespawnBehaviour(PythonBehaviour):
     [...]
     def create(self):
-        self.transform = self.entity.attribute("TransformAttribute")
-        self.health = self.entity.attribute("HealthAttribute")
+        self.transform = self.entity.attribute(TransformAttribute)
+        self.health = self.entity.attribute(HealthAttribute)
         self.subscription = self.entity.subscribe("EntityDiedEvent", self.on_entity_died)
     def on_entity_died(self, event):
         self.transform.position(0, 0, 0)
@@ -145,8 +145,8 @@ class ExampleScene(PythonScene):
     def __init__(self):
         PythonScene.__init__(self)
         entity = self.create_entity("Player")
-        entity.create_attribute("HealthAttribute")
-        entity.create_behaviour("RespawnBehaviour")
+        entity.create_attribute(HealthAttribute)
+        entity.create_behaviour(RespawnBehaviour)
         
     def update(self, dt):
         pass
