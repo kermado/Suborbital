@@ -1,5 +1,6 @@
-from suborbital import *
-from scripting import *
+from suborbital import PythonBehaviour
+from scripting import ExampleAttribute
+import HealthAttribute
 
 class ExampleBehaviour(PythonBehaviour):
 
@@ -11,11 +12,11 @@ class ExampleBehaviour(PythonBehaviour):
         print("ExampleBehaviour::~ExampleBehaviour()")
 
     def create(self):
-        self.example = self.entity.attribute("ExampleAttribute")
+        self.example = self.entity.attribute(ExampleAttribute)
         self.example.value("You can even write your components in c++ and interface with them from Python!")
         self.example.log()
 
-        self.health = self.entity.attribute("HealthAttribute")
+        self.health = self.entity.attribute(HealthAttribute)
         self.died_subscription = self.entity.subscribe("EntityDiedEvent", self.on_entity_died)
 
     def update(self, dt):

@@ -7,6 +7,8 @@
 
 /**
  * A primitive attribute used for testing purposes.
+ *
+ * This attribute is exposed to Python.
  */
 class ExampleAttribute : public suborbital::Attribute
 {

@@ -11,7 +11,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 # Source files.
 set(SOURCE_FILES
     main.cpp
-    ExampleScene.cpp
     ExampleAttribute.cpp
 )
 
@@ -24,12 +23,15 @@ include_directories(${PYTHON_INCLUDE_PATH})
 target_link_libraries(ScriptingExample ${PYTHON_LIBRARIES})
 
 # SWIG.
-set(SWIG_LIBRARY_NAME scripting)
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
 set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_SWIG_FLAGS "")
 
+# Build our own "scripting" module that can be imported inside of Python scripts.
+# This module contains all of our C++ defined components that we want to expose to Python.
+# Note that we need to link this module with both the Python and Suborbital libraries.
+set(SWIG_LIBRARY_NAME scripting)
 set_source_files_properties(${SWIG_ROOT}/Scripting.i PROPERTIES CPLUSPLUS ON)
 set_source_files_properties(${SWIG_ROOT}/Scripting.i PROPERTIES SWIG_FLAGS "-I${SWIG_ROOT}")
 swig_add_module(${SWIG_LIBRARY_NAME} python ${SWIG_ROOT}/Scripting.i ${SOURCE_FILES})

@@ -1,7 +1,9 @@
 %{
     #include <suborbital/WatchPtr.hpp>
     #include <suborbital/Entity.hpp>
+
     #include <suborbital/component/PythonAttribute.hpp>
+
     #include <suborbital/event/PythonEvent.hpp>
     #include <suborbital/event/EventSubscription.hpp>
     #include <suborbital/event/EventCallbackBase.hpp>
@@ -66,6 +68,33 @@
         $result = SWIG_NewPointerObj(new suborbital::WatchPtr<suborbital::Attribute>($1), out_type, SWIG_POINTER_OWN | 0);
     }
 }
+
+// Custom implementation for the Python method that calls the `create_attribute function`. This method takes a Python
+// type as its only parameter and passes the name of the provided type into the `create_attribute` function as a string.
+// This is done to ensure that the provided type is imported (which would not be possible if just a type name was to be
+// provided by the user).
+%feature("shadow") suborbital::Entity::create_attribute %{
+    def create_attribute(self, attribute_type):
+        return $action(self, attribute_type.__name__)
+%}
+
+// Custom implementation for the Python method that calls the `attribute` function. This method takes a Python type as
+// its only parameter and passes the name of the provided type into the `attribute` function as a string. This is done
+// to ensure that the provided type is imported (which would not be possible if just a type name was to be
+// provided by the user).
+%feature("shadow") suborbital::Entity::attribute %{
+    def attribute(self, attribute_type):
+            return $action(self, attribute_type.__name__)
+%}
+
+// Custom implementation for the Python method that calls the `create_behaviour function`. This method takes a Python
+// type as its only parameter and passes the name of the provided type into the `create_behaviour` function as a string.
+// This is done to ensure that the provided type is imported (which would not be possible if just a type name was to be
+// provided by the user).
+%feature("shadow") suborbital::Entity::create_behaviour %{
+    def create_behaviour(self, attribute_type):
+        return $action(self, attribute_type.__name__)
+%}
 
 // Define a WeaklyBoundMethod class that wraps a method bound to a weakref of an object. This is required for callback
 // functions so as to avoid increasing the reference count of the object that subscribes for an event.
