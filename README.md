@@ -4,7 +4,9 @@
 
 **Please note that this project is currently under development and is not ready for production.**
 
-Suborbital is a lightweight component-oriented entity framework for games, written in c++11. It is heavily inspired by both the Unity game engine and a presentation given by [Marcin Chady][1] at GDC Canada in 2009. The concept differs slightly from Entity Component Systems (ECS), such as that used by [Artemis][2]. The framework includes bindings for Python scripting, which are generated using [SWIG][3]. Components can be defined in both c++ source files or python scripts. It is possible to expose components implemented in c++ to Python but the converse is not currently possible.
+Suborbital is a lightweight component-oriented entity framework for games, written in C++11. It is heavily inspired by both the Unity game engine and a presentation given by [Marcin Chady][1] at GDC Canada in 2009. The concept differs slightly from Entity Component Systems (ECS), such as that used by [Artemis][2].
+
+The framework includes bindings for Python scripting, which are generated using [SWIG][3]. Components can be defined in both C++ source files or python scripts. It is possible to expose components implemented in C++ to Python but the converse is not currently possible.
 
 [1]: http://www.gdcvault.com/play/1911/
 [2]: http://gamadu.com/artemis/index.html
@@ -114,13 +116,13 @@ class RespawnBehaviour(PythonBehaviour):
 
 ### Adding components to entities
 
-You can add both Python and c++ defined components to entities:
+You can add both Python and C++ defined components to entities:
 
 ```cpp
 some_entity->create_attribute("SomeAttribute"); // Add a Python defined attribute
-some_entity->create_attribute<SomeAttribute>(); // Add a c++ defined attribute
+some_entity->create_attribute<SomeAttribute>(); // Add a C++ defined attribute
 some_entity->create_behaviour("SomeBehaviour"); // Add a Python defined behaviour
-some_entity->create_behaviour<SomeBehaviour>(); // Add a c++ defined behaviour
+some_entity->create_behaviour<SomeBehaviour>(); // Add a C++ defined behaviour
 ```
 
 Or, for example, from inside of a Python script:
@@ -128,13 +130,13 @@ Or, for example, from inside of a Python script:
 ```python
 
 some_entity.create_attribute(SomePythonDefinedAttribute) # Add a Python defined attribute
-some_entity.create_attribute(SomeCppDefinedAttribute)    # Add a c++ defined attribute that has been exposed to Python
+some_entity.create_attribute(SomeCppDefinedAttribute)    # Add a C++ defined attribute that has been exposed to Python
 some_entity.create_behaviour(SomePythonDefinedBehaviour) # Add a Python defined behaviour
-some_entity.create_behaviour(SomeCppDefinedBehaviour)    # Add a c++ defined behaviour that has been exposed to Python
+some_entity.create_behaviour(SomeCppDefinedBehaviour)    # Add a C++ defined behaviour that has been exposed to Python
 
 ```
 
-Note the any c++ defined components must be exposed to Python before it is possible to add them to entities.
+Note the any C++ defined components must be exposed to Python before it is possible to add them to entities.
 
 ### Scenes: Tying it all together
 

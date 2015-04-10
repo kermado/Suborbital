@@ -36,6 +36,20 @@ namespace suborbital
         ~EntitySet();
 
         /**
+         * Copy constructor.
+         *
+         * @param other The other EntitySet to copy from.
+         */
+        EntitySet(const EntitySet& other);
+
+        /**
+         * Copy assignment operator.
+         *
+         * @param other The other EntitySet to copy from.
+         */
+        EntitySet& operator=(const EntitySet& other);
+
+        /**
          * Accessor for the number of entities in the group.
          *
          * @return The number of entities in the group.

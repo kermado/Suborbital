@@ -12,7 +12,6 @@ namespace suborbital
     , m_entities()
     , m_entities_by_group()
     , m_groups_by_entity()
-    , m_empty_set()
     {
         // Nothing to do.
     }
@@ -28,12 +27,12 @@ namespace suborbital
         }
     }
 
-    const EntitySet& EntityManager::all() const
+    const EntitySet EntityManager::all() const
     {
         return m_entities;
     }
 
-    const EntitySet& EntityManager::group(const std::string& group_name) const
+    const EntitySet EntityManager::group(const std::string& group_name) const
     {
         auto position = m_entities_by_group.find(group_name);
         if (position != m_entities_by_group.end())
@@ -41,7 +40,7 @@ namespace suborbital
             return position->second;
         }
 
-        return m_empty_set;
+        return EntitySet();
     }
 
     void EntityManager::add_to_group(const std::string& group_name, WatchPtr<Entity> entity)

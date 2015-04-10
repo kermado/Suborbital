@@ -35,7 +35,7 @@ namespace suborbital
          *
          * @return Set containing all of the entities in the scene.
          */
-        const EntitySet& all() const;
+        const EntitySet all() const;
 
         /**
          * Returns the set of entities for the group specified by the provided `group_name`.
@@ -43,7 +43,7 @@ namespace suborbital
          * @param group_name Name of the group.
          * @return Set containing all of the entities in the group.
          */
-        const EntitySet& group(const std::string& group_name) const;
+        const EntitySet group(const std::string& group_name) const;
 
         /**
          * Adds the specified `entity` to the group denoted by the provided `group_name`.
@@ -114,11 +114,6 @@ namespace suborbital
          * Map from entities to sets of groups.
          */
         std::unordered_map<Entity*, std::set<std::string>> m_groups_by_entity;
-
-        /**
-         * An empty set containing no entities.
-         */
-        EntitySet m_empty_set;
     };
 }
 

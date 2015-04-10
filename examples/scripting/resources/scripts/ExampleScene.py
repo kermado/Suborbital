@@ -1,8 +1,7 @@
 from suborbital import PythonScene
 from scripting import ExampleAttribute
-import ExampleSystem
 import HealthAttribute
-import ExampleBehaviour
+import AttackRandomEnemyBehaviour
 
 class ExampleScene(PythonScene):
 
@@ -14,11 +13,10 @@ class ExampleScene(PythonScene):
         print("ExampleScene::~ExampleScene()")
 
     def create(self):
-        example_system = self.create_system(ExampleSystem)
-        entity = self.create_entity("Player 1")
-        entity.create_attribute(ExampleAttribute)
-        entity.create_attribute(HealthAttribute)
-        entity.create_behaviour(ExampleBehaviour)
+        for i in range(0, 5):
+            entity = self.create_entity("Player " + str(i + 1))
+            entity.create_attribute(HealthAttribute)
+            entity.create_behaviour(AttackRandomEnemyBehaviour)
 
     def update(self, dt):
         pass

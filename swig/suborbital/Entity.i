@@ -10,6 +10,12 @@
     #include <suborbital/event/PythonEventCallback.hpp>
 %}
 
+%feature("shadow") suborbital::Entity::scene %{
+    @property
+    def scene(self):
+        return $action(self)
+%}
+
 // Use the stored PyObject* for Python defined scenes.
 %typemap(out) suborbital::Scene& suborbital::Entity::scene
 {

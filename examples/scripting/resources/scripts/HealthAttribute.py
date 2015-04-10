@@ -1,5 +1,4 @@
 from suborbital import PythonAttribute
-from EntityDiedEvent import EntityDiedEvent
 
 class HealthAttribute(PythonAttribute):
 
@@ -23,7 +22,7 @@ class HealthAttribute(PythonAttribute):
         self.health -= amount
         if self.health <= 0:
             self.health = 0
-            self.entity.publish("EntityDiedEvent", EntityDiedEvent())
+            self.entity.destroy()
 
     def increase(self, amount):
         self.health += amount

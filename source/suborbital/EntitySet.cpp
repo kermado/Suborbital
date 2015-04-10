@@ -14,6 +14,18 @@ namespace suborbital
         // Nothing to do.
     }
 
+    EntitySet::EntitySet(const EntitySet& other)
+    : m_entities(other.m_entities)
+    {
+        // Nothing to do.
+    }
+
+    EntitySet& EntitySet::operator=(const EntitySet& other)
+    {
+        m_entities = other.m_entities;
+        return *this;
+    }
+
     std::size_t EntitySet::size() const
     {
         return m_entities.size();

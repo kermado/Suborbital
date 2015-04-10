@@ -4,6 +4,12 @@
 
 %feature("director") suborbital::Scene;
 
+%feature("shadow") suborbital::Scene::entities %{
+    @property
+    def entities(self):
+        return $action(self)
+%}
+
 // Custom implementation for the Python method that calls the `create_system function`. This method takes a Python type
 // as its only parameter and passes the name of the provided type into the `create_system` function as a string. This is
 // done to ensure that the provided type is imported (which would not be possible if just a type name was to be provided

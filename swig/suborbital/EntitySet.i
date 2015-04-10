@@ -2,6 +2,10 @@
     #include <suborbital/EntitySet.hpp>
 %}
 
+// Include std::set so that the set iterators are exposed to SWIG.
+%include <std_set.i>
+%template(InternalEntitySet) std::set<suborbital::WatchPtr<suborbital::Entity>>;
+
 // We need to do a little work to allow Python to iterate over entity sets. In particular, we need to provide an
 // `__iter__` method that returns an iterator object for the set. Our iterator object needs to recall the current
 // position and so we create a custom EntitySetIterator class that stores both the `current` EntitySet iterator and the
