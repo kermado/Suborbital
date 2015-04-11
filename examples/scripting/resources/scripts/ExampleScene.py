@@ -7,10 +7,6 @@ class ExampleScene(PythonScene):
 
     def __init__(self):
         PythonScene.__init__(self)
-        print("ExampleScene::ExampleScene()")
-
-    def __del__(self):
-        print("ExampleScene::~ExampleScene()")
 
     def create(self):
         for i in range(0, 5):

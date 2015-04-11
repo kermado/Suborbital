@@ -6,10 +6,6 @@ class ExampleBehaviour(PythonBehaviour):
 
     def __init__(self):
         PythonBehaviour.__init__(self)
-        print("ExampleBehaviour::ExampleBehaviour()")
-
-    def __del__(self):
-        print("ExampleBehaviour::~ExampleBehaviour()")
 
     def create(self):
         self.example = self.entity.attribute(ExampleAttribute)

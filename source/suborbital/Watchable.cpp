@@ -18,4 +18,9 @@ namespace suborbital
             watcher->ptr = nullptr;
         }
     }
+
+    std::size_t Watchable::use_count() const
+    {
+        return m_watchers.size();
+    }
 }

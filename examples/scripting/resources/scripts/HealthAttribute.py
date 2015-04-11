@@ -4,10 +4,6 @@ class HealthAttribute(PythonAttribute):
 
     def __init__(self):
         PythonAttribute.__init__(self)
-        print("HealthAttribute::HealthAttribute()")
-
-    def __del__(self):
-        print("HealthAttribute::~HealthAttribute()")
 
     def create(self):
         self.health = 100

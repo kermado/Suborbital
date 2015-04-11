@@ -4,10 +4,6 @@ class ExampleSystem(PythonSystem):
 
     def __init__(self):
         PythonSystem.__init__(self)
-        print("ExampleSystem::ExampleSystem()")
-
-    def __del__(self):
-        print("ExampleSystem::~ExampleSystem()")
 
     def create(self):
         self.entities = self.scene().entities().all()

@@ -4,10 +4,27 @@
 
 %feature("director") suborbital::Scene;
 
+// Rewrite getter methods to use Python properties.
 %feature("shadow") suborbital::Scene::entities %{
     @property
     def entities(self):
         return $action(self)
+%}
+
+%feature("shadow") suborbital::Scene::has_camera %{
+    @property
+    def has_camera(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::Scene::camera %{
+    @property
+    def camera(self):
+        return $action(self)
+
+    @camera.setter
+    def camera(self, value):
+        return $action(self, value)
 %}
 
 // Custom implementation for the Python method that calls the `create_system function`. This method takes a Python type

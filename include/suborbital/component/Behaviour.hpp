@@ -13,11 +13,18 @@ namespace suborbital
      */
     class Behaviour : public Component
     {
+    friend Entity;
     public:
         /**
          * Destructor.
          */
         virtual ~Behaviour();
+
+    protected:
+        /**
+         * Constructor.
+         */
+        Behaviour();
 
         /**
          * Called each frame.
@@ -25,12 +32,6 @@ namespace suborbital
          * @param dt Time elapsed (in seconds) since the previous call to update.
          */
         virtual void update(double dt) = 0;
-
-    protected:
-        /**
-         * Constructor.
-         */
-        Behaviour();
     };
 }
 

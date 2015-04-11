@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <cassert>
+#include <functional>
 
 namespace suborbital
 {
@@ -217,6 +218,18 @@ namespace suborbital
     {
         return WatchPtr<T>(static_cast<T*>(t.get()));
     }
+}
+
+namespace std
+{
+    template<class T>
+    struct hash<suborbital::WatchPtr<T>>
+    {
+        std::size_t operator()(const suborbital::WatchPtr<T>& p) const
+        {
+            return std::hash<T*>()(p.get());
+        }
+    };
 }
 
 #endif

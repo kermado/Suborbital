@@ -26,6 +26,13 @@ namespace suborbital
          */
         virtual ~Watchable();
 
+        /**
+         * Returns the number of WatchPtr objects that point to this object.
+         *
+         * @return Number of WatchPtr objects pointing to this object.
+         */
+        std::size_t use_count() const;
+
     private:
         /**
          * List of watch_ptr's that are pointing to the watchable object.

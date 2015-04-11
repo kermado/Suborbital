@@ -23,11 +23,6 @@ namespace suborbital
         virtual ~Component();
 
         /**
-         * Called after the component has been created and attached to the entity.
-         */
-        virtual void create() = 0;
-
-        /**
          * Accessor for the parent entity that the component belongs to.
          *
          * @return Pointer to the parent entity.
@@ -39,6 +34,11 @@ namespace suborbital
          * Constructor.
          */
         Component();
+
+        /**
+         * Called after the component has been created and attached to the entity.
+         */
+        virtual void create() = 0;
 
     private:
         /**

@@ -6,7 +6,6 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include <set>
 #include <iostream>
 
 #include <suborbital/NonCopyable.hpp>

@@ -10,9 +10,40 @@
     #include <suborbital/event/PythonEventCallback.hpp>
 %}
 
+// Rewrite getter methods to use Python properties.
 %feature("shadow") suborbital::Entity::scene %{
     @property
     def scene(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::Entity::name %{
+    @property
+    def name(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::Entity::dead %{
+    @property
+    def dead(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::Entity::alive %{
+    @property
+    def alive(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::Entity::has_children %{
+    @property
+    def has_children(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::Entity::has_parent %{
+    @property
+    def has_parent(self):
         return $action(self)
 %}
 

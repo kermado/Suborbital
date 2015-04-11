@@ -6,10 +6,6 @@ class AttackRandomEnemyBehaviour(PythonBehaviour):
 
     def __init__(self):
         PythonBehaviour.__init__(self)
-        print("AttackRandomEnemyBehaviour::AttackRandomEnemyBehaviour()")
-
-    def __del__(self):
-        print("AttackRandomEnemyBehaviour::~AttackRandomEnemyBehaviour()")
 
     def create(self):
         pass
@@ -17,7 +13,7 @@ class AttackRandomEnemyBehaviour(PythonBehaviour):
     def update(self, dt):
         entities = self.entity.scene.entities.all
         if entities.size() == 1:
-            player_name = self.entity.name()
+            player_name = self.entity.name
             print(player_name.upper() + " WAS VICTORIOUS")
             self.entity.destroy()
         else:
@@ -25,7 +21,7 @@ class AttackRandomEnemyBehaviour(PythonBehaviour):
             while target == self.entity:
                 target = self.random_element_from_set(entities)
 
-            if target.alive():
+            if target.alive:
                 damage_to_inflict = random.random() * 100
                 target.attribute(HealthAttribute).decrease(damage_to_inflict)
 
