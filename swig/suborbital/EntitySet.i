@@ -2,6 +2,31 @@
     #include <suborbital/EntitySet.hpp>
 %}
 
+// Rewrite getter methods to use Python properties.
+%feature("shadow") suborbital::EntitySet::size %{
+    @property
+    def size(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::EntitySet::empty %{
+    @property
+    def empty(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::EntitySet::begin %{
+    @property
+    def begin(self):
+        return $action(self)
+%}
+
+%feature("shadow") suborbital::EntitySet::end %{
+    @property
+    def end(self):
+        return $action(self)
+%}
+
 // Include std::set so that the set iterators are exposed to SWIG.
 %include <std_set.i>
 %template(InternalEntitySet) std::set<suborbital::WatchPtr<suborbital::Entity>>;

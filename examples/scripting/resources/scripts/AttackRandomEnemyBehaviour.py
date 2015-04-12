@@ -12,19 +12,14 @@ class AttackRandomEnemyBehaviour(PythonBehaviour):
 
     def update(self, dt):
         entities = self.entity.scene.entities.all
-        if entities.size() == 1:
-            player_name = self.entity.name
-            print(player_name.upper() + " WAS VICTORIOUS")
-            self.entity.destroy()
-        else:
+        if entities.size > 1:
             target = self.random_element_from_set(entities)
             while target == self.entity:
                 target = self.random_element_from_set(entities)
-
             if target.alive:
-                damage_to_inflict = random.random() * 100
+                damage_to_inflict = random.random() * 10
                 target.attribute(HealthAttribute).decrease(damage_to_inflict)
 
     def random_element_from_set(self, set):
-        iterator = set.begin() + random.randint(0, set.size() - 1)
+        iterator = set.begin + random.randint(0, set.size - 1)
         return iterator.value()

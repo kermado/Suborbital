@@ -14,6 +14,8 @@
 #include <suborbital/NonCopyable.hpp>
 #include <suborbital/EntityManager.hpp>
 
+#include <suborbital/event/EventDispatcher.hpp>
+
 #include <suborbital/system/System.hpp>
 #include <suborbital/system/SystemRegistry.hpp>
 
@@ -79,7 +81,19 @@ namespace suborbital
         WatchPtr<Entity> create_entity(const std::string& entity_name);
 
         /**
-         * Broadcasts an event to every entity in the scene.
+         * Publishes an event to be dispatched to all subscribers of the specified `event_name` on this scene.
+         *
+         * The event must be passed as a shared pointer to the event. This is because we make no assumption about how
+         * subscribers may choose to use the event. For instance, we cannot guarantee that subscribers will not make
+         * use of the event beyond the lifetime of their callback function.
+         *
+         * @param event_name Name of the event to publish.
+         * @param Shared pointer to the event to be published.
+         */
+        void publish(const std::string& event_name, std::shared_ptr<suborbital::Event> event);
+
+        /**
+         * Broadcasts an event to the scene and every entity in the scene.
          *
          * The event must be passed as a shared pointer to the event. This is because we make no assumption about how
          * subscribers may choose to use the event. For instance, we cannot guarantee that subscribers will not make
@@ -89,6 +103,20 @@ namespace suborbital
          * @param Shared pointer to the event to be broadcast.
          */
         void broadcast(const std::string& event_name, std::shared_ptr<suborbital::Event> event);
+
+        /**
+         * Subscribes to receive events of the specified `event_name`.
+         *
+         * The `EventSubscription` object returned manages the lifetime of the subscription. The subscription is
+         * cancelled automatically once the object goes out of scope. Alternatively, it is possible to manually cancel
+         * the subscription using the function provided by the `EventSubscription` class.
+         *
+         * @param event_name Name of the event to subscribe for.
+         * @param callback Callback function that should receive the events.
+         * @return Subscription object that controls the lifetime of the subscription.
+         */
+        std::unique_ptr<suborbital::EventSubscription> subscribe(const std::string& event_name,
+                std::unique_ptr<suborbital::EventCallbackBase> callback);
 
         /**
          * Creates a new system to process entities in the scene.
@@ -203,6 +231,11 @@ namespace suborbital
          * The entity serving as the scene's camera.
          */
         WatchPtr<Entity> m_camera;
+
+        /**
+         * Event dispatcher for the scene.
+         */
+        std::unique_ptr<EventDispatcher> m_event_dispatcher;
 
         /**
          * The systems that process the entities in the scene.

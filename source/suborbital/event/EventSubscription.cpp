@@ -5,9 +5,8 @@
 
 namespace suborbital
 {
-    EventSubscription::EventSubscription(std::weak_ptr<EventDispatcher> dispatcher, const std::string& event_name)
-    : m_cancelled(false)
-    , m_dispatcher(dispatcher)
+    EventSubscription::EventSubscription(EventDispatcher* dispatcher, const std::string& event_name)
+    : m_dispatcher(dispatcher)
     , m_event_name(event_name)
     {
         // Nothing to do.
@@ -15,26 +14,19 @@ namespace suborbital
 
     EventSubscription::~EventSubscription()
     {
-        if (m_cancelled == false)
-        {
-            unsubscribe();
-        }
+        unsubscribe();
     }
 
     bool EventSubscription::active() const
     {
-        return m_cancelled == false && m_dispatcher.lock();
+        return m_dispatcher != nullptr;
     }
 
     void EventSubscription::unsubscribe()
     {
-        assert(m_cancelled == false);
+        assert(m_dispatcher != nullptr);
 
-        if (std::shared_ptr<EventDispatcher> dispatcher = m_dispatcher.lock())
-        {
-            dispatcher->unsubscribe(this);
-        }
-
-        m_cancelled = true;
+        m_dispatcher->unsubscribe(this);
+        m_dispatcher = nullptr;
     }
 }

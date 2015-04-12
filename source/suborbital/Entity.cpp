@@ -25,6 +25,7 @@ namespace suborbital
     : Watchable()
     , m_scene(scene)
     , m_name(name)
+    , m_dead(false)
     , m_parent(nullptr)
     , m_children()
     , m_event_dispatcher(new EventDispatcher())
@@ -63,6 +64,7 @@ namespace suborbital
     {
         assert(m_dead == false);
         m_dead = true;
+        m_scene.entities().destroy(WatchPtr<Entity>(this));
     }
 
     void Entity::add_to_group(const std::string& group_name)

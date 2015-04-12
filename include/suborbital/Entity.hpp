@@ -84,7 +84,8 @@ namespace suborbital
         /**
          * Marks the entity for destruction.
          *
-         * @note Destruction is delayed until after all of the entities in the scene have been updated.
+         * @note The entity will be immediately removed from the scene. However, the entity is not deleted until after
+         * all of the entities in the scene have been updated.
          */
         void destroy();
 
@@ -340,7 +341,7 @@ namespace suborbital
         /**
          * Event dispatcher for the entity.
          */
-        std::shared_ptr<EventDispatcher> m_event_dispatcher;
+        std::unique_ptr<EventDispatcher> m_event_dispatcher;
 
         /**
          * Attributes attached to the entity, indexed by class name.

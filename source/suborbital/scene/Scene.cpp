@@ -1,5 +1,9 @@
 #include <suborbital/Entity.hpp>
+
 #include <suborbital/scene/Scene.hpp>
+
+#include <suborbital/event/EventCallbackBase.hpp>
+#include <suborbital/event/EventSubscription.hpp>
 
 namespace suborbital
 {
@@ -7,6 +11,7 @@ namespace suborbital
     : Watchable()
     , m_entities(*this)
     , m_camera(nullptr)
+    , m_event_dispatcher(new EventDispatcher())
     , m_systems()
     {
         // Nothing to do.
@@ -47,14 +52,27 @@ namespace suborbital
         return m_entities.create(entity_name);
     }
 
+    void Scene::publish(const std::string& event_name, std::shared_ptr<suborbital::Event> event)
+    {
+        m_event_dispatcher->publish(event_name, event);
+    }
+
     void Scene::broadcast(const std::string& event_name, std::shared_ptr<suborbital::Event> event)
     {
+        publish(event_name, event);
+
         const EntitySet& entities = m_entities.all();
         for (auto iter = entities.cbegin(); iter != entities.cend(); ++iter)
         {
             const WatchPtr<Entity>& entity = *iter;
             entity->broadcast(event_name, event);
         }
+    }
+
+    std::unique_ptr<suborbital::EventSubscription> Scene::subscribe(const std::string& event_name,
+            std::unique_ptr<suborbital::EventCallbackBase> callback)
+    {
+        return m_event_dispatcher->subscribe(event_name, std::move(callback));
     }
 
     WatchPtr<System> Scene::create_system(const std::string& class_name)
@@ -104,7 +122,7 @@ namespace suborbital
             }
         }
 
-        // 4. Delete all the entities marked for destruction.
+        // 4. Delete all entities marked for destruction.
         m_entities.purge();
     }
 }

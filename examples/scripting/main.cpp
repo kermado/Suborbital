@@ -19,11 +19,13 @@ int main(int argc, char* argv[])
     // Register the C++ defined components that we expose to Python.
     REGISTER_ATTRIBUTE(ExampleAttribute);
 
+    // Register and push a scene onto the stack.
     SceneStack scene_stack;
     scene_stack.register_scene("ExampleScene");
     scene_stack.push("ExampleScene");
 
-    for (int i = 0; i < 10; ++i)
+    // Just process the scene a large number of times...
+    for (int i = 0; i < 500; ++i)
     {
         scene_stack.process(0.1);
     }

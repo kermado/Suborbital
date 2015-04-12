@@ -47,6 +47,31 @@
         return $action(self)
 %}
 
+// Add simplified methods that use the event's class name as the event name.
+%feature("shadow") suborbital::Entity::publish %{
+    def publish(self, event_name, event):
+        return $action(self, event_name, event)
+
+    def publish(self, event):
+        return $action(self, type(event).__name__, event)
+%}
+
+%feature("shadow") suborbital::Entity::broadcast_descendents %{
+    def broadcast_descendents(self, event_name, event):
+        return $action(self, event_name, event)
+
+    def broadcast_descendents(self, event):
+        return $action(self, type(event).__name__, event)
+%}
+
+%feature("shadow") suborbital::Entity::broadcast %{
+    def broadcast(self, event_name, event):
+        return $action(self, event_name, event)
+
+    def broadcast(self, event):
+        return $action(self, type(event).__name__, event)
+%}
+
 // Use the stored PyObject* for Python defined scenes.
 %typemap(out) suborbital::Scene& suborbital::Entity::scene
 {
@@ -133,26 +158,14 @@
         return $action(self, attribute_type.__name__)
 %}
 
-// Define a WeaklyBoundMethod class that wraps a method bound to a weakref of an object. This is required for callback
-// functions so as to avoid increasing the reference count of the object that subscribes for an event.
-%pythoncode %{
-class WeaklyBoundMethod:
-    def __init__(self, meth):
-        self._self = weakref.ref(meth.__self__)
-        self._func = meth.__func__
-
-    def __call__(self, *args, **kw):
-        _self = self._self()
-        if _self is None:
-            raise weakref.ReferenceError()
-        return self._func(_self, *args, **kw)
-%}
-
 // Manually define the Python wrapper function for Entity::subscribe so that we convert the callback function from a
 // strongly bound method to weakly bound method, using the WeaklyBoundMethod class defined above.
 %feature("shadow") suborbital::Entity::subscribe(const std::string&, PyObject*) %{
-    def subscribe(self, event_name, strongly_bound_method):
-        return $action(self, event_name, WeaklyBoundMethod(strongly_bound_method))
+    def subscribe(self, event, strongly_bound_method):
+        if isinstance(event, str):
+            return $action(self, event, WeaklyBoundMethod(strongly_bound_method))
+        else:
+            return $action(self, event.__name__, WeaklyBoundMethod(strongly_bound_method))
 %}
 
 // Ignore the Entity::subscribe function. An alternative implementation is provided below that SWIG is able to work

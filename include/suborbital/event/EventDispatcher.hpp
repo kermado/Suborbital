@@ -8,6 +8,7 @@
 #include <unordered_map>
 
 #include <suborbital/NonCopyable.hpp>
+#include <suborbital/Watchable.hpp>
 
 namespace suborbital
 {
@@ -19,7 +20,7 @@ namespace suborbital
     /**
      * Event dispatcher.
      */
-    class EventDispatcher : public std::enable_shared_from_this<EventDispatcher>, private NonCopyable
+    class EventDispatcher : public Watchable, private NonCopyable
     {
     friend EventSubscription;
     public:
@@ -65,7 +66,7 @@ namespace suborbital
         /**
          * Event subscriptions.
          *
-         * Maps event names to a vector of callback functions.
+         * Maps event names to a map from event subscriptions to callback pointers.
          */
         std::unordered_map<std::string, std::map<EventSubscription* const, std::unique_ptr<EventCallbackBase>>> m_subscriptions;
     };

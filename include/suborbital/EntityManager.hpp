@@ -4,6 +4,7 @@
 #include <string>
 #include <set>
 #include <unordered_map>
+#include <vector>
 
 #include <suborbital/NonCopyable.hpp>
 #include <suborbital/WatchPtr.hpp>
@@ -17,6 +18,7 @@ namespace suborbital
     class EntityManager : private NonCopyable
     {
     friend Scene;
+    friend Entity;
     public:
         /**
          * Constructor.
@@ -64,6 +66,8 @@ namespace suborbital
         /**
          * Removes the specified `entity` from all groups that it is a member of.
          *
+         * @note The specified `entity` is not removed from the special `all` group.
+         *
          * @param entity Pointer to the entity that should be removed from all groups.
          */
         void remove_from_all_groups(WatchPtr<Entity> entity);
@@ -87,10 +91,18 @@ namespace suborbital
         WatchPtr<Entity> create(const std::string& entity_name);
 
         /**
-         * Removes all entities that have been marked for destruction.
+         * Removes the specified `entity` from all groups, including the special `all` group.
          *
-         * This function also takes care of removing pointers to the deleted entities from any groups that the entities
-         * belonged to.
+         * This function also takes care of removing pointers to the deleted `entity` from any groups that the `entity`
+         * belonged to. The deleted `entity` is also removed from the special `all` group. The entity will be deleted
+         * on the next call to `purge`.
+         *
+         * @param entity Pointer to the entity to remove from all groups.
+         */
+        void destroy(WatchPtr<Entity> entity);
+
+        /**
+         * Deletes all entities marked for destruction.
          */
         void purge();
 
@@ -114,6 +126,11 @@ namespace suborbital
          * Map from entities to sets of groups.
          */
         std::unordered_map<Entity*, std::set<std::string>> m_groups_by_entity;
+
+        /**
+         * Entities that have been marked for destruction.
+         */
+        std::vector<Entity*> m_destroyed;
     };
 }
 

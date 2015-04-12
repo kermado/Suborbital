@@ -2,9 +2,10 @@
 #define SUBORBITAL_EVENT_SUBSCRIPTION_HPP
 
 #include <string>
-#include <memory>
 
 #include <suborbital/NonCopyable.hpp>
+#include <suborbital/WatchPtr.hpp>
+#include "EventDispatcher.hpp"
 
 namespace suborbital
 {
@@ -44,18 +45,13 @@ namespace suborbital
         /**
          * Constructor.
          */
-        EventSubscription(std::weak_ptr<EventDispatcher> dispatcher, const std::string& event_name);
+        EventSubscription(EventDispatcher* dispatcher, const std::string& event_name);
 
     private:
         /**
-         * Whether the subscription has been manually cancelled.
+         * Pointer to the dispatcher for the subscription. Will be a nullptr if the subscription has been cancelled.
          */
-        bool m_cancelled;
-
-        /**
-         * Weak pointer to the dispatcher for the subscription.
-         */
-        std::weak_ptr<EventDispatcher> m_dispatcher;
+        EventDispatcher* m_dispatcher;
 
         /**
          * The name of the event that the subscription is for.

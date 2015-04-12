@@ -12,6 +12,7 @@ namespace suborbital
     , m_entities()
     , m_entities_by_group()
     , m_groups_by_entity()
+    , m_destroyed()
     {
         // Nothing to do.
     }
@@ -87,27 +88,25 @@ namespace suborbital
         return *position;
     }
 
+    void EntityManager::destroy(WatchPtr<Entity> entity)
+    {
+        // Remove the entity from all of the groups that it is a member of.
+        remove_from_all_groups(entity);
+
+        // Remove the entity from the set of all entities.
+        m_entities.remove(entity);
+
+        // Add the entity to the list of entities to be deleted on the next call to purge.
+        m_destroyed.push_back(entity.get());
+    }
+
     void EntityManager::purge()
     {
-        for (auto iter = m_entities.begin(); iter != m_entities.end();)
+        for (Entity* entity : m_destroyed)
         {
-            const WatchPtr<Entity>& entity = *iter;
-            if (entity->dead())
-            {
-                // Remove the entity from all of the groups that it is a member of.
-                remove_from_all_groups(entity);
-
-                // Remove the entity from the set of all entities and update the iterator to point to the next entity.
-                iter = m_entities.remove(iter);
-
-                // Delete the entity
-                delete entity.get();
-            }
-            else
-            {
-                // Move onto the next entity in the set.
-                ++iter;
-            }
+            delete entity;
         }
+
+        m_destroyed.clear();
     }
 }

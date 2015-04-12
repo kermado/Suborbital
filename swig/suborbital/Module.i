@@ -12,6 +12,21 @@
     }
 }
 
+// Define a WeaklyBoundMethod class that wraps a method bound to a weakref of an object. This is required for callback
+// functions so as to avoid increasing the reference count of the object that subscribes for an event.
+%pythoncode %{
+class WeaklyBoundMethod:
+    def __init__(self, meth):
+        self._self = weakref.ref(meth.__self__)
+        self._func = meth.__func__
+
+    def __call__(self, *args, **kw):
+        _self = self._self()
+        if _self is None:
+            raise weakref.ReferenceError()
+        return self._func(_self, *args, **kw)
+%}
+
 // Include parts of the c++ standard library.
 %include <std_string.i>
 %include <std_shared_ptr.i>
