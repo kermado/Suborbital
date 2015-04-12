@@ -5,8 +5,6 @@
 #include <suborbital/event/EventCallbackBase.hpp>
 #include <suborbital/event/EventSubscription.hpp>
 
-#include <suborbital/system/System.hpp>
-
 namespace suborbital
 {
     Entity::Entity(Scene& scene)
@@ -20,7 +18,7 @@ namespace suborbital
     , m_attributes()
     , m_behaviours()
     {
-        std::cout << "Entity::Entity()" << std::endl;
+        // Nothing to do.
     }
 
     Entity::Entity(Scene& scene, const std::string& name)
@@ -33,12 +31,12 @@ namespace suborbital
     , m_attributes()
     , m_behaviours()
     {
-        std::cout << "Entity::Entity(" << name << ")" << std::endl;
+        // Nothing to do.
     }
 
     Entity::~Entity()
     {
-        std::cout << "Entity::~Entity(" << m_name << ")" << std::endl;
+        // Nothing to do.
     }
 
     Scene& Entity::scene() const

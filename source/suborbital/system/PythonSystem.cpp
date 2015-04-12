@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cassert>
 
 #include <suborbital/system/PythonSystem.hpp>
@@ -9,13 +8,11 @@ namespace suborbital
     : System()
     , m_instance(nullptr)
     {
-        std::cout << "PythonSystem::PythonSystem()" << std::endl;
+        // Nothing to do.
     }
 
     PythonSystem::~PythonSystem()
     {
-        std::cout << "PythonSystem::~PythonSystem()" << std::endl;
-
         Py_XDECREF(m_instance);
     }
 

@@ -5,7 +5,6 @@ project(ScriptingExample)
 SET(SWIG_ROOT ${PROJECT_SOURCE_DIR}/swig)
 
 # Include headers.
-include_directories(${INC_ROOT})
 include_directories(${PROJECT_SOURCE_DIR})
 
 # Source files.

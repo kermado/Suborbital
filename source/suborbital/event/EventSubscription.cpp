@@ -1,5 +1,4 @@
 #include <cassert>
-#include <iostream>
 
 #include <suborbital/event/EventSubscription.hpp>
 #include <suborbital/event/EventDispatcher.hpp>
@@ -11,13 +10,11 @@ namespace suborbital
     , m_dispatcher(dispatcher)
     , m_event_name(event_name)
     {
-        std::cout << "EventSubscription::EventSubscription()" << std::endl;
+        // Nothing to do.
     }
 
     EventSubscription::~EventSubscription()
     {
-        std::cout << "EventSubscription::~EventSubscription()" << std::endl;
-
         if (m_cancelled == false)
         {
             unsubscribe();

@@ -1,6 +1,3 @@
-#include <iostream>
-#include <cassert>
-
 #include <suborbital/component/PythonAttribute.hpp>
 
 namespace suborbital
@@ -9,13 +6,11 @@ namespace suborbital
     : Attribute()
     , m_instance(nullptr)
     {
-        std::cout << "PythonAttribute::PythonAttribute()" << std::endl;
+        // Nothing to do.
     }
 
     PythonAttribute::~PythonAttribute()
     {
-        std::cout << "PythonAttribute::~PythonAttribute()" << std::endl;
-
         Py_XDECREF(m_instance);
     }
 

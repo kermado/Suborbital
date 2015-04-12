@@ -1,6 +1,3 @@
-#include <iostream>
-#include <cassert>
-
 #include <suborbital/component/PythonBehaviour.hpp>
 
 namespace suborbital
@@ -9,13 +6,11 @@ namespace suborbital
     : Behaviour()
     , m_instance(nullptr)
     {
-        std::cout << "PythonBehaviour::PythonBehaviour()" << std::endl;
+        // Nothing to do.
     }
 
     PythonBehaviour::~PythonBehaviour()
     {
-        std::cout << "PythonBehaviour::~PythonBehaviour()" << std::endl;
-
         Py_XDECREF(m_instance);
     }
 

@@ -1,6 +1,3 @@
-#include <cassert>
-#include <iostream>
-
 #include <suborbital/component/Behaviour.hpp>
 
 namespace suborbital
@@ -8,11 +5,11 @@ namespace suborbital
     Behaviour::Behaviour()
     : Component()
     {
-        std::cout << "Behaviour::Behaviour()" << std::endl;
+        // Nothing to do.
     }
 
     Behaviour::~Behaviour()
     {
-        std::cout << "Behaviour::~Behaviour()" << std::endl;
+        // Nothing to do.
     }
 }

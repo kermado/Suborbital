@@ -1,6 +1,8 @@
 #ifndef SUBORBITAL_EVENT_CALLBACK_BASE_HPP
 #define SUBORBITAL_EVENT_CALLBACK_BASE_HPP
 
+#include <memory>
+
 namespace suborbital
 {
     // Forward declarations.

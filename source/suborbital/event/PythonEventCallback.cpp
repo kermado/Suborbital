@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <suborbital/PythonRuntime.hpp>
 #include <suborbital/event/PythonEventCallback.hpp>
 #include <suborbital/event/PythonEvent.hpp>
@@ -10,8 +8,6 @@ namespace suborbital
     : EventCallbackBase()
     , m_callback_function(callback_function)
     {
-        std::cout << "PythonEventCallback::PythonEventCallback()" << std::endl;
-
         assert(m_callback_function != nullptr);
         assert(m_callback_function != Py_None);
         assert(PyCallable_Check(m_callback_function));
@@ -27,8 +23,6 @@ namespace suborbital
 
     PythonEventCallback::~PythonEventCallback()
     {
-        std::cout << "PythonEventCallback::~PythonEventCallback()" << std::endl;
-
         Py_DECREF(m_callback_function);
     }
 

@@ -1,5 +1,3 @@
-#include <cassert>
-#include <iostream>
 #include <Python/Python.h>
 
 #include <suborbital/PythonInterpreter.hpp>

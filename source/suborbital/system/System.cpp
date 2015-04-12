@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cassert>
 
 #include <suborbital/system/System.hpp>
@@ -8,12 +7,12 @@ namespace suborbital
     System::System()
     : m_scene(nullptr)
     {
-        std::cout << "System::System()" << std::endl;
+        // Nothing to do.
     }
 
     System::~System()
     {
-        std::cout << "System::~System()" << std::endl;
+        // Nothing to do.
     }
 
     WatchPtr<Scene> System::scene() const

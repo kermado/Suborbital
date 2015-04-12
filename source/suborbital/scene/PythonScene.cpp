@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cassert>
 
 #include <suborbital/scene/PythonScene.hpp>
@@ -9,13 +8,11 @@ namespace suborbital
     : Scene()
     , m_instance(nullptr)
     {
-        std::cout << "PythonScene::PythonScene()" << std::endl;
+        // Nothing to do.
     }
 
     PythonScene::~PythonScene()
     {
-        std::cout << "PythonScene::~PythonScene()" << std::endl;
-
         Py_XDECREF(m_instance);
     }
 

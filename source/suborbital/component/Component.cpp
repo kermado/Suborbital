@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <suborbital/component/Component.hpp>
 
 namespace suborbital
@@ -7,12 +5,12 @@ namespace suborbital
     Component::Component()
     : m_entity(nullptr)
     {
-        std::cout << "Component::Component()" << std::endl;
+        // Nothing to do.
     }
 
     Component::~Component()
     {
-        std::cout << "Component::~Component()" << std::endl;
+        // Nothing to do.
     }
 
     WatchPtr<Entity> Component::entity() const

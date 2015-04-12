@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <suborbital/Suborbital.hpp>
 #include <suborbital/PythonInterpreter.hpp>
 #include <suborbital/scene/SceneStack.hpp>
@@ -21,20 +19,14 @@ int main(int argc, char* argv[])
     // Register the C++ defined components that we expose to Python.
     REGISTER_ATTRIBUTE(ExampleAttribute);
 
+    SceneStack scene_stack;
+    scene_stack.register_scene("ExampleScene");
+    scene_stack.push("ExampleScene");
+
+    for (int i = 0; i < 10; ++i)
     {
-        SceneStack scene_stack;
-        scene_stack.register_scene("ExampleScene");
-        scene_stack.push("ExampleScene");
-
-        for (int i = 0; i < 10; ++i)
-        {
-            scene_stack.process(0.1);
-        }
-
-        std::cout << "End of scope." << std::endl;
+        scene_stack.process(0.1);
     }
-
-    std::cout << "End of program." << std::endl;
 
     return 0;
 }

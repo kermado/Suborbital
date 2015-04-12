@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <suborbital/event/PythonEvent.hpp>
 
 namespace suborbital
@@ -8,12 +6,12 @@ namespace suborbital
     : Event()
     , m_instance(nullptr)
     {
-        std::cout << "PythonEvent::PythonEvent()" << std::endl;
+        // Nothing to do.
     }
 
     PythonEvent::~PythonEvent()
     {
-        std::cout << "PythonEvent::~PythonEvent()" << std::endl;
+        // Nothing to do.
     }
 
     void PythonEvent::instance(PyObject* derived_instance)

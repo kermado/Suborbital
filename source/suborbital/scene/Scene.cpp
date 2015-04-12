@@ -1,7 +1,4 @@
-#include <iostream>
-
 #include <suborbital/Entity.hpp>
-
 #include <suborbital/scene/Scene.hpp>
 
 namespace suborbital
@@ -12,12 +9,12 @@ namespace suborbital
     , m_camera(nullptr)
     , m_systems()
     {
-        std::cout << "Scene::Scene()" << std::endl;
+        // Nothing to do.
     }
 
     Scene::~Scene()
     {
-        std::cout << "Scene::~Scene()" << std::endl;
+        // Nothing to do.
     }
 
     EntityManager& Scene::entities()

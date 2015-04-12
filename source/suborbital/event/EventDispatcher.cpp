@@ -1,5 +1,4 @@
 #include <cassert>
-#include <iostream>
 
 #include <suborbital/event/Event.hpp>
 #include <suborbital/event/EventDispatcher.hpp>
@@ -11,12 +10,12 @@ namespace suborbital
     EventDispatcher::EventDispatcher()
     : m_subscriptions()
     {
-        std::cout << "EventDispatcher::EventDispatcher()" << std::endl;
+        // Nothing to do.
     }
 
     EventDispatcher::~EventDispatcher()
     {
-        std::cout << "EventDispatcher::~EventDispatcher()" << std::endl;
+        // Nothing to do.
     }
 
     void EventDispatcher::publish(const std::string& event_name, std::shared_ptr<Event> event)

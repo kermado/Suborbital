@@ -1,6 +1,7 @@
 #ifndef SUBORBITAL_EVENT_DISPATCHER_HPP
 #define SUBORBITAL_EVENT_DISPATCHER_HPP
 
+#include <string>
 #include <memory>
 #include <functional>
 #include <map>
