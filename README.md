@@ -114,7 +114,7 @@ class RespawnBehaviour(PythonBehaviour):
     [...]
 ```
 
-You can publish and subscribe for events at both the Scene and Entity levels. It is also possible to broadcast events downwards from the scene to all entities and their descendants, or from a particular entity downwards to any descendant entities.
+You can `publish` and `subscribe` for events at both the `Scene` and `Entity` levels. It is also possible to `broadcast` events downwards from the scene to all entities and their descendants, or from a particular entity downwards to any descendant entities.
 
 ### Adding components to entities
 
