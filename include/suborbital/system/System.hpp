@@ -11,7 +11,6 @@ namespace suborbital
 {
     // Forward declarations.
     class Scene;
-    class EntitySet;
 
     class System : public Watchable, private NonCopyable
     {
