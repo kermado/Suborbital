@@ -8,6 +8,25 @@
 #include <typeindex>
 
 #include <suborbital/NonCopyable.hpp>
+#include "ComponentFactory.hpp"
+
+/**
+ * Macro for associating a string name to a c++ type.
+ *
+ * @param T Type to be associated with a string of the same name.
+ */
+#define TYPE(T)                                                                                                        \
+namespace suborbital                                                                                                   \
+{                                                                                                                      \
+    template<>                                                                                                         \
+    struct Type<T>                                                                                                     \
+    {                                                                                                                  \
+        static std::string name()                                                                                      \
+        {                                                                                                              \
+            return #T;                                                                                                 \
+        }                                                                                                              \
+    };                                                                                                                 \
+}                                                                                                                      \
 
 namespace suborbital
 {
@@ -18,16 +37,26 @@ namespace suborbital
     class Behaviour;
 
     /**
+     * Type naming system used for associating string names to c++ types.
+     *
+     * The `TYPE` macro will generate a specialisation of the `TypeName` template class for the provided type.
+     * Note that this is done automatically when using the `REGISTER_ATTRIBUTE` and `REGISTER_BEHAVIOUR` macros.
+     */
+    template <typename T>
+    struct Type
+    {
+        static std::string name()
+        {
+            assert(0); // Specialisation for `T` has not been provided.
+        }
+    };
+
+    /**
      * Component registry.
      */
     class ComponentRegistry : public NonCopyable
     {
     private:
-        /**
-         * Component names registry type definition.
-         */
-        typedef std::unordered_map<std::type_index, std::string> NameRegistry;
-
         /**
          * Component factories registry type definition.
          */
@@ -45,39 +74,17 @@ namespace suborbital
         ~ComponentRegistry();
 
         /**
-         * Accessor for the name associated with the provided component type.
+         * Registers the provided component type to the specified factory.
          *
-         * @note This function is only useful for obtaining the name associated with c++ defined components. It
-         * is not possible to find the name associated with components defined in scripts.
-         *
-         * @return Name associated with the provided component type.
+         * @param factory Factory to use for instantiating components of the provided `ComponentType`.
          */
         template<typename ComponentType>
-        std::string component_name() const
-        {
-            static_assert(std::is_base_of<Component, ComponentType>::value, "Template parameter ComponentType in"
-                    " ComponentRegistry::component_name is not derived from Component");
-
-            auto iter = m_name_registry.find(std::type_index(typeid(ComponentType)));
-            assert(iter != m_name_registry.end());
-
-            return iter->second;
-        }
-
-        /**
-         * Registers the provided component type to the specified name and factory.
-         *
-         * @param name Name to associate with the provided component type.
-         * @param factory Factory to use for instantiating components of the specified name.
-         */
-        template<typename ComponentType>
-        void register_component(const std::string& name, std::unique_ptr<ComponentFactory> factory)
+        void register_component(std::unique_ptr<ComponentFactory> factory)
         {
             static_assert(std::is_base_of<Component, ComponentType>::value, "Template parameter ComponentType in"
                     " ComponentRegistry::register_component is not derived from Component");
 
-            m_name_registry.insert(NameRegistry::value_type(typeid(ComponentType), name));
-            m_factory_registry.insert(FactoryRegistry::value_type(name, std::move(factory)));
+            m_factory_registry.insert(FactoryRegistry::value_type(Type<ComponentType>::name(), std::move(factory)));
         }
 
         /**
@@ -110,7 +117,7 @@ namespace suborbital
             static_assert(std::is_base_of<Attribute, AttributeType>::value, "Template parameter AttributeType in"
                     " ComponentRegistry::create_attribute is not derived from Attribute");
 
-            return std::dynamic_pointer_cast<std::unique_ptr<AttributeType>>(create_attribute(component_name<AttributeType>()));
+            return std::dynamic_pointer_cast<std::unique_ptr<AttributeType>>(create_attribute(Type<AttributeType>::name()));
         }
 
         /**
@@ -132,17 +139,10 @@ namespace suborbital
             static_assert(std::is_base_of<Attribute, BehaviourType>::value, "Template parameter BehaviourType in"
                     " ComponentRegistry::create_behaviour is not derived from Behaviour");
 
-            return std::dynamic_pointer_cast<std::unique_ptr<BehaviourType>>(create_behaviour(component_name<BehaviourType>()));
+            return std::dynamic_pointer_cast<std::unique_ptr<BehaviourType>>(create_behaviour(Type<BehaviourType>::name()));
         }
 
     private:
-        /**
-         * Component name registry.
-         *
-         * Maps component types to their registered names.
-         */
-        NameRegistry m_name_registry;
-
         /**
          * Component factory registry.
          *
@@ -161,6 +161,37 @@ namespace suborbital
         static ComponentRegistry instance;
         return instance;
     }
+
+    /**
+     * Minimal templated class used for registering components outside of `main()`.
+     *
+     * To use, just instantiate the class with the required component type provided as the template argument.
+     */
+    template<typename ComponentType>
+    class ComponentRegistration
+    {
+    public:
+        /**
+         * Constructor.
+         *
+         * @param factory Factory to use for instantiating components of the provided template type.
+         */
+        ComponentRegistration(std::unique_ptr<ComponentFactory> factory)
+        {
+            component_registry().register_component<ComponentType>(std::move(factory));
+        }
+
+        /**
+         * Constructor.
+         *
+         * @param name Name to be associated with the templated component type.
+         * @param factory Factory to use for instantiating components of the specified name.
+         */
+        ComponentRegistration(const std::string& name, std::unique_ptr<ComponentFactory> factory)
+        {
+            component_registry().register_component<ComponentType>(name, std::move(factory));
+        }
+    };
 }
 
 #endif

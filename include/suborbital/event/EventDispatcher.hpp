@@ -17,8 +17,33 @@ namespace suborbital
     class EventSubscription;
     class EventCallbackBase;
 
+    // Type definitions.
+    namespace
+    {
+        /**
+         * Map from event subscriptions to callbacks.
+         *
+         * Note that we map from `EventSubscription` pointers since subscriptions are unique and non-copyable.
+         */
+        typedef std::map<EventSubscription* const, std::unique_ptr<EventCallbackBase>> SubscriptionMap;
+    }
+
     /**
      * Event dispatcher.
+     *
+     * Manages subscriptions for events and provides methods for both subscribing to receive named events and publishing
+     * events to all registered subscribers.
+     *
+     * Note that we make no guarantees on the derived type of `Event`. The `publish` function delivers the provided
+     * event shared pointer to all objects that are subscribed to the provided event name. The scripting system requires
+     * that the event name matches the derived event's class name exactly in order for type casting to function
+     * correctly. For example, to subscribe for events of type `SomeEvent`, you must use the event name "SomeEvent".
+     * This is the case for event classes defined in both C++ and Python. You can include the scope resolution operator
+     * for C++ defined event classes under specific namespaces; for example "mynamespace::SomeEvent".
+     *
+     * It is the responsibility of any C++ defined callback functions to cast the received event shared pointer to the
+     * correct type. Event type inference is handled automatically by the scripting system for Python defined callback
+     * functions.
      */
     class EventDispatcher : public Watchable, private NonCopyable
     {
@@ -55,8 +80,8 @@ namespace suborbital
         /**
          * Cancels a subscription.
          *
-         * This method cannot be called directly. See the `EventSubscription` class for details on how to unsubscribe
-         * for events.
+         * This function is called exclusively by the `EventSubscription` class. See the `EventSubscription` class for
+         * details on how to unsubscribe for events.
          *
          * @param subscription Pointer to the subscription that is being cancelled.
          */
@@ -68,7 +93,7 @@ namespace suborbital
          *
          * Maps event names to a map from event subscriptions to callback pointers.
          */
-        std::unordered_map<std::string, std::map<EventSubscription* const, std::unique_ptr<EventCallbackBase>>> m_subscriptions;
+        std::unordered_map<std::string, SubscriptionMap> m_subscriptions;
     };
 }
 

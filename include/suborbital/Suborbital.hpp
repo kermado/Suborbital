@@ -2,30 +2,33 @@
 #define SUBORBITAL_HPP
 
 #include <suborbital/Entity.hpp>
+
 #include <suborbital/component/ComponentRegistry.hpp>
 #include <suborbital/component/PythonAttributeFactory.hpp>
 #include <suborbital/component/PythonBehaviourFactory.hpp>
 
 /**
-* Macro for registering an attribute type. This is necessary for creating attributes inside of scripts.
-*
-* @param TYPE Behaviour type.
-*/
-#define REGISTER_ATTRIBUTE(TYPE)                                                                                       \
-	{                                                                                                                  \
-        std::unique_ptr<AttributeFactory<TYPE>> factory(new AttributeFactory<TYPE>());                                 \
-        component_registry().register_component<TYPE>(#TYPE, std::move(factory));                                      \
-    }
+ * Macro for registering an attribute type. This is necessary for creating attributes inside of scripts.
+ *
+ * @param TYPE Behaviour type.
+ */
+#define REGISTER_ATTRIBUTE(T)                                                                                          \
+    TYPE(T);                                                                                                           \
+    namespace {                                                                                                        \
+        std::unique_ptr<AttributeFactory<T>> factory(new AttributeFactory<T>());                                       \
+        ComponentRegistration<T> registration(std::move(factory));                                                     \
+    }                                                                                                                  \
 
 /**
  * Macro for registering a behaviour type. This is necessary for creating behaviours inside of scripts.
  *
- * @param TYPE Behaviour type.
+ * @param T Behaviour type.
  */
-#define REGISTER_BEHAVIOUR(TYPE)                                                                                       \
-	{                                                                                                                  \
-        std::unique_ptr<BehaviourFactory<TYPE>> factory(new BehaviourFactory<TYPE>());                                 \
-        component_registry().register_component<TYPE>(#TYPE, std::move(factory));                                      \
+#define REGISTER_BEHAVIOUR(T)                                                                                          \
+    TYPE(T);                                                                                                           \
+    namespace {                                                                                                        \
+        std::unique_ptr<BehaviourFactory<T>> factory(new BehaviourFactory<T>());                                       \
+        ComponentRegistration<T> registration(std::move(factory));                                                     \
     }                                                                                                                  \
 
 /**
@@ -36,7 +39,7 @@
 #define REGISTER_PYTHON_BEHAVIOUR(NAME)                                                                                \
 	{                                                                                                                  \
         std::unique_ptr<BehaviourFactory<PythonBehaviour>> factory(new BehaviourFactory<PythonBehaviour>(NAME));       \
-        component_registry().register_component(NAME, std::move(factory));                                             \
+        ComponentRegistration<TYPE> registration(NAME, std::move(factory));                                            \
     }                                                                                                                  \
 
 

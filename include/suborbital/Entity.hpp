@@ -18,6 +18,24 @@
 #include <suborbital/component/Behaviour.hpp>
 #include <suborbital/component/ComponentRegistry.hpp>
 
+/**
+ * Creates an event callback from the passed function object.
+ *
+ * @param function_object Function object.
+ * @return Event callback.
+ */
+#define CALLBACK(EventType, function_object) \
+std::unique_ptr<suborbital::EventCallback<EventType>>(new suborbital::EventCallback<EventType>(function_object))
+
+/**
+ * Creates an event callback from the passed member function.
+ *
+ * @param member_function Member function.
+ * @return Event callback.
+ */
+#define MEMBER_CALLBACK(EventType, member_function) \
+std::unique_ptr<suborbital::EventCallback<EventType>>(new suborbital::EventCallback<EventType>(std::bind(&member_function, this, std::placeholders::_1)))
+
 namespace suborbital
 {
     // Forward declarations.
@@ -118,6 +136,15 @@ namespace suborbital
         bool has_parent() const;
 
         /**
+         * Accessor for the parent entity.
+         *
+         * A nullptr is returned in the event that the entity has no parent.
+         *
+         * @return Pointer to the parent entity.
+         */
+        WatchPtr<Entity> parent() const;
+
+        /**
          * Creates and attaches an entity as the child of this entity.
          *
          * Sets the child entity's name to the empty string.
@@ -142,8 +169,7 @@ namespace suborbital
         template<typename AttributeType>
         bool has_attribute() const
         {
-            const std::string attribute_name = component_registry().component_name<AttributeType>();
-            auto iter = m_attributes.find(attribute_name);
+            auto iter = m_attributes.find(Type<AttributeType>::name());
             if (iter != m_attributes.end())
             {
                 auto& attributes = iter->second;
@@ -178,8 +204,7 @@ namespace suborbital
         WatchPtr<AttributeType> create_attribute()
         {
             AttributeType* attribute_ptr = new AttributeType();
-            const std::string attribute_name = component_registry().component_name<AttributeType>();
-            m_attributes[attribute_name].push_back(std::unique_ptr<AttributeType>(attribute_ptr));
+            m_attributes[Type<AttributeType>::name()].push_back(std::unique_ptr<AttributeType>(attribute_ptr));
 
             attribute_ptr->m_entity = this;
             attribute_ptr->create();
@@ -206,8 +231,7 @@ namespace suborbital
         template<typename AttributeType>
         WatchPtr<AttributeType> attribute()
         {
-            const std::string attribute_name = component_registry().component_name<AttributeType>();
-            auto iter = m_behaviours.find(attribute_name);
+            auto iter = m_behaviours.find(Type<AttributeType>::name());
             assert(iter != m_behaviours.end());
             assert(!iter->second.empty());
 
@@ -236,8 +260,7 @@ namespace suborbital
             BehaviourType* specific_behaviour_ptr = new BehaviourType();
             std::unique_ptr<BehaviourType> specific_behaviour(specific_behaviour_ptr);
 
-            const std::string name = component_registry().component_name<BehaviourType>();
-            m_behaviours[name].push_back(std::move(specific_behaviour));
+            m_behaviours[Type<BehaviourType>::name()].push_back(std::move(specific_behaviour));
 
             specific_behaviour_ptr->m_entity = this;
             specific_behaviour_ptr->create();

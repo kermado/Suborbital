@@ -6,8 +6,7 @@
 namespace suborbital
 {
     ComponentRegistry::ComponentRegistry()
-    : m_name_registry()
-    , m_factory_registry()
+    : m_factory_registry()
     {
         // Nothing to do.
     }

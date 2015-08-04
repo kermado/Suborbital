@@ -5,7 +5,6 @@
 
 #include <suborbital/NonCopyable.hpp>
 #include <suborbital/WatchPtr.hpp>
-#include "EventDispatcher.hpp"
 
 namespace suborbital
 {
@@ -15,13 +14,21 @@ namespace suborbital
     /**
      * Manages the lifetime of an event subscription.
      *
-     * The handled event subscription is cancelled automatically upon destruction. Alternatively, the subscription can
-     * be manually cancelled by calling `unsubscribe`.
+     * The subscription is cancelled automatically upon destruction. Alternatively, the subscription can be manually
+     * cancelled by calling `unsubscribe`. In both cases you must keep the subscription object alive as long as you want
+     * to remain subscribed.
      */
     class EventSubscription : private NonCopyable
     {
     friend EventDispatcher;
     public:
+        /**
+         * Default constructor removed.
+         *
+         * Subscriptions must be created through an `EventDispatcher`.
+         */
+        EventSubscription() = delete;
+
         /**
          * Destructor.
          *
@@ -44,6 +51,8 @@ namespace suborbital
     private:
         /**
          * Constructor.
+         *
+         * This constructor is available exclusively to the `EventDispatcher` class.
          */
         EventSubscription(EventDispatcher* dispatcher, const std::string& event_name);
 

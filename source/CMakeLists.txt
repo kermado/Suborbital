@@ -1,2 +1,2 @@
 # Subdirectories.
-add_subdirectory(Suborbital)
+add_subdirectory(suborbital)

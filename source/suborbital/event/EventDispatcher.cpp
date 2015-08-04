@@ -15,6 +15,7 @@ namespace suborbital
 
     EventDispatcher::~EventDispatcher()
     {
+        // Cancel all managed event subscriptions, ensuring that we don't have any dangling pointers to the dispatcher.
         for (const auto& event_name_subscriptions : m_subscriptions)
         {
             const auto& subscription_callbacks = event_name_subscriptions.second;

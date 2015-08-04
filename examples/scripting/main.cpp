@@ -6,6 +6,9 @@
 
 using namespace suborbital;
 
+// Register the C++ defined components that we expose to Python.
+REGISTER_ATTRIBUTE(ExampleAttribute);
+
 int main(int argc, char* argv[])
 {
     PythonInterpreter script_interpreter;
@@ -15,9 +18,6 @@ int main(int argc, char* argv[])
 
     // Where our Python scripts reside.
     script_interpreter.add_path("/Users/Omar/Documents/Suborbital/examples/scripting/resources/scripts");
-
-    // Register the C++ defined components that we expose to Python.
-    REGISTER_ATTRIBUTE(ExampleAttribute);
 
     // Register and push a scene onto the stack.
     SceneStack scene_stack;

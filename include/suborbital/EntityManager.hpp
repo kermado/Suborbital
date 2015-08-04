@@ -33,14 +33,14 @@ namespace suborbital
         ~EntityManager();
 
         /**
-         * Returns the set containing all of the entities in the scene.
+         * Returns a copy of the special set containing all of the entities in the scene.
          *
          * @return Set containing all of the entities in the scene.
          */
         const EntitySet all() const;
 
         /**
-         * Returns the set of entities for the group specified by the provided `group_name`.
+         * Returns a copy of the set of entities for the group specified by the provided `group_name`.
          *
          * @param group_name Name of the group.
          * @return Set containing all of the entities in the group.

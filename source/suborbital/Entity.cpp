@@ -87,6 +87,11 @@ namespace suborbital
         return static_cast<bool>(m_parent);
     }
 
+    WatchPtr<Entity> Entity::parent() const
+    {
+        return m_parent;
+    }
+
     WatchPtr<Entity> Entity::create_child()
     {
         Entity* child = new Entity(m_scene);

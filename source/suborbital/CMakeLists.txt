@@ -2,9 +2,9 @@
 set(LIBRARY_NAME Suborbital)
 
 # Set project path variables.
-SET(INC_ROOT ${PROJECT_SOURCE_DIR}/include/subrbital)
-SET(SRC_ROOT ${PROJECT_SOURCE_DIR}/source/suborbital)
-SET(SWIG_ROOT ${PROJECT_SOURCE_DIR}/swig/suborbital)
+set(INC_ROOT ${PROJECT_SOURCE_DIR}/include/suborbital)
+set(SRC_ROOT ${PROJECT_SOURCE_DIR}/source/suborbital)
+set(SWIG_ROOT ${PROJECT_SOURCE_DIR}/swig/suborbital)
 
 # Source files.
 set(SOURCE_FILES
@@ -38,7 +38,6 @@ set(SOURCE_FILES
 	${SRC_ROOT}/event/Event.cpp
 	${SRC_ROOT}/event/PythonEvent.cpp
 	${SRC_ROOT}/event/EventCallbackBase.cpp
-	${SRC_ROOT}/event/EventCallback.cpp
 	${SRC_ROOT}/event/PythonEventCallback.cpp
 )
 
@@ -57,9 +56,9 @@ include(${SWIG_USE_FILE})
 set(CMAKE_SWIG_OUTDIR "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_SWIG_FLAGS "")
 
-#if(NOT EXISTS SwigRuntime.h)
+if(NOT EXISTS SwigRuntime.h)
 	execute_process(COMMAND ${SWIG_EXECUTABLE} -python -c++ -external-runtime SwigRuntime.h)
-#endif()
+endif()
 
 set_source_files_properties(${SWIG_ROOT}/Module.i PROPERTIES CPLUSPLUS ON)
 set_source_files_properties(${SWIG_ROOT}/Module.i PROPERTIES SWIG_FLAGS "-I${PROJECT_SOURCE_DIR}/swig")
@@ -67,12 +66,12 @@ swig_add_module(${SWIG_LIBRARY_NAME} python ${SWIG_ROOT}/Module.i ${SOURCE_FILES
 swig_link_libraries(${SWIG_LIBRARY_NAME} ${PYTHON_LIBRARIES})
 
 # Install.
-INSTALL(TARGETS ${LIBRARY_NAME} DESTINATION lib)
-INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/include
+install(TARGETS ${LIBRARY_NAME} DESTINATION lib)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include
 		DESTINATION .
 		PATTERN ".svn" EXCLUDE
 		PATTERN ".DS_Store" EXCLUDE)
-INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/swig/suborbital/
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/swig/suborbital/
 		DESTINATION include/suborbital
 		PATTERN ".svn" EXCLUDE
 		PATTERN ".DS_Store" EXCLUDE)

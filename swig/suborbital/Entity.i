@@ -124,7 +124,7 @@
     }
     else
     {
-        const std::string lookup_typename ="suborbital::WatchPtr<" + *arg2 + ">*";
+        const std::string lookup_typename = "suborbital::WatchPtr<" + *arg2 + ">*";
         swig_type_info* const out_type = SWIG_TypeQuery(lookup_typename.c_str());
         assert(out_type != NULL);
         $result = SWIG_NewPointerObj(new suborbital::WatchPtr<suborbital::Attribute>($1), out_type, SWIG_POINTER_OWN | 0);
